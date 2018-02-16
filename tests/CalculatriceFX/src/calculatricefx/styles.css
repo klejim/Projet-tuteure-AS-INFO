@@ -1,0 +1,33 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 10 févr. 2018, 17:23:29
+    Author     : Jimenez
+*/
+
+.label{
+    -fx-text-alignment: right;
+    -fx-font-family: "Segoe UI";
+}
+
+.label-small{
+    text-align: right;
+    -fx-font-size: 15px;
+}
+
+.label-big{
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.button{
+    -fx-font-family: "Segoe-UI";
+    -fx-font-size: 20px;
+}
+
+.button-number{
+    -fx-font-weight: bold;
+}
