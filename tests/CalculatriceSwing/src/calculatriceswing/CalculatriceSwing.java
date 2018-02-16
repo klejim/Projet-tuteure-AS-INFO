@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package calculatriceswing;
 
 import calculatrice.Calculatrice;
@@ -25,6 +20,8 @@ public class CalculatriceSwing extends JFrame{
     private boolean newNumber;
     /**
      * Classes implémentant AbstractAction
+     * A priori il n'est pas possible d'utiliser des classes anonymes en tant qu'event handler
+     * mais j'ai peut-être raté quelque chose
      */
     abstract class CalcAction extends AbstractAction{
         CalculatriceSwing frame;
@@ -111,6 +108,9 @@ public class CalculatriceSwing extends JFrame{
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 4;
+        // il est nécessaire de replacer l'objet pour que l'interface soit mise à jour. Première
+        // fois que je vois ça et si ce n'est pas à cause d'une erreur de ma part c'est une
+        // aberration.
         this.getContentPane().add(resultLabel,c);
         this.getContentPane().validate();
         this.getContentPane().repaint();
@@ -157,7 +157,7 @@ public class CalculatriceSwing extends JFrame{
         resultLabel = new JLabel("");
         resultLabel.setMinimumSize(new Dimension(95*4,60));
         panel.add(resultLabel,c);
-        
+        // trois labels vides pour combler une ligne
         for(int i=0;i<3;i++){
             c = new GridBagConstraints();
             c.gridy = 2;
@@ -166,6 +166,7 @@ public class CalculatriceSwing extends JFrame{
             label.setMinimumSize(new Dimension(95,60));
             panel.add(label,c);
         }
+        // les boutons de 1 à 9
         int x = 0, y = 5;
         for(int i=0;i<9;i++){
             JButton btn = new JButton(new NumberAction(this,String.valueOf(i+1)));
@@ -177,6 +178,7 @@ public class CalculatriceSwing extends JFrame{
                 y -= 1;
             }
         }
+        // les boutons "+", "/", "*", "-" et "="
         Operation ops[] = {Operation.DIVIDE,Operation.MULTIPLY,Operation.SUBSTRACT,Operation.ADD,Operation.EQUALS};
         for (int i=0;i<5;i++){
             Operation op = ops[i];
@@ -198,6 +200,7 @@ public class CalculatriceSwing extends JFrame{
             btnOp.setMinimumSize(new Dimension(95,60));
             addJButtonToPane(btnOp,3,2+i,panel);
         }
+        // les boutons "0" et "."
         JButton btn0 = new JButton(new NumberAction(this,"0"));
         btn0.setMinimumSize(new Dimension(95,60));
         addJButtonToPane(btn0,1,6,panel);
@@ -217,9 +220,6 @@ public class CalculatriceSwing extends JFrame{
 		this.validate();
 		this.repaint();
     }
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
        SwingUtilities.invokeLater(()->{
            CalculatriceSwing calc = new CalculatriceSwing();

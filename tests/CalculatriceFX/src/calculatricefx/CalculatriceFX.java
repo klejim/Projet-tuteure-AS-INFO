@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package calculatricefx;
 
 import calculatrice.Calculatrice;
@@ -25,7 +20,7 @@ public class CalculatriceFX extends Application {
     boolean newNumber;
     private Stage stage;
     /** 
-     * appelée avant start, utile pour ... initialiser. Elle s'exécute dans le thread principal.
+     * appelée avant start, utile pour ... initialiser, oui. Elle s'exécute dans le thread principal.
      * Important : le code de la partie graphique sera exécuté dans un thread spécifique à JavaFX. Il est interdit de créer des objets Stage
      * ou Scene dans un autre thread que celui de JavaFX (et donc dans cette méthode). Créer d'autres objets est autorisé. 
     */
@@ -48,24 +43,30 @@ public class CalculatriceFX extends Application {
         grid.setVgap(5);
         opText = new Label("");
         opText.setMinHeight(30);
-        opText.setId("label-small");
-        opText.getStyleClass().add("label-small");
+        opText.getStyleClass().add("label-small"); // classe utilisée dans le .css
         resultText = new Label("");
         resultText.setMinHeight(60);
-        resultText.setId("label-small");
         resultText.getStyleClass().add("label-big");
         grid.add(opText, 0, 0, 4, 1);
         grid.add(resultText, 0, 1, 4, 1);
-        int x = 0, y = 5;
+        // création d'une ligne vide entre les label et les boutons
+        for (int i=0;i<3;i++){
+            grid.add(new Text(""), i, 2);
+        }
+        // handler pour les évènements de clic sur un bouton correspondant à un chiffre
         EventHandler<ActionEvent> handlerN = (ActionEvent event) -> {
 			Button btn1 = (Button)event.getSource();
-			if (newNumber) {
-			resultText.setText(btn1.getText());
-			newNumber = false;
+			if (newNumber){
+                resultText.setText(btn1.getText());
+                newNumber = false;
 			}
-			else {resultText.setText(resultText.getText() + btn1.getText());}
+			else {
+                resultText.setText(resultText.getText() + btn1.getText());
+            }
 			calc.feedNumber(Double.parseDouble(resultText.getText()));
-            };
+        };
+        // création des boutons de 1 à 9
+        int x = 0, y = 5;
         for (int i=1;i<10;i++){
             Button btn = new Button();
             btn.setText(String.valueOf(i));
@@ -79,9 +80,7 @@ public class CalculatriceFX extends Application {
                 y -= 1;
             }
         }
-        for (int i=0;i<3;i++){
-            grid.add(new Text(""), i, 2);
-        }
+        // création du bouton "0" et de celui pour le séparateur décimal
         Button btn0 = new Button("0");
         btn0.getStyleClass().add("button-number");
         btn0.setOnAction(handlerN);
@@ -94,6 +93,7 @@ public class CalculatriceFX extends Application {
         });
         btnPt.setMinSize(95,60);
         grid.add(btnPt,2,6);
+        // création des boutons pour les différentes opérations
         Operation ops[] = {Operation.DIVIDE,Operation.MULTIPLY,Operation.SUBSTRACT,Operation.ADD,Operation.EQUALS};
         for (int i=0;i<5;i++){
             Operation op = ops[i];
@@ -115,7 +115,7 @@ public class CalculatriceFX extends Application {
                     newNumber = true;
                 };
             }
-            else{
+            else {
                 handler = (ActionEvent event)->{
                     Button btn = (Button)event.getSource();
                     String str = resultText.getText() + " " + btn.getText() + " ";
@@ -137,9 +137,7 @@ public class CalculatriceFX extends Application {
         stage.show();
         
     }
-
     public static void main(String[] args) {
         launch(args);
     }
-    
 }
