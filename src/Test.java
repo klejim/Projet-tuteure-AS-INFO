@@ -1,4 +1,5 @@
 import network.Network;
+import view.View;
 /**
  *
  * @author Jimenez
@@ -6,6 +7,7 @@ import network.Network;
 public class Test {
     public static void main(String... args){
         Network network = new Network(1, 2, 10);
-        System.out.println("DONE");
+        View view = new View();
+        System.out.print(view.rapport(network));
     }
 }

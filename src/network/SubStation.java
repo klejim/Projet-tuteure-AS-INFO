@@ -9,7 +9,6 @@ import java.util.Arrays;
  */
 public class SubStation extends Node{
     private int powerIn, powerOut;
-    private String name;
     private ArrayList<Group> groups;
     private ArrayList<Line> lines;
     
@@ -20,12 +19,15 @@ public class SubStation extends Node{
     }
     
     SubStation(String n){
-        this();
-        name = n;
+        super(n);
+        groups = new ArrayList<>();
+        lines = new ArrayList<>();
     }
     
     SubStation(String n, PowerPlant[] plants, Group[] gr){
-        this(n);
+        super(n);
+        groups = new ArrayList<>();
+        lines = new ArrayList<>();
         for (PowerPlant p : plants){
             lines.add(new Line(p,this));
         }
@@ -34,7 +36,7 @@ public class SubStation extends Node{
     }
     
     @Override
-    boolean isConnected(){
+    public boolean isConnected(){
         return true;
     }
     
@@ -68,7 +70,11 @@ public class SubStation extends Node{
         return powerOut;
     }
 
-    public String getName() {
-        return name;
+    public ArrayList<Group> getGroups() {
+        return groups;
+    }
+
+    public ArrayList<Line> getLines() {
+        return lines;
     }
 }

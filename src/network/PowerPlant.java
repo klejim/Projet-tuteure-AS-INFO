@@ -13,7 +13,6 @@ abstract public class PowerPlant extends Node{
     public enum State {ON, OFF, STARTING};
     private State state;
     private int power, startDelay;
-    private String name;
     private ArrayList<Line> lines;
     
     private PowerPlant(){
@@ -23,15 +22,16 @@ abstract public class PowerPlant extends Node{
     }
 
     PowerPlant(String n, int p, int sd){
-        this();
-        name = n;
+        super(n);
+        state = State.ON;
+        lines = new ArrayList<>();
         power = p;
         startDelay = sd;
     }
     
     /** méthodes accessibles **/
     @Override
-    boolean isConnected(){
+    public boolean isConnected(){
         return !lines.isEmpty();
     }
     void updateStations(){
@@ -81,10 +81,6 @@ abstract public class PowerPlant extends Node{
         }
         return ok;
     }
-    
-    void setName(String name) {
-        this.name = name;
-    }
 
     void setLines(ArrayList<Line> lines) {
         this.lines = lines;
@@ -100,10 +96,6 @@ abstract public class PowerPlant extends Node{
 
     public int getStartDelay() {
         return startDelay;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public ArrayList<Line> getLines() {

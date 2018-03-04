@@ -7,33 +7,19 @@ package network;
 public class Group extends Node{
     // membres et méthodes statiques
     private int consumption;
-    private String name;
     private SubStation station;
     
-    private Group(){
-        super();
-    }
-    
     Group(int power, String s){
-        this();
+        super(s);
         consumption = power;
-        name = s;
     }
     
     @Override
-    boolean isConnected(){
+    public boolean isConnected(){
         return station != null;
     }
     
     // getters/setters
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getConsumption() {
         return consumption;
     }
