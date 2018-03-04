@@ -4,26 +4,28 @@ package network;
  *
  * @author Jimenez
  */
-public class Group {
+public class Group extends Node{
     // membres et méthodes statiques
-    private static int nextId = 0;
-    private int consumption, id;
+    private int consumption;
     private String name;
+    private SubStation station;
     
     private Group(){
-        id = nextId++;
+        super();
     }
     
-    public Group(int power, String s){
+    Group(int power, String s){
         this();
         consumption = power;
         name = s;
     }
-
-    public int getId() {
-        return id;
+    
+    @Override
+    boolean isConnected(){
+        return station != null;
     }
-
+    
+    // getters/setters
     public String getName() {
         return name;
     }
@@ -38,5 +40,13 @@ public class Group {
 
     public void setConsumption(int consumption) {
         this.consumption = consumption;
+    }
+
+    void setStation(SubStation station) {
+        this.station = station;
+    }
+
+    public SubStation getStation() {
+        return station;
     }
 }

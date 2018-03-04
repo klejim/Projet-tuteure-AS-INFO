@@ -11,15 +11,16 @@ public class Line {
     private SubStation out;
     
     private Line(){
-        id = nextId++;
+        super();
     }
     
-    public Line(PowerPlant plant, SubStation station){
+    Line(PowerPlant plant, SubStation station){
+        this();
         in = plant;
         out = station;        
-        power = plant.getActivePower();
     }
-
+    
+    /** getters/setters **/
     public int getId() {
         return id;
     }
@@ -34,5 +35,9 @@ public class Line {
 
     public SubStation getOut() {
         return out;
+    }
+
+    void setPower(int power) {
+        this.power = power;
     }
 }

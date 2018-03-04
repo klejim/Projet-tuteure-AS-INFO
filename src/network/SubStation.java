@@ -7,38 +7,59 @@ import java.util.Arrays;
  *
  * @author Jimenez
  */
-public class SubStation {
-    public static int nextId = 0;
-    private int id, powerIn, powerOut;
+public class SubStation extends Node{
+    private int powerIn, powerOut;
     private String name;
     private ArrayList<Group> groups;
     private ArrayList<Line> lines;
     
     private SubStation(){
-       id = nextId++;
+       super();
        groups = new ArrayList<>();
        lines = new ArrayList<>();
     }
     
-    public SubStation(String n, PowerPlant[] plants, Group[] gr){
+    SubStation(String n){
         this();
         name = n;
+    }
+    
+    SubStation(String n, PowerPlant[] plants, Group[] gr){
+        this(n);
         for (PowerPlant p : plants){
             lines.add(new Line(p,this));
         }
         groups.addAll(Arrays.asList(gr));
-        computePower();
+        updatePowers();
     }
     
-    private void computePower(){
-        lines.forEach(line -> powerIn += line.getPower());
+    @Override
+    boolean isConnected(){
+        return true;
+    }
+    
+    void updateInput(){
+        powerIn = 0;
+        lines.forEach(lien -> powerIn += lien.getPower());
+    }
+    void updateOutput(){
+        powerOut = 0;
         groups.forEach(g -> powerOut += g.getConsumption());
     }
-    // getters/setters
-    public int getId() {
-        return id;
+    
+    void updatePowers(){
+        updateInput();
+        updateOutput();
     }
-
+    /** méthodes acessibles **/
+    void addGroups(Group... gr){
+        groups.addAll(Arrays.asList(gr));
+    }
+    void addLines(Line... li){
+        lines.addAll(Arrays.asList(li));
+    }
+    
+    /** getters/setters **/
     public int getPowerIn() {
         return powerIn;
     }
