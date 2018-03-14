@@ -24,33 +24,31 @@ public class ConfigParser {
 				section = line.split(" ")[1];
 				vars = new HashMap<>();
 			}
-			if (section.equals("DATA_CONSUMPTION")){
-				if (line.matches(VAR_DECLARATION)){
-					String splitted[] = line.split(" = ");
-					String name = splitted[0], expression = splitted[1].substring(0, splitted[1].length()-1);
-					/* cas valides pour expression
-					 * numérique
-					 * chaîne de caractères
-					 * tableau de numériques
-					 */
-					if (expression.matches("[0-9]+")){ // 42
-						Double value = Double.parseDouble(expression);
-						addToMap(vars, name, value);
+			if (line.matches(VAR_DECLARATION)){
+				String splitted[] = line.split(" = ");
+				String name = splitted[0], expression = splitted[1].substring(0, splitted[1].length()-1);
+				/* cas valides pour expression
+				 * numérique
+				 * chaîne de caractères
+				 * tableau de numériques
+				 */
+				if (expression.matches("[0-9]+")){ // 42
+					Double value = Double.parseDouble(expression);
+					addToMap(vars, name, value);
+				}
+				else if (expression.matches("\"(\\w+ ?)+\"")){ // "chat"
+					String value = expression.substring(1, expression.length()-1);
+					addToMap(vars, name, value);
+				}
+				else if (expression.matches("\\[([0-9]+\\.?[0-9]?,? ?)+\\]")){ // [12.0, 25,32]
+					String tmp = expression.substring(1, expression.length()-1);
+					String vals[] = tmp.split(", ?");
+					ArrayList<Double> values = new ArrayList<>();
+					for (String s : vals){
+						Double numeric = Double.parseDouble(s);
+						values.add(numeric);
 					}
-					else if (expression.matches("\"(\\w+ ?)+\"")){ // "chat"
-						String value = expression.substring(1, expression.length()-1);
-						addToMap(vars, name, value);
-					}
-					else if (expression.matches("\\[([0-9]+\\.?[0-9]?,? ?)+\\]")){ // [12.0, 25,32]
-						String tmp = expression.substring(1, expression.length()-1);
-						String vals[] = tmp.split(", ?");
-						ArrayList<Double> values = new ArrayList<>();
-						for (String s : vals){
-							Double numeric = Double.parseDouble(s);
-							values.add(numeric);
-						}
-						addToMap(vars, name, values);
-					}
+					addToMap(vars, name, values);
 				}
 			}
 		}
