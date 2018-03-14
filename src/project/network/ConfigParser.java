@@ -1,4 +1,4 @@
-package network;
+package project.network;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,8 +7,24 @@ import java.util.Scanner;
 import java.io.FileInputStream;
 
 /**
+ * Classe permettant la lecture d'un fichier de configuration. 
  * 
+ * Le parser identifie différentes sections (### nom_section ###) et va enregisrer toutes
+ * les variables déclarées à l'intérieur. Les déclarations se font suivant le style de java.
+ * Le parser ne reconnaît que trois types de données : les valeurs numériques (lues comme des Doubles), 
+ * les chaînes de caractères et les tableaux de numériques.
+ * Exemple de fichier:
+ *	### DATA_CONSUMPTION ### // déclaration de section
+ *	var = 15; // déclaration de variable
+ *	data = [12, 25.0, 2.2, 0];
+ *	chaine = "Le Chat";
  * 
+ *	### NETWORK_FILES ### // la syntaxe doit être respectée
+ *
+ *	network = "path/to/file";
+ *
+ *	### SECTION_2 ###
+ *	testvar = 42;
  */
 public class ConfigParser {
 	private static final String SECTION = "#{3} \\w+ #{3}";
@@ -16,6 +32,14 @@ public class ConfigParser {
 	private static final String NUMERIC = "[0-9]+";
 	private static final String STRING = "\"(.+ ?)+\"";
 	private static final String ARRAY = "\\[([0-9]+\\.?[0-9]?,? ?)+\\]";
+	/**
+	 * Parcours un fichier de configuration.
+	 * Cette méthode crée un tableau associatif dont les clés sont les noms des variables définies dans chaque section du fichier
+	 * et les valeurs sont les valeurs desdites variables. Elle renvoie ensuite un second tableau dont les clés sont les noms des sections
+	 * et les valeurs le tableau associatif de chaque section.
+	 * @param filename le nom du fichier à lire
+	 * @return un tableau associatif contenant les variables de configuration
+	 */
 	public static HashMap<String, HashMap<String,Object>> parse(String filename)throws IOException{
 		HashMap<String,HashMap<String,Object>> config = new HashMap<>();
 		Scanner scan = new Scanner(new FileInputStream(filename));
