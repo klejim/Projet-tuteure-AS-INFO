@@ -44,8 +44,8 @@ public class StatusWindowSubStation {
 		
 		this.subStationDisplay = new JPanel();
 		
-		// 1 colonne
-		this.subStationDisplay.setLayout(new GridLayout(0,1));
+		// 1 colonne - espacement vertical 5px
+		this.subStationDisplay.setLayout(new GridLayout(0,1,0,5));
 		this.subStationDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 2, false));
 				
 		
@@ -57,7 +57,7 @@ public class StatusWindowSubStation {
 		display.put(key, value);
 
 		content.put("station", display);
-		this.addToDisplay(key, value);
+		this.addToDisplay(key, value, true);
 
 	}
 	
@@ -98,18 +98,30 @@ public class StatusWindowSubStation {
 	}
 	
 	/**
-	 * Ajoute une ligne de données à l'affichage
+	 * Ajoute une ligne de données à l'affichage. Par défaut sans bordure
 	 * @param key JLabel clé
 	 * @param value JLabel valeur
 	 */
 	private void addToDisplay(JLabel key, JLabel value) {
+		this.addToDisplay(key, value, false);
+	}
+	
+	/**
+	 * Ajoute une ligne de données à l'affichage.
+	 * @param key JLabel clé
+	 * @param value JLabel valeur
+	 * @param border bordure si true
+	 */
+	private void addToDisplay(JLabel key, JLabel value, boolean border) {
 		JPanel row = new JPanel();
 		row.setLayout(new GridLayout(1,2));
 		
 		row.add(key);
 		row.add(value);
-		row.setBorder(BorderFactory.createLineBorder(Color.RED));	
-		
+		if(border) {
+			row.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		}
+				
 		this.subStationDisplay.add(row);
 	}
 	

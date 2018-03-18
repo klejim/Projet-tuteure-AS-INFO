@@ -21,85 +21,101 @@ import project.network.*;
  *
  */
 public class StatusWindow extends JFrame {
-	
+
 	private int nbSubStations;
-	
-		
+
+
 	/**
 	 * Constructeur par défaut
 	 */
 	public StatusWindow () {
 		super();
-		
-		this.nbSubStations = 1;
-		build();
+
+		this.nbSubStations = 0;
+		buildWindow();
 	}
-	
+
 	/**
 	 * Initialisation de la JFrame StatusWindow
 	 */
-	private void build() {
-		
+	private void buildWindow() {
+
 		// init fenêtre
 		this.setTitle("Statut Réseau");
-		this.setSize(500,600);
+		this.setSize(800,600);
 		this.setLocationRelativeTo(null); 
-		this.setResizable(false);
+		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setContentPane(initUI());
+		this.setContentPane(initDisplay());
 		this.validate();
 		this.repaint();		
 	}
-	
-	
-	
-	
+
+
+
+
 	/**
-	 * JPanel principal
-	 * @return
+	 * Initialise le JPanel principal
+	 * @return le JPanel Principal
 	 */	
-	private JPanel initUI() {
-		
+	private JPanel initDisplay() {
+
 		JPanel panel = new JPanel();
-		
-		// 2 columns and as many rows as requested
-		panel.setLayout(new GridLayout(0,2));
-		
-        
-		//One static label
-//        JLabel station1 = new JLabel();
-//        station1.setText("Station 1 is great");
-//        
-//        		
-//        panel.add(station1);
-//        panel.add(this.labelText);
-//        
-//        panel.add(new JLabel("station 3"));
-//        panel.add(new JLabel("station 4"));      
-//        panel.add(new JLabel("station 5"));
+
+		// 2 colonnes et autant de lignes que nécessaires - espacement de 5px
+		panel.setLayout(new GridLayout(0,2,5,5));
+
 		return panel;
 	}
-	
+
 	/**
-	 * Mise à jour de la fenêtre sur la constitution du réseau
+	 * Créé l'affichage à partir du réseau. N'utiliser qu'à la création ou au changement d'architecture du réseau
 	 * @param ntw réseau à afficher
 	 */
-	public void updateUI(Network ntw) {
+	public void buildDisplay(Network ntw) {
 		this.nbSubStations = ntw.count(SubStation.class)[0];
 		System.out.println("Nombre de sous-sations : " + this.nbSubStations);
 
-		
+
 		ArrayList<Node> nodes = ntw.getNodes();
-		
-		
-		
-		
+
+
+		for(Node node : nodes) {
+			// pour chaque station
+			if(node instanceof SubStation) {
+				StatusWindowSubStation station = new StatusWindowSubStation();
+
+				// pour chaque centrale reliée à la station
+				for(Line line : ((SubStation)node).getLines()) {
+					station.addPowerPlant(line.getIn());
+				}
+
+				// pour chaque groupe relié à la station
+				for(Group group : ((SubStation)node).getGroups()) {
+					station.addGroup(group);
+				}
+
+				// ajout de la nouvelle station à la fenêtre
+				this.getContentPane().add(station.getContainer());
+			}
+		}
+
+
+
 		// mise à jour de la fenêtre
 		this.validate();
 		this.repaint();
 	}
-	
-	
+
+	/**
+	 * Met à jour l'affichage des valeurs correspondant au réseau
+	 * @param ntw le réseau à afficher
+	 */
+	public void updateDisplay(Network ntw) {
+		// TODO
+	}
+
+
 	/**
 	 * Main de test pour StatusWindows
 	 * @param args aucun parametre nécessaire
@@ -107,16 +123,16 @@ public class StatusWindow extends JFrame {
 	public static void main(String[] args) {
 		StatusWindow myWindow = new StatusWindow();
 		myWindow.setVisible(true);	
-		
+
 		Scanner sc = new Scanner(System.in);
-		
-		 Network myNetwork = new Network(0,0,0);
-		 
-		 //myWindow.updateUI(myNetwork);
-		
+
+		// réseau de test basé sur l'archi en dur de Network
+		Network myNetwork = new Network(0,0,0);
+
+		myWindow.buildDisplay(myNetwork);
+
 		while(true) {
-			myWindow.getLabelText().setText(sc.next());
-			System.out.println("OK");
+
 		}
 	}
 
