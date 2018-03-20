@@ -33,11 +33,19 @@ public class StatusWindowSubStation {
 		
 	// JPanel de la sous-station
 	private JPanel subStationDisplay;
-
+	
 	/**
-	 * Constructeur par défaut. Init à un champ station
+	 * Constructeur par défaut
 	 */
 	public StatusWindowSubStation() {
+		this(-1);
+	}
+
+	/**
+	 * Constructeur avec id.
+	 * @param id id de la sous-station
+	 */
+	public StatusWindowSubStation(int id) {
 		this.nbGroups = 0;
 		this.nbPowerPlants = 0;
 		
@@ -50,7 +58,7 @@ public class StatusWindowSubStation {
 		this.subStationDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 2, false));
 				
 		
-		JLabel key = new JLabel("Sous-station #");
+		JLabel key = new JLabel("Sous-station "+id);
 		JLabel value = new JLabel("(-DEFAULT-)");
 
 		ArrayList<JLabel> display = new ArrayList<>();

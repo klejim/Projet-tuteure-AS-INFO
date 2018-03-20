@@ -6,6 +6,7 @@ package project.view;
 
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
@@ -25,6 +26,7 @@ import project.network.*;
 public class StatusWindow extends JFrame {
 
 	private int nbSubStations;
+	private HashMap<Integer, StatusWindowSubStation> stations;
 
 
 	/**
@@ -34,6 +36,7 @@ public class StatusWindow extends JFrame {
 		super();
 
 		this.nbSubStations = 0;
+		stations = new HashMap<>();
 		buildWindow();
 	}
 
@@ -78,14 +81,16 @@ public class StatusWindow extends JFrame {
 		this.nbSubStations = ntw.count(SubStation.class)[0];
 		System.out.println("Nombre de sous-sations : " + this.nbSubStations);
 
-
 		ArrayList<Node> nodes = ntw.getNodes();
-
 
 		for(Node node : nodes) {
 			// pour chaque station
 			if(node instanceof SubStation) {
-				StatusWindowSubStation station = new StatusWindowSubStation();
+				StatusWindowSubStation station = new StatusWindowSubStation(node.getId());
+				
+				// ajout de la station à la Map stations
+				this.stations.put(node.getId(), station);
+				this.nbSubStations++;
 
 				// pour chaque centrale reliée à la station
 				for(Line line : ((SubStation)node).getLines()) {
