@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import project.network.*;
+import project.network.PowerPlant.State;
 /**
  * 
  * @author yoann
@@ -21,94 +22,148 @@ import project.network.*;
  * de fournir un conteneur swing pour l'affichage
  * 
  * TODO : gestion mutualisé via fonction private de l'ajout/retrait dans content et subStationDisplay
+ * TODO : update(). 
+ * TODO : grouper les trois fonction add() en une seule à l'aide de la généricité
  *
  */
 public class StatusWindowSubStation {
-	
-	private int nbGroups;
-	private int nbPowerPlants;
-	
+
 	// Collection des lignes avec Labels
 	private HashMap<String, ArrayList<JLabel>> content;
-		
+
 	// JPanel de la sous-station
 	private JPanel subStationDisplay;
-	
+
 	/**
 	 * Constructeur par défaut
 	 */
 	public StatusWindowSubStation() {
-		this(-1);
-	}
-
-	/**
-	 * Constructeur avec id.
-	 * @param id id de la sous-station
-	 */
-	public StatusWindowSubStation(int id) {
-		this.nbGroups = 0;
-		this.nbPowerPlants = 0;
-		
 		this.content = new HashMap<>();
-		
+
 		this.subStationDisplay = new JPanel();
-		
+
 		// 1 colonne - espacement vertical 5px
 		this.subStationDisplay.setLayout(new GridLayout(0,1,0,5));
 		this.subStationDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 2, false));
-				
-		
-		JLabel key = new JLabel("Sous-station "+id);
-		JLabel value = new JLabel("(-DEFAULT-)");
+	}
+
+
+	/**
+	 * Constructeur avec SubStation
+	 * @param station la sous-station à construire
+	 */
+	public StatusWindowSubStation(SubStation station) {
+
+		this();
+
+		JLabel key = new JLabel("Sous-station "+ station.getId());
 
 		ArrayList<JLabel> display = new ArrayList<>();
-		
 		display.add(key);
-		display.add(value);
-		
+		for(String data : subStationDataFormat(station)) {
+			display.add(new JLabel(data));
+		}
+
 		content.put("station", display);
 		this.addToDisplay(display, true);
-
 	}
-	
-	
+
+
 	/**
 	 * Ajout d'un groupe de consommateurs
 	 * @param item le groupe
 	 */
 	public void addGroup(Group item) {
-		JLabel key = new JLabel("| --> Group "+ item.getId());
-		JLabel value = new JLabel("(-DEFAULT-)");
+		JLabel groupeId = new JLabel("| --> Group "+ item.getId());
+
 
 		ArrayList<JLabel> display = new ArrayList<>();
+		display.add(groupeId);
+		for(String data : groupDataFormat(item)) {
+			display.add(new JLabel(data));
+		}
 
-		display.add(key);
-		display.add(value);
-		
+
 		this.content.put("group" + item.getId(), display);
-		this.addToDisplay(display);
-		this.nbGroups++;
+		this.addToDisplay(display,true);
+
 	}
-	
+
 	/**
 	 * Ajout d'une centrale électrique
 	 * @param item la centrale
 	 */	
 	public void addPowerPlant(PowerPlant item) {
-		
-		JLabel key = new JLabel("| <-- PowerPlant "+ item.getId());
-		JLabel value = new JLabel("(-DEFAULT-)");
+
+		JLabel powerPlantId = new JLabel("| <-- PowerPlant "+ item.getId());
 
 		ArrayList<JLabel> display = new ArrayList<>();
-
-		display.add(key);
-		display.add(value);
+		display.add(powerPlantId);
+		for(String data : powerPlantDataFormat(item)) {
+			display.add(new JLabel(data));
+		}
 
 		this.content.put("powerplant"+ item.getId(), display);
-		this.addToDisplay(display);
-		this.nbPowerPlants++;
+		this.addToDisplay(display,true);
 	}
-	
+
+
+	/**
+	 * Formate les données pour un groupe de consommation
+	 * @param item le groupe
+	 * @return String avec les données à afficher
+	 */
+	private static String[] groupDataFormat(Group item) {		
+
+		String[] data = new String[1];
+		data[0] = "(Conso: "+item.getConsumption()+" kW)";
+		return data;
+	}
+	/**
+	 * Formate les données pour une sous station
+	 * @param item la sous station
+	 * @return String avec les données à afficher
+	 */
+	private static String[] subStationDataFormat(SubStation item) {
+
+		String[] data = new String[3];
+
+		int pin = item.getPowerIn();
+		int pout = item.getPowerOut();
+
+		data[0] = "(Pin: "+pin+" kW)";
+		data[1] = "(Pout: "+pout+" kW)";
+		data[2] = (pin>=pout?"OK":"P. INSUFISANTE");
+
+		return data;
+	}
+	/**
+	 * Formate les données pour une centrale
+	 * @param item la centrale
+	 * @return String avec les données à afficher
+	 */
+	private static String[] powerPlantDataFormat(PowerPlant item) {
+		String[] data = new String[2];
+
+		State state = item.getState();
+		int pout = item.getActivePower();
+
+		data[0] = "(Etat: "+state+")";
+		data[1] = "(Pout: "+pout+" kW)";
+
+		return data;
+	}
+
+	/**
+	 * Met à jour les champs de valeurs pour chaque objet
+	 */	
+	public void update() {
+
+		// pour tous les éléments
+	}
+
+
+
 	/**
 	 * Ajoute une ligne de données à l'affichage. Sans bordure par défaut
 	 * @param values tableau de labels à afficher
@@ -116,7 +171,7 @@ public class StatusWindowSubStation {
 	private void addToDisplay(ArrayList<JLabel> values) {
 		this.addToDisplay(values, false);
 	}
-	
+
 	/**
 	 * Ajoute une ligne de données à l'affichage
 	 * @param values tableau de labels à afficher
@@ -124,27 +179,33 @@ public class StatusWindowSubStation {
 	 */
 	private void addToDisplay(ArrayList<JLabel> values, boolean border) {
 		JPanel row = new JPanel();
-		
+
 		// une ligne - autant de colones que nécessaire
-		row.setLayout(new GridLayout(1,0));
-		
+		row.setLayout(new GridLayout(1,0,5,0));
+
 		for(JLabel label : values) {
 			row.add(label);
 		}
-		
+
+		for(int i= 4-values.size(); i > 0; i--) 
+			row.add(new JLabel(""));
+
+
 		if(border) {
 			row.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		}
-				
+
 		this.subStationDisplay.add(row);
 	}
-	
+
+
+
 	/**
 	 * Fournit le JPanel contenant l'affichage de la station
 	 * @return JPanel 
 	 */
 	public JPanel getContainer() {
-		
+
 		return this.subStationDisplay;
 	}
 

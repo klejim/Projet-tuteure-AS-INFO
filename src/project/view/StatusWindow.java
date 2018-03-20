@@ -47,7 +47,7 @@ public class StatusWindow extends JFrame {
 
 		// init fenêtre
 		this.setTitle("Statut Réseau");
-		this.setSize(800,600);
+		this.setSize(1200,600);
 		this.setLocationRelativeTo(null); 
 		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -55,10 +55,7 @@ public class StatusWindow extends JFrame {
 		this.validate();
 		this.repaint();		
 	}
-
-
-
-
+	
 	/**
 	 * Initialise le JPanel principal
 	 * @return le JPanel Principal
@@ -86,7 +83,7 @@ public class StatusWindow extends JFrame {
 		for(Node node : nodes) {
 			// pour chaque station
 			if(node instanceof SubStation) {
-				StatusWindowSubStation station = new StatusWindowSubStation(node.getId());
+				StatusWindowSubStation station = new StatusWindowSubStation((SubStation)node);
 				
 				// ajout de la station à la Map stations
 				this.stations.put(node.getId(), station);
@@ -107,8 +104,6 @@ public class StatusWindow extends JFrame {
 			}
 		}
 
-
-
 		// mise à jour de la fenêtre
 		this.validate();
 		this.repaint();
@@ -120,6 +115,16 @@ public class StatusWindow extends JFrame {
 	 */
 	public void updateDisplay(Network ntw) {
 		// TODO
+		
+		for(Node currentNode : ntw.getNodes()) {
+			if(currentNode instanceof SubStation) {
+				this.stations.get(currentNode.getId()).update();
+			}
+		}
+		
+		// mise à jour de la fenêtre
+		this.validate();
+		this.repaint();
 	}
 
 
