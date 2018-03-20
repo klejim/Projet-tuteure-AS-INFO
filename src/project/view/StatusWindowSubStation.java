@@ -2,6 +2,7 @@ package project.view;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -27,10 +28,10 @@ public class StatusWindowSubStation {
 	private int nbGroups;
 	private int nbPowerPlants;
 	
-
-	private HashMap<String, HashMap<JLabel, JLabel>> content;
+	// Collection des lignes avec Labels
+	private HashMap<String, ArrayList<JLabel>> content;
 		
-	// Conteneur représentatif de la station
+	// JPanel de la sous-station
 	private JPanel subStationDisplay;
 
 	/**
@@ -49,15 +50,16 @@ public class StatusWindowSubStation {
 		this.subStationDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 2, false));
 				
 		
-		JLabel key = new JLabel("Station #");
+		JLabel key = new JLabel("Sous-station #");
 		JLabel value = new JLabel("(-DEFAULT-)");
 
-		HashMap<JLabel, JLabel> display = new HashMap<>();
-
-		display.put(key, value);
-
+		ArrayList<JLabel> display = new ArrayList<>();
+		
+		display.add(key);
+		display.add(value);
+		
 		content.put("station", display);
-		this.addToDisplay(key, value, true);
+		this.addToDisplay(display, true);
 
 	}
 	
@@ -70,12 +72,13 @@ public class StatusWindowSubStation {
 		JLabel key = new JLabel("| --> Group "+ item.getId());
 		JLabel value = new JLabel("(-DEFAULT-)");
 
-		HashMap<JLabel, JLabel> display = new HashMap<>();
+		ArrayList<JLabel> display = new ArrayList<>();
 
-		display.put(key, value);
-
-		content.put("group" + item.getId(), display);
-		this.addToDisplay(key, value);
+		display.add(key);
+		display.add(value);
+		
+		this.content.put("group" + item.getId(), display);
+		this.addToDisplay(display);
 		this.nbGroups++;
 	}
 	
@@ -88,36 +91,39 @@ public class StatusWindowSubStation {
 		JLabel key = new JLabel("| <-- PowerPlant "+ item.getId());
 		JLabel value = new JLabel("(-DEFAULT-)");
 
-		HashMap<JLabel, JLabel> display = new HashMap<>();
+		ArrayList<JLabel> display = new ArrayList<>();
 
-		display.put(key, value);
+		display.add(key);
+		display.add(value);
 
 		this.content.put("powerplant"+ item.getId(), display);
-		this.addToDisplay(key, value);
+		this.addToDisplay(display);
 		this.nbPowerPlants++;
 	}
 	
 	/**
-	 * Ajoute une ligne de données à l'affichage. Par défaut sans bordure
-	 * @param key JLabel clé
-	 * @param value JLabel valeur
+	 * Ajoute une ligne de données à l'affichage. Sans bordure par défaut
+	 * @param values tableau de labels à afficher
 	 */
-	private void addToDisplay(JLabel key, JLabel value) {
-		this.addToDisplay(key, value, false);
+	private void addToDisplay(ArrayList<JLabel> values) {
+		this.addToDisplay(values, false);
 	}
 	
 	/**
-	 * Ajoute une ligne de données à l'affichage.
-	 * @param key JLabel clé
-	 * @param value JLabel valeur
-	 * @param border bordure si true
+	 * Ajoute une ligne de données à l'affichage
+	 * @param values tableau de labels à afficher
+	 * @param border affiche une bordure autour de la ligne si true
 	 */
-	private void addToDisplay(JLabel key, JLabel value, boolean border) {
+	private void addToDisplay(ArrayList<JLabel> values, boolean border) {
 		JPanel row = new JPanel();
-		row.setLayout(new GridLayout(1,2));
 		
-		row.add(key);
-		row.add(value);
+		// une ligne - autant de colones que nécessaire
+		row.setLayout(new GridLayout(1,0));
+		
+		for(JLabel label : values) {
+			row.add(label);
+		}
+		
 		if(border) {
 			row.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		}
@@ -126,8 +132,8 @@ public class StatusWindowSubStation {
 	}
 	
 	/**
-	 * Retourne le JPanel contenant l'affichage de la station
-	 * @return JPanel
+	 * Fournit le JPanel contenant l'affichage de la station
+	 * @return JPanel 
 	 */
 	public JPanel getContainer() {
 		

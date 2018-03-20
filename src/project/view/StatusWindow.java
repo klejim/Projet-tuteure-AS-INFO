@@ -18,6 +18,8 @@ import project.network.*;
  * @author yoann
  * 
  * Classe créant la fenêtre de statut de réseau
+ * 
+ * TODO : Taille sous-paneaux avec autre type Layout ?
  *
  */
 public class StatusWindow extends JFrame {
