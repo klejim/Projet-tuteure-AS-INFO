@@ -21,9 +21,9 @@ import project.network.PowerPlant.State;
  * de mettre en forme l'affichage de ces informations,
  * de fournir un conteneur swing pour l'affichage
  * 
- * TODO : gestion mutualisé via fonction private de l'ajout/retrait dans content et subStationDisplay
+ * TODO : gestion mutualisé via fonction private de l'ajout/retrait dans content et subStationDisplay FINIR !
  * TODO : update(). 
- * TODO : grouper les trois fonction add() en une seule à l'aide de la généricité
+ * TODO : Faire des classes pour groupe ou Powerplant si les données ou leur traitement deviennent compliqués
  *
  */
 public class StatusWindowSubStation {
@@ -64,10 +64,9 @@ public class StatusWindowSubStation {
 			display.add(new JLabel(data));
 		}
 
-		content.put("station", display);
-		this.addToDisplay(display, true);
+		addToDisplay("station", display, true);
 	}
-
+	
 
 	/**
 	 * Ajout d'un groupe de consommateurs
@@ -82,10 +81,7 @@ public class StatusWindowSubStation {
 		for(String data : groupDataFormat(item)) {
 			display.add(new JLabel(data));
 		}
-
-
-		this.content.put("group" + item.getId(), display);
-		this.addToDisplay(display,true);
+		addToDisplay("group" + item.getId(), display);
 
 	}
 
@@ -102,16 +98,14 @@ public class StatusWindowSubStation {
 		for(String data : powerPlantDataFormat(item)) {
 			display.add(new JLabel(data));
 		}
-
-		this.content.put("powerplant"+ item.getId(), display);
-		this.addToDisplay(display,true);
+		addToDisplay("powerplant"+ item.getId(), display);
 	}
 
 
 	/**
 	 * Formate les données pour un groupe de consommation
 	 * @param item le groupe
-	 * @return String avec les données à afficher
+	 * @return Tableau de String avec les données à afficher
 	 */
 	private static String[] groupDataFormat(Group item) {		
 
@@ -122,7 +116,7 @@ public class StatusWindowSubStation {
 	/**
 	 * Formate les données pour une sous station
 	 * @param item la sous station
-	 * @return String avec les données à afficher
+	 * @return Tableau de String avec les données à afficher
 	 */
 	private static String[] subStationDataFormat(SubStation item) {
 
@@ -140,7 +134,7 @@ public class StatusWindowSubStation {
 	/**
 	 * Formate les données pour une centrale
 	 * @param item la centrale
-	 * @return String avec les données à afficher
+	 * @return Tableau de String avec les données à afficher
 	 */
 	private static String[] powerPlantDataFormat(PowerPlant item) {
 		String[] data = new String[2];
@@ -168,16 +162,24 @@ public class StatusWindowSubStation {
 	 * Ajoute une ligne de données à l'affichage. Sans bordure par défaut
 	 * @param values tableau de labels à afficher
 	 */
-	private void addToDisplay(ArrayList<JLabel> values) {
-		this.addToDisplay(values, false);
+	private void addToDisplay(String key, ArrayList<JLabel> values) {
+		this.addToDisplay(key, values, false);
 	}
 
+	
+	
 	/**
-	 * Ajoute une ligne de données à l'affichage
-	 * @param values tableau de labels à afficher
-	 * @param border affiche une bordure autour de la ligne si true
+	 * Ajoute une ligne de donnée à l'affichage
+	 * @param key la clé de sauvegarde du bloc
+	 * @param values les valeurs à afficher
+	 * @param border si true, affiche une bordure autour de la ligne
 	 */
-	private void addToDisplay(ArrayList<JLabel> values, boolean border) {
+	private void addToDisplay(String key, ArrayList<JLabel> values, boolean border) {
+		
+		// ajout à content
+		this.content.put(key, values);
+		
+		
 		JPanel row = new JPanel();
 
 		// une ligne - autant de colones que nécessaire
