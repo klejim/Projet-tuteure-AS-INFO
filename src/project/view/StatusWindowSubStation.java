@@ -21,12 +21,13 @@ import project.network.PowerPlant.State;
  * de mettre en forme l'affichage de ces informations,
  * de fournir un conteneur swing pour l'affichage
  * 
- * TODO : gestion mutualisé via fonction private de l'ajout/retrait dans content et subStationDisplay FINIR !
- * TODO : update(). 
- * TODO : Faire des classes pour groupe ou Powerplant si les données ou leur traitement deviennent compliqués
+ * TODO : update()
  *
  */
 public class StatusWindowSubStation {
+	
+	// Référence vers la sous-station modèle
+	private SubStation modelSubStation;
 
 	// Collection des lignes avec Labels
 	private HashMap<String, ArrayList<JLabel>> content;
@@ -38,6 +39,8 @@ public class StatusWindowSubStation {
 	 * Constructeur par défaut
 	 */
 	public StatusWindowSubStation() {
+		
+		
 		this.content = new HashMap<>();
 
 		this.subStationDisplay = new JPanel();
@@ -55,7 +58,8 @@ public class StatusWindowSubStation {
 	public StatusWindowSubStation(SubStation station) {
 
 		this();
-
+		this.modelSubStation = station;		
+		
 		JLabel key = new JLabel("Sous-station "+ station.getId());
 
 		ArrayList<JLabel> display = new ArrayList<>();
@@ -67,7 +71,6 @@ public class StatusWindowSubStation {
 		addToDisplay("station", display, true);
 	}
 	
-
 	/**
 	 * Ajout d'un groupe de consommateurs
 	 * @param item le groupe
@@ -110,12 +113,12 @@ public class StatusWindowSubStation {
 	private static String[] groupDataFormat(Group item) {		
 
 		String[] data = new String[1];
-		data[0] = "(Conso: "+item.getConsumption()+" kW)";
+		data[0] = "Conso: "+item.getConsumption()+" kW";
 		return data;
 	}
 	/**
-	 * Formate les données pour une sous station
-	 * @param item la sous station
+	 * Formate les données pour une sous-station
+	 * @param item la sous-station
 	 * @return Tableau de String avec les données à afficher
 	 */
 	private static String[] subStationDataFormat(SubStation item) {
@@ -125,8 +128,8 @@ public class StatusWindowSubStation {
 		int pin = item.getPowerIn();
 		int pout = item.getPowerOut();
 
-		data[0] = "(Pin: "+pin+" kW)";
-		data[1] = "(Pout: "+pout+" kW)";
+		data[0] = "Pin: "+pin+" kW";
+		data[1] = "Pout: "+pout+" kW";
 		data[2] = (pin>=pout?"OK":"P. INSUFISANTE");
 
 		return data;
@@ -142,8 +145,8 @@ public class StatusWindowSubStation {
 		State state = item.getState();
 		int pout = item.getActivePower();
 
-		data[0] = "(Etat: "+state+")";
-		data[1] = "(Pout: "+pout+" kW)";
+		data[0] = "Etat: "+state;
+		data[1] = "Pout: "+pout+" kW";
 
 		return data;
 	}
@@ -177,8 +180,7 @@ public class StatusWindowSubStation {
 	private void addToDisplay(String key, ArrayList<JLabel> values, boolean border) {
 		
 		// ajout à content
-		this.content.put(key, values);
-		
+		this.content.put(key, values);			
 		
 		JPanel row = new JPanel();
 
@@ -189,8 +191,9 @@ public class StatusWindowSubStation {
 			row.add(label);
 		}
 
-		for(int i= 4-values.size(); i > 0; i--) 
+		for(int i= 4-values.size(); i > 0; i--) {
 			row.add(new JLabel(""));
+		}
 
 
 		if(border) {
@@ -210,6 +213,25 @@ public class StatusWindowSubStation {
 
 		return this.subStationDisplay;
 	}
+	
+	/**
+	 * Ajout d'un élément group ou PowerPlant
+	 */	
+	/*public void addElement(Node item) {
+		String nomElt;
+		if (item.getClass().equals(Group.class)) {
+			nomElt = "| --> Group ";
+		}else if (item.getClass().equals(PowerPlant.class)) {
+			nomElt = "| <-- PowerPlant ";
+		}else {
+			nomElt = "Elt. inconnu";
+		}
+		nomElt += item.getId();
+		
+		
+	}
+	*/
+
 
 
 
