@@ -73,6 +73,14 @@ public abstract class StatusWindowElement {
 	public boolean isAlive() {
 		return modelNode != null;
 	}
+	
+	/**
+	 * Retourne le panel de l'élément
+	 * @return JPanel
+	 */	
+	public JPanel getDisplay() {
+		return this.elementDisplay;
+	}
 
 
 

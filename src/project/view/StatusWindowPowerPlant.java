@@ -9,6 +9,13 @@ import javax.swing.JPanel;
 import project.network.PowerPlant;
 import project.network.PowerPlant.State;
 
+/**
+ * 
+ * @author yoann
+ * 
+ * Classe qui décrit la vue d'une centrale électrique selon le Modèle
+ */
+
 public class StatusWindowPowerPlant extends StatusWindowElement {
 
 	public StatusWindowPowerPlant(PowerPlant plant) {
