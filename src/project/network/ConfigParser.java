@@ -42,7 +42,6 @@ public class ConfigParser {
      * @return un tableau associatif contenant les variables de configuration
      * @throws IOException
      */
-    // todo : gérer le cas où des variables sont déclarées hors section (section DEFAULT?) et les cas pouvant causer une erreur
     public static HashMap<String, HashMap<String,Object>> parse(String filename) throws IOException{
         HashMap<String,HashMap<String,Object>> config = new HashMap<>();
         try (Scanner scan = new Scanner(new FileInputStream(filename))) {
@@ -85,7 +84,7 @@ public class ConfigParser {
             }
         }
         return config;
-}
+    }
     private static void addToMap(HashMap<String,Object> map, String key, Object value){
         if (!map.containsKey(key)){
                 map.put(key, value);

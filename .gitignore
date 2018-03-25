@@ -1,6 +1,7 @@
 nbproject
 build.xml
 manifest.mf
+*.bat
 
 # Compiled class file
 *.class

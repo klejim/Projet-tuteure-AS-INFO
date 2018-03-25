@@ -1,7 +1,9 @@
 package project.network;
 
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 
 /**
  * Classe représentant le réseau de distribution.
@@ -10,22 +12,111 @@ import java.util.Arrays;
  * @author Jimenez
  */
 public class Network {
+    static final int SIMULATION_PERIOD = 24;
+    
+    private HashMap<String,HashMap<String,Object>> config; // contenu du fichier config.txt
     private int production, consumption;
     private ArrayList<Node> nodes;
-    private Network(){
+    private Network() throws IOException{
         nodes = new ArrayList<>();
+        config = ConfigParser.parse("config");
+        System.out.print(ConfigParser.stringify(config));
+        initNetwork();
+        TESTInitNetwork();
     }
     /**
      * Constructeur. Bidon pour l'instant, l'initialisation du réseau se fait dans {#TESTInitNetwork TESTInitNetwork}.
      * @param nStations non utilisé
      * @param nPowerPlants non utilisé
      * @param nGroups  non utilisé
+     * @throws java.io.IOException une erreur s'est produite lors de la lecture des fichiers de configuration
      */
     // todo : un vrai constructeur
-    public Network(int nStations, int nPowerPlants, int nGroups){
+    
+    public Network(int nStations, int nPowerPlants, int nGroups) throws IOException{ // l'exception indique le contrôleur qu'une erreur critique a eu lieu lors de la création du réseau
         this();
+        initNetwork();
         TESTInitNetwork();
     }
+    /**
+     * Initialisation du réseau à partir de la valeur de config
+     */
+    private void initNetwork(){
+       
+    }
+    /**
+     * Analyse le réseau à la recherche d'erreurs
+     * @return la liste des erreurs rencontrées
+     */
+    public ArrayList<NetworkError> analyse(){
+        ArrayList<NetworkError> errors = new ArrayList<>();
+        for (Node n : nodes){
+            if (!n.isConnected()){
+                errors.add(new NodeNotConnectedError(n));
+            }
+            if (n instanceof SubStation){
+                // todo : ajuster seuils
+                SubStation station = (SubStation)n;
+                if (station.getDiff() > 0){ // demande supérieure à l'entrée
+                    errors.add(new TooMuchPowerError(station, station.getDiff()));
+                }
+                else if (station.getDiff() < 0){
+                    errors.add(new NotEnoughPowerError(station, Math.abs(station.getDiff())));
+                }
+            }
+        }
+        return errors;
+    }
+    private ArrayList<NetworkError> handleErrors(ArrayList<NetworkError> rawErrors){
+        ArrayList<NetworkError> errors = new ArrayList<>(rawErrors.size());
+        for (NetworkError e : rawErrors){
+            if (e instanceof NotEnoughPowerError){
+                NotEnoughPowerError err = (NotEnoughPowerError) e;
+                if (solve1(err.getStation(), err.getPower())){
+                    e.setSolved(true);
+                }
+                else{
+                    e.setMessage("Correction automatique impossible");
+                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
+                    errors.add(newError);
+                }
+            }
+            else if (e instanceof TooMuchPowerError){
+                TooMuchPowerError err = (TooMuchPowerError) e;
+                if (solvePowerOverflow(err.getStation(), err.getPower())){
+                    e.setSolved(true);
+                }
+                else{
+                    e.setMessage("Correction automatique impossible");
+                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
+                    errors.add(newError);
+                }
+            }
+            else if (e instanceof NodeNotConnectedError){
+                e.setMessage("Connexion manuelle nécessaire");
+            }
+        }
+        return errors;
+    }
+    private boolean solve1(SubStation station, int p){
+        return true;
+    }
+    private boolean solvePowerOverflow(SubStation station, int overflow){
+        ArrayList<PowerPlant> tmp = new ArrayList<>();
+        for (Line line : station.getLines()){
+            PowerPlant plant = line.getIn();
+            
+        }
+        return true;
+    }
+    
+    public ArrayList<NetworkError> runOnce(){
+        // todo : mise à jour consommation
+        // todo : mise à jour sous-stations
+        return handleErrors(analyse());
+    }
+    
+    
     /**
      * Initialise un réseau relativement simple.
      */
@@ -74,7 +165,7 @@ public class Network {
             p.updateStations();
         }
         computeProduction();
-    }
+    }    
     /**
      * Met à jour la consommation totale du réseau en fonction des besoins de chaque sous-station.
      */

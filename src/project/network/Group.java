@@ -1,11 +1,35 @@
 package project.network;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+
 /**
  * Classe représentant un groupe de consommation (ou groupe de foyers, ou encore groupe d'habitations).
  * @author Jimenez
  * @see SubStation
  */
 public class Group extends Node{
+    // correspondance entre un nom de suite de données et une tableau de données
+    // ex : <hiver, tableau de valeurs> 
+    private static HashMap<String, ArrayList<Double>> consumptionModes = new HashMap<>();
+    /**
+     * Ajoute un modèle de consommation avec ses valeurs.
+     * @param name le nom référençant le modèle
+     * @param values les valeurs
+     * @return vrai si le modèle à été ajouté et faux sinon
+     */
+    static boolean addConsumptionMode(String name, Double... values){
+        boolean ok = false;
+        if (!consumptionModes.containsKey(name)){
+            ArrayList<Double> tab = new ArrayList<>(Network.SIMULATION_PERIOD);
+            tab.addAll(Arrays.asList(values));
+            consumptionModes.put(name, tab);
+            ok = true;
+        }
+        return ok;
+    }
+    //
     private int consumption;
     private SubStation station;
     /**

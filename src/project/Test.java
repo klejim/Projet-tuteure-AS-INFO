@@ -1,5 +1,6 @@
 package project;
 
+import java.io.IOException;
 import java.util.Arrays;
 import project.network.Group;
 import project.network.Network;
@@ -13,9 +14,18 @@ import project.view.View;
  */
 public class Test {
     public static void main(String... args){
-        Network network = new Network(1, 2, 10);
-        System.out.println(Arrays.toString(network.count(SubStation.class, Group.class, PowerPlant.class, Node.class, NuclearPlant.class)));
-        View view = new View();
-        System.out.print(view.rapport(network));
+        Network network = null;
+        try{
+            network = new Network(1, 2, 10);
+        }
+        catch (IOException e){
+            System.out.println("Erreur de lecture du fichier config");
+        }
+        if (network != null){
+            System.out.println(Arrays.toString(network.count(SubStation.class, Group.class, PowerPlant.class, Node.class, NuclearPlant.class)));
+            View view = new View();
+            System.out.print(view.rapport(network));
+        }
+        
     }
 }
