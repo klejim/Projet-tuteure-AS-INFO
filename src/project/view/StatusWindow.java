@@ -30,7 +30,7 @@ import project.network.*;
 public class StatusWindow extends JFrame {
 
 	private Network modelNetwork;
-	private ArrayList<StatusWindowSubStationElement> subStations;
+	private ArrayList<StatusWindowSubStation> subStations;
 
 	private HashMap<Integer, Node> TESTNetworkElements;
 
@@ -86,7 +86,7 @@ public class StatusWindow extends JFrame {
 
 			// pour chaque station
 			if(node.getClass().equals(SubStation.class)) {
-				StatusWindowSubStationElement station = new StatusWindowSubStationElement((SubStation)node);
+				StatusWindowSubStation station = new StatusWindowSubStation((SubStation)node);
 
 				// ajout de la sous-station à la collection
 				this.subStations.add(station);
@@ -120,7 +120,7 @@ public class StatusWindow extends JFrame {
 	 * Met à jour l'affichage des valeurs de paramètres. Utiliser après createDisplay()
 	 */
 	public void updateDisplay() {
-		for(StatusWindowSubStationElement station : this.subStations) {
+		for(StatusWindowSubStation station : this.subStations) {
 			station.updateDisplay();
 		}
 	}

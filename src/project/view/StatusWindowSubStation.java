@@ -19,7 +19,7 @@ import project.network.*;
  * sont connectés.
  */
 
-public class StatusWindowSubStationElement extends StatusWindowElement {
+public class StatusWindowSubStation extends StatusWindowElement {
 
 	// liste des éléments connectés à la sous-station
 	private ArrayList<StatusWindowElement> connectedElements;
@@ -28,7 +28,7 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 	 * Constructeur
 	 * @param subStation La sous-station à afficher
 	 */
-	public StatusWindowSubStationElement(SubStation subStation) {
+	public StatusWindowSubStation(SubStation subStation) {
 		this.modelNode = subStation;
 
 		this.content = new ArrayList<>();
@@ -122,7 +122,7 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 
 		Network myNetwork = new Network(0,0,0);
 
-		ArrayList<StatusWindowSubStationElement> stations = new ArrayList<>();
+		ArrayList<StatusWindowSubStation> stations = new ArrayList<>();
 		ArrayList<PowerPlant> plants = new ArrayList<>();
 		ArrayList<Group> groups = new ArrayList<>();
 
@@ -131,7 +131,7 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 
 		for(Node node : myNetwork.getNodes()) {
 			if(node.getClass().equals(SubStation.class)) {
-				StatusWindowSubStationElement local = new StatusWindowSubStationElement((SubStation)node);
+				StatusWindowSubStation local = new StatusWindowSubStation((SubStation)node);
 
 				// pour chaque centrale reliée à la station
 				for(Line line : ((SubStation)node).getLines()) {
@@ -171,7 +171,7 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 			groups.get(0).setConsumption(0);
 			groups.get(1).setConsumption(300000);
 
-			for(StatusWindowSubStationElement station : stations) {
+			for(StatusWindowSubStation station : stations) {
 				station.updateDisplay();
 			}
 
@@ -180,7 +180,7 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 			groups.get(0).setConsumption(100000);
 			groups.get(1).setConsumption(0);
 
-			for(StatusWindowSubStationElement station : stations) {
+			for(StatusWindowSubStation station : stations) {
 				station.updateDisplay();
 			}
 
