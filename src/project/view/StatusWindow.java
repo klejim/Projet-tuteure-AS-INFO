@@ -7,10 +7,8 @@ package project.view;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import project.network.*;
@@ -18,26 +16,37 @@ import project.network.*;
 /**
  * @author yoann
  * 
- * Classe créant la fenêtre de statut de réseau
+ * Classe gérant la fenêtre de statut de réseau.
  * 
- * TODO : Taille sous-paneaux avec autre type Layout ?
- *
+ * Elle créé la fenêtre, récupère les sous-station du réseau, créé leur affichage et celui des éléments
+ * qui lui sont connectés. Le réseau se créé en trois temps :
+ * 
+ *  1. Utiliser le constructeur StatusWindow(Network) pour créer la fenêtre principale
+ *  2. Utiliser StatusWindow.createDisplay() pour créer l'affichage du réseau
+ *  3. Utiliser StatusWindow.updateDisplay() pour mettre à jour l'affichage des paramètres des éléments du réseau
+ * 
+ * TODO : Tester un autre type de Layout pour la fenêtre 
  */
 public class StatusWindow extends JFrame {
 
-	private int nbSubStations;
-	private HashMap<Integer, StatusWindowSubStation> stations;
+	private Network modelNetwork;
+	private ArrayList<StatusWindowSubStationElement> subStations;
 
+	private HashMap<Integer, Node> TESTNetworkElements;
 
 	/**
-	 * Constructeur par défaut
+	 * Constructeur
+	 * @param ntw Le réseau à afficher
 	 */
-	public StatusWindow () {
+	public StatusWindow (Network ntw) {
 		super();
+		this.modelNetwork = ntw;
 
-		this.nbSubStations = 0;
-		stations = new HashMap<>();
+		this.subStations = new ArrayList<>();
 		buildWindow();
+
+
+		TESTNetworkElements = new HashMap<>();
 	}
 
 	/**
@@ -51,56 +60,54 @@ public class StatusWindow extends JFrame {
 		this.setLocationRelativeTo(null); 
 		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setContentPane(initDisplay());
-		this.validate();
-		this.repaint();		
-	}
-	
-	/**
-	 * Initialise le JPanel principal
-	 * @return le JPanel Principal
-	 */	
-	private JPanel initDisplay() {
 
 		JPanel panel = new JPanel();
 
-		// 2 colonnes et autant de lignes que nécessaires - espacement de 5px
+		// Layout principal - 2 colonnes et autant de lignes que nécessaires - espacement de 5px
 		panel.setLayout(new GridLayout(0,2,5,5));
 
-		return panel;
+		this.setContentPane(panel);
+		this.validate();
+		this.repaint();		
+		this.setVisible(true);
 	}
 
-	/**
-	 * Créé l'affichage à partir du réseau. N'utiliser qu'à la création ou au changement d'architecture du réseau
-	 * @param ntw réseau à afficher
-	 */
-	public void buildDisplay(Network ntw) {
-		this.nbSubStations = ntw.count(SubStation.class)[0];
-		System.out.println("Nombre de sous-sations : " + this.nbSubStations);
 
-		ArrayList<Node> nodes = ntw.getNodes();
+	/**
+	 * Créé l'affichage à partir du réseau. N'utiliser qu'une fois, à la création de la fenêtre
+	 */
+	public void createDisplay() {
+
+		ArrayList<Node> nodes = this.modelNetwork.getNodes();
 
 		for(Node node : nodes) {
+			// Sauvegarde node pour test
+			TESTNetworkElements.put(node.getId(), node);
+
 			// pour chaque station
-			if(node instanceof SubStation) {
-				StatusWindowSubStation station = new StatusWindowSubStation((SubStation)node);
-				
-				// ajout de la station à la Map stations
-				this.stations.put(node.getId(), station);
-				this.nbSubStations++;
+			if(node.getClass().equals(SubStation.class)) {
+				StatusWindowSubStationElement station = new StatusWindowSubStationElement((SubStation)node);
+
+				// ajout de la sous-station à la collection
+				this.subStations.add(station);
 
 				// pour chaque centrale reliée à la station
 				for(Line line : ((SubStation)node).getLines()) {
-					station.addPowerPlant(line.getIn());
+					System.out.println("Plant " + line.getIn().getId());
+					station.addElement(new StatusWindowPowerPlant(line.getIn()));
 				}
 
 				// pour chaque groupe relié à la station
 				for(Group group : ((SubStation)node).getGroups()) {
-					station.addGroup(group);
+					System.out.println("Groupe " + group.getId());
+					station.addElement(new StatusWindowGroup(group));
 				}
-
-				// ajout de la nouvelle station à la fenêtre
-				this.getContentPane().add(station.getContainer());
+				
+				// creation de l'affichage sous-station
+				station.createDisplay();
+				
+				// ajout à la fenêtre
+				this.getContentPane().add(station.getDisplay());
 			}
 		}
 
@@ -110,41 +117,54 @@ public class StatusWindow extends JFrame {
 	}
 
 	/**
-	 * Met à jour l'affichage des valeurs correspondant au réseau
-	 * @param ntw le réseau à afficher
+	 * Met à jour l'affichage des valeurs de paramètres. Utiliser après createDisplay()
 	 */
-	public void updateDisplay(Network ntw) {
-		// TODO
-		
-		for(Node currentNode : ntw.getNodes()) {
-			if(currentNode instanceof SubStation) {
-				this.stations.get(currentNode.getId()).update();
-			}
+	public void updateDisplay() {
+		for(StatusWindowSubStationElement station : this.subStations) {
+			station.updateDisplay();
 		}
-		
-		// mise à jour de la fenêtre
-		this.validate();
-		this.repaint();
 	}
 
 
 	/**
 	 * Main de test pour StatusWindows
 	 * @param args aucun parametre nécessaire
+	 * @throws InterruptedException thread.sleep() exception
 	 */
-	public static void main(String[] args) {
-		StatusWindow myWindow = new StatusWindow();
-		myWindow.setVisible(true);	
-
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args) throws InterruptedException {
 
 		// réseau de test basé sur l'archi en dur de Network
 		Network myNetwork = new Network(0,0,0);
 
-		myWindow.buildDisplay(myNetwork);
+		StatusWindow myWindow = new StatusWindow(myNetwork);
 
+		myWindow.createDisplay();
+		
+		// TEST update data
+		Group group7 = null;
+		Group group12 = null;
+		if(myWindow.TESTNetworkElements.containsKey(7)) {
+			group7 = (Group) myWindow.TESTNetworkElements.get(7);
+		}
+		
+		if(myWindow.TESTNetworkElements.containsKey(7)) {
+			group12 = (Group) myWindow.TESTNetworkElements.get(12);
+		}
+		
 		while(true) {
-
+			Thread.sleep(2000);
+			if(group7 != null)
+				group7.setConsumption(0);
+			if(group12 != null)
+				group12.setConsumption(300000);
+			myWindow.updateDisplay();
+			
+			Thread.sleep(2000);
+			if(group7 != null)
+				group7.setConsumption(400000);
+			if(group12 != null)
+				group12.setConsumption(0);
+			myWindow.updateDisplay();			
 		}
 	}
 

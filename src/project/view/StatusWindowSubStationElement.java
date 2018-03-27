@@ -3,7 +3,6 @@ package project.view;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -14,10 +13,10 @@ import project.network.*;
 /**
  * 
  * @author yoann
- * Classe représentant une sous-station dans la vue
- * TODO : A quel moment on rajoute les groupes/Centrales connectés à la sous-station ? Comment gérer leur affichage ?
- * Implémenter pour ça la fonction createDisplay() qui crééra une fois pour toutes tous les Labels et Panels nécessaires
- * APRES que les éléments connectés soient rajoutés. Les fonctions update() feront ensuite des setText() dans les Labels
+ * Classe représentant une sous-station dans la vue.
+ * 
+ * Elle s'occupe de gérer l'affichage des paramètres propres à la sous-station ainsi qu'aux éléments qui lui sont
+ * sont connectés.
  */
 
 public class StatusWindowSubStationElement extends StatusWindowElement {
@@ -25,7 +24,10 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 	// liste des éléments connectés à la sous-station
 	private ArrayList<StatusWindowElement> connectedElements;
 
-
+	/**
+	 * Constructeur
+	 * @param subStation La sous-station à afficher
+	 */
 	public StatusWindowSubStationElement(SubStation subStation) {
 		this.modelNode = subStation;
 
@@ -65,8 +67,8 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 	}
 
 	/**
-	 * Ajout d'une centrale ou d'un groupe à la sous-station
-	 * @param elt l'élément à rajouter
+	 * Ajout d'une centrale ou d'un groupe connecté à la sous-station
+	 * @param elt l'élément de réseau à rajouter
 	 */	
 	public void addElement(StatusWindowElement elt) {
 		elt.createDisplay();
@@ -75,7 +77,7 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 
 	@Override
 	/**
-	 * Pour la sous-station, update doit maj tous les éléments connectés
+	 * Pour la sous-station, updateDisplay() doit mettre à jour tous les éléments connectés
 	 */
 	public void updateDisplay() {
 		// maj des éléments connectés
