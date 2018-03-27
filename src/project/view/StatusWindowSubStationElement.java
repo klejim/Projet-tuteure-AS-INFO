@@ -11,14 +11,21 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import project.network.*;
-
+/**
+ * 
+ * @author yoann
+ * Classe représentant une sous-station dans la vue
+ * TODO : A quel moment on rajoute les groupes/Centrales connectés à la sous-station ? Comment gérer leur affichage ?
+ * Implémenter pour ça la fonction createDisplay() qui crééra une fois pour toutes tous les Labels et Panels nécessaires
+ * APRES que les éléments connectés soient rajoutés. Les fonctions update() feront ensuite des setText() dans les Labels
+ */
 
 public class StatusWindowSubStationElement extends StatusWindowElement {
 
 	// liste des éléments connectés à la sous-station
 	private ArrayList<StatusWindowElement> connectedElements;
-	
-	
+
+
 	public StatusWindowSubStationElement(SubStation subStation) {
 		this.modelNode = subStation;
 
@@ -26,10 +33,34 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 		this.connectedElements = new ArrayList<>();
 
 		this.elementDisplay = new JPanel();
+	}
 
-		// 1 colonne - espacement vertical 5px
+	/**
+	 * Créé l'affichage statique de la sous-station est des éléments connectés
+	 */
+	public void createDisplay() {
+
+		// Layout de la sous-station - 1 colonne - espacement vertical 5px
 		this.elementDisplay.setLayout(new GridLayout(0,1,0,5));
 		this.elementDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 2, false));
+
+		// Affichage infos sous-station - Layout 1 ligne - espacement horizontal 5px.
+		JPanel localDisplay = new JPanel();
+		localDisplay.setLayout(new GridLayout(1,0,5,0));
+		localDisplay.setBorder(BorderFactory.createLineBorder(Color.blue, 1, true));
+
+		for(String param : this.formatData()) {
+			JLabel parametre = new JLabel(param);
+			this.content.add(parametre);
+			localDisplay.add(parametre);
+		}
+
+		this.elementDisplay.add(localDisplay);
+
+		// Affichage des groupes et centrales
+		for(StatusWindowElement elt : this.connectedElements) {
+			this.elementDisplay.add(elt.getDisplay());
+		}
 
 	}
 
@@ -38,6 +69,7 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 	 * @param elt l'élément à rajouter
 	 */	
 	public void addElement(StatusWindowElement elt) {
+		elt.createDisplay();
 		this.connectedElements.add(elt);		
 	}
 
@@ -45,44 +77,20 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 	/**
 	 * Pour la sous-station, update doit maj tous les éléments connectés
 	 */
-	public void update() {
+	public void updateDisplay() {
 		// maj des éléments connectés
 		for(StatusWindowElement elt : this.connectedElements) {
-			elt.update();
+			elt.updateDisplay();
 		}
 
-		// maj des éléments locaux		
-		for(String param : this.formatData()) {
-			this.content.add(new JLabel(param));
+		// maj des éléments locaux
+		String[] data = this.formatData();
+		for(int i = 0; i<data.length; i++) {
+			this.content.get(i).setText(data[i]);
 		}
-		updateDisplay();
 
 	}
 
-	@Override
-	/**
-	 * Pour la sous-station, updateDisplay doit prendre en compte tous les éléments connectés
-	 */
-	public void updateDisplay() {
-
-		this.elementDisplay.removeAll();
-
-		// rajoute les nouveaux labels pour la sous-stations
-		JPanel row = new JPanel();
-
-		// 1 ligne - espacement horizontal 5px - bordure noire
-		row.setLayout(new GridLayout(1,0,5,0));
-		row.setBorder(BorderFactory.createLineBorder(Color.black, 2, true));
-		
-		for(JLabel label : this.content) {
-			row.add(label);
-		}
-		this.elementDisplay.add(row);
-
-		for(StatusWindowElement elt : this.connectedElements) {
-			this.elementDisplay.add(elt.getDisplay());
-		}
-	}
 
 	@Override
 	/**
@@ -94,7 +102,7 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 		int pin = ((SubStation)this.modelNode).getPowerIn();
 		int pout = ((SubStation)this.modelNode).getPowerOut();
 		int id = ((SubStation)this.modelNode).getId();
-		
+
 		data[0] = ("Sous-station "+ id);
 		data[1] = "Pin: "+pin+" kW";
 		data[2] = "Pout: "+pout+" kW";
@@ -102,33 +110,52 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 
 		return data;
 	}
-	
+
 	/**
 	 * Main de test de SubstationElement
 	 * @param args Aucun
+	 * @throws InterruptedException Thread.sleep() exception
 	 */
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) throws InterruptedException {
+
 		Network myNetwork = new Network(0,0,0);
-		
+
 		ArrayList<StatusWindowSubStationElement> stations = new ArrayList<>();
-		
+		ArrayList<PowerPlant> plants = new ArrayList<>();
+		ArrayList<Group> groups = new ArrayList<>();
+
 		JPanel globalPanel = new JPanel();
 		globalPanel.setLayout(new GridLayout(0,2,10,10));
-		
+
 		for(Node node : myNetwork.getNodes()) {
 			if(node.getClass().equals(SubStation.class)) {
 				StatusWindowSubStationElement local = new StatusWindowSubStationElement((SubStation)node);
-				local.update();
+
+				// pour chaque centrale reliée à la station
+				for(Line line : ((SubStation)node).getLines()) {
+					plants.add(line.getIn());
+					System.out.println("Plant " + line.getIn().getId());
+					local.addElement(new StatusWindowPowerPlant(line.getIn()));
+				}
+
+				// pour chaque groupe relié à la station
+				for(Group group : ((SubStation)node).getGroups()) {
+					groups.add(group);
+					System.out.println("Groupe " + group.getId());
+					local.addElement(new StatusWindowGroup(group));
+				}
+
+
+				local.createDisplay();
 				stations.add(local);
 				globalPanel.add(local.getDisplay());
 			}
 		}
 
-		
+
 		JFrame testWindow = new JFrame();
 		testWindow.setTitle("Test Substation");
-		testWindow.setSize(400,600);
+		testWindow.setSize(1200,600);
 		testWindow.setLocationRelativeTo(null); 
 		testWindow.setResizable(true);
 		testWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -136,7 +163,28 @@ public class StatusWindowSubStationElement extends StatusWindowElement {
 		testWindow.validate();
 		testWindow.repaint();		
 		testWindow.setVisible(true);
-		
+
+		while (true) {
+			Thread.sleep(1000);
+			groups.get(0).setConsumption(0);
+			groups.get(1).setConsumption(300000);
+
+			for(StatusWindowSubStationElement station : stations) {
+				station.updateDisplay();
+			}
+
+			
+			Thread.sleep(1000);
+			groups.get(0).setConsumption(100000);
+			groups.get(1).setConsumption(0);
+
+			for(StatusWindowSubStationElement station : stations) {
+				station.updateDisplay();
+			}
+
+
+		}
+
 	}
 
 }

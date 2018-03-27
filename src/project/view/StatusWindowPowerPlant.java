@@ -32,7 +32,6 @@ public class StatusWindowPowerPlant extends StatusWindowElement {
 		for(String data : formatData()) {
 			this.content.add(new JLabel(data));
 		}
-		updateDisplay();
 	}
 
 	@Override
@@ -40,13 +39,15 @@ public class StatusWindowPowerPlant extends StatusWindowElement {
 	 * @see project.view.StatusWindow.Element#formatData()
 	 */
 	public String[] formatData() {
-		String[] data = new String[2];
+		String[] data = new String[3];
 
 		State state = ((PowerPlant)this.modelNode).getState();
 		int pout = ((PowerPlant)this.modelNode).getActivePower();
+		int id = ((PowerPlant)this.modelNode).getId();
 
-		data[0] = "Etat: "+state;
-		data[1] = "Pout: "+pout+" kW";
+		data[0] = "| <-- PowerPlant "+ id;
+		data[1] = "Etat: "+state;
+		data[2] = "Pout: "+pout+" kW";
 
 		return data;
 	}

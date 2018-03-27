@@ -37,19 +37,17 @@ public abstract class StatusWindowElement {
 	/**
 	 * Met à jour l'affichage par rapport au modèle.
 	 */
-	public void update() {
+	public void updateDisplay() {
 		Iterator<JLabel> it = content.iterator();
 		for(String param : this.formatData()) {
 			it.next().setText(param);
 		}
-		updateDisplay();
 	}
 	
 	/**
-	 * Synchronise les labels de content avec elementDisplay
-	 * TODO : Solution non destructrice des labels existants
+	 * Créé les labels dans elementDisplay à partir de content
 	 */
-	public void updateDisplay() {
+	public void createDisplay() {
 		
 		// efface tous les labels
 		this.elementDisplay.removeAll();
@@ -66,7 +64,7 @@ public abstract class StatusWindowElement {
 	}
 
 	/**
-	 * Vérifie que l'élément correspond encore à un élément du réseau dans le modèle
+	 * Vérifie que l'élément correspond encore à un élément du réseau dans le modèle.
 	 * INUTILE dans un réseau statique
 	 * @return {@code true} si le modèle existe, {@code false} sinon
 	 */

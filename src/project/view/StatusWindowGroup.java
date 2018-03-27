@@ -31,7 +31,6 @@ public class StatusWindowGroup extends StatusWindowElement {
 		for(String data : formatData()) {
 			this.content.add(new JLabel(data));
 		}
-		updateDisplay();
 	}
 
 
