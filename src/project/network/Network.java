@@ -21,7 +21,8 @@ public class Network {
         nodes = new ArrayList<>();
         config = ConfigParser.parse("network");
         System.out.print(ConfigParser.stringify(config));
-        initNetwork();
+        String networkFile = (String)config.get("DEFAULT").get("network");
+        initNetwork(ConfigParser.parse(networkFile));
         TESTInitNetwork();
     }
     /**
@@ -35,14 +36,23 @@ public class Network {
     
     public Network(int nStations, int nPowerPlants, int nGroups) throws IOException{ // l'exception indique le contrôleur qu'une erreur critique a eu lieu lors de la création du réseau
         this();
-        initNetwork();
-        TESTInitNetwork();
     }
     /**
      * Initialisation du réseau à partir de la valeur de config
      */
-    private void initNetwork(){
-       
+    private void initNetwork(HashMap<String,HashMap<String,Object>> network){
+        for(String key : network.keySet()){
+            if(key.matches("GROUP_.+")){
+                HashMap<String, Object> group = network.get(key);
+                if(group.containsKey("name") && group.containsKey("consumption")){
+                    String name = (String)group.get("name");
+                    int consumption = Integer.parseInt((String)group.get("consumption"));
+                    nodes.add(new Group(consumption, name));
+                }
+                else{
+                }
+            }
+        }
     }
     /**
      * Analyse le réseau à la recherche d'erreurs
