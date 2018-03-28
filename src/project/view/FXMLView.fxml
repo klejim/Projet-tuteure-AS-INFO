@@ -1,14 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.input.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.view.FXMLController">
-    <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction12" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-    </children>
+<AnchorPane fx:id="anchor" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="project.view.FXMLController">
+   <children>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="640.0">
+        <children>
+          <MenuBar maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" VBox.vgrow="NEVER">
+            <menus>
+              <Menu mnemonicParsing="false" text="Réseau">
+                <items>
+                  <MenuItem mnemonicParsing="false" text="Créer" />
+                        <MenuItem mnemonicParsing="false" text="Charger" />
+                  <MenuItem mnemonicParsing="false" text="Analyse" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="Enregistrer" />
+                  <MenuItem mnemonicParsing="false" text="Enregistrer sous" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" onAction="#onClose" text="Quitter">
+                           <accelerator>
+                              <KeyCodeCombination alt="UP" code="Q" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                           </accelerator></MenuItem>
+                </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Simulation">
+                <items>
+                  <MenuItem mnemonicParsing="false" text="Lancer une itération" />
+                        <MenuItem mnemonicParsing="false" text="Afficher les courbes" />
+                </items>
+              </Menu>
+              <Menu mnemonicParsing="false" text="Aide">
+                <items>
+                        <MenuItem mnemonicParsing="false" text="Aide" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem mnemonicParsing="false" text="A propos" />
+                </items>
+              </Menu>
+            </menus>
+          </MenuBar>
+            <SplitPane dividerPositions="0.7827298050139275" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" prefHeight="361.0" prefWidth="640.0">
+              <items>
+                <AnchorPane>
+                     <children>
+                        <SplitPane dividerPositions="0.6515151515151515" layoutX="-2.0" prefHeight="277.0" prefWidth="638.0">
+                          <items>
+                            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                 <children>
+                                    <ImageView fitHeight="322.0" fitWidth="316.0" layoutX="47.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../Downloads/reseau_complet.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="35.0">
+                                 <children>
+                                    <TitledPane animated="false" collapsible="false" layoutX="3.0" layoutY="6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="275.0" prefWidth="218.0" text="Propriétés" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="227.0" prefWidth="210.0" />
+                                      </content>
+                                    </TitledPane>
+                                 </children>
+                              </AnchorPane>
+                          </items>
+                        </SplitPane>
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                     <children>
+                        <TextArea editable="false" layoutX="-2.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="74.0" prefWidth="638.0" promptText="Résultats de simulation" text="Eléments connectés : &#10;station 1&#10;| &lt;-- nucléaire&#10;| &lt;-- gaz 1&#10;| --&gt; groupe 1&#10;| --&gt; groupe 2&#10;station 2&#10;| &lt;-- nucléaire&#10;| &lt;-- gaz 1&#10;| &lt;-- hydraulique 2&#10;| --&gt; groupe 3&#10;| --&gt; groupe 4&#10;| --&gt; groupe 5&#10;station 3&#10;| &lt;-- nucléaire&#10;| &lt;-- hydraulique 2&#10;| --&gt; groupe 6&#10;| --&gt; groupe 7&#10;Eléments isolés : &#10;hydraulique 1&#10;groupe 8" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+              </items>
+            </SplitPane>
+        </children>
+      </VBox>
+   </children>
 </AnchorPane>

@@ -5,14 +5,16 @@
  */
 package project.view;
 
-import java.io.IOException;
+import static java.awt.SystemColor.window;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import project.network.Network;
 
 /**
@@ -22,10 +24,10 @@ import project.network.Network;
  */
 public class FXMLController implements Initializable {
     private Network network;
+    private Stage stage;
     @FXML
-    private Button button;
-    @FXML
-    private Label label;
+    private AnchorPane anchor;
+    
 
     /**
      * Initializes the controller class.
@@ -33,17 +35,21 @@ public class FXMLController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-
-    @FXML
-    private void handleButtonAction12(ActionEvent event) {
-        try{
-            network = new Network(1,2,3);
-            label.setText("Réseau créé");
-        }
-        catch(IOException e){
-            label.setText(e.getMessage());
-        }
     }
+    
+    void setStage(Stage stge){
+        stage = stge;
+        stage.setOnCloseRequest((event)->{
+            onClose(event);
+        });
+    }
+    
+    @FXML
+    private void onClose(Event event){
+        System.out.println("closing");
+        // todo : avertissement et demande de sauvegarde
+        Platform.exit();
+    }
+
     
 }

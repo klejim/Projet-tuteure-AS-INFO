@@ -19,10 +19,14 @@ public class View extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLView.fxml"));//FXMLLoader.load(getClass().getResource("FXMLView.fxml"));
+        Parent root = loader.load();
+        // il est nécessaire de récupérer le contrôleur pour pouvoir l'initialiser avec le stage
+        FXMLController controller = loader.getController();
+        controller.setStage(stage);
         
         Scene scene = new Scene(root);
-        
+        stage.setTitle("Simulation");
         stage.setScene(scene);
         stage.show();
     }
