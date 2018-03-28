@@ -1,5 +1,6 @@
 package project.view;
 
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import project.network.Group;
 import project.network.Line;
@@ -12,7 +13,36 @@ import project.network.SubStation;
  * @author Jimenez
  */
 public class View {
-   /**
+	
+	StatusWindow statWin;
+	
+	/**
+	 * Créé l'IHM à partir du réseau. Utiliser à l'initialisation seulement
+	 * @param network
+	 */
+   	public void createView(Network network) {
+		statWin = new StatusWindow(network);
+	}
+
+   	/**
+   	 * Met à jour l'IHM
+   	 */
+	public void updateView() {
+		if(statWin != null) {
+			statWin.updateDisplay();
+		}
+	}
+	/**
+	 * Ferme l'IHM
+	 */
+	public void deleteView() {
+		if(statWin != null) {
+			statWin.dispatchEvent(new WindowEvent(statWin, WindowEvent.WINDOW_CLOSING));
+		}
+	}
+	
+	
+	/**
     * Génère une chaîne représentant le réseau donné en paramètre.
     * @param network le réseau à représenter
     * @return une chaîne représentant le réseau.
