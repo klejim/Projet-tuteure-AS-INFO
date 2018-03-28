@@ -1,0 +1,20 @@
+### GROUP_1 ###
+name = "groupe 1";
+consumption = 250000; //kW
+
+### GROUP_2 ### 
+name = "groupe 2";
+consumption = 150000;
+
+### PLANT_1 ###
+type = "NUCLEAR";
+name = "centrale 1";
+
+### SUBSTATION_1 ###
+name = "station 1";
+groups = {GROUP_1, GROUP_2};
+plants = {PLANT_1};
+
+### PLANT_2 ### // centrale non connectée
+name = "centrale 2";
+type = "HYDRAULIC";

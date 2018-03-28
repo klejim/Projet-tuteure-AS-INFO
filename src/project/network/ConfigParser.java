@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.FileInputStream;
+import java.util.Arrays;
 
 /**
  * Classe permettant la lecture d'un fichier de configuration. 
@@ -29,10 +30,13 @@ import java.io.FileInputStream;
 public class ConfigParser {
     private static final String OPTIONAL_COMMENT = "(\\s?(//.+)?)+";
     private static final String SECTION = "#{3} \\w+ #{3}" + OPTIONAL_COMMENT;
-    private static final String VAR_DECLARATION = "\\w+ = (\\[|\\\")?.+(\\]|\\\")?" + OPTIONAL_COMMENT;
+    private static final String VAR_DECLARATION = "\\w+ = .+;" + OPTIONAL_COMMENT;
     private static final String NUMERIC = "[0-9]+(\\.[0-9]+)?";
-    private static final String STRING ="\"(.?)+\"";
+    private static final String STRING = "\"(.?)+\"";
     private static final String ARRAY = "\\[([0-9]+(\\.[0-9]+)?(,( ?)+)?)+\\]";
+    private static final String OBJECTSARRAY = "\\{([\\w\\d]+(,( ?)+)?)+\\}";
+    
+    
     /**
      * Parcours un fichier de configuration.
      * Cette méthode crée un tableau associatif dont les clés sont les noms des variables définies dans chaque section du fichier
@@ -69,12 +73,19 @@ public class ConfigParser {
                     }
                     else if (expression.matches(ARRAY)){
                         String tmp = expression.substring(1, expression.length()-1);
-                        String vals[] = tmp.split(", ?");
+                        String vals[] = tmp.split(",( ?)+");
                         ArrayList<Double> values = new ArrayList<>();
                         for (String s : vals){
                             Double numeric = Double.parseDouble(s);
                             values.add(numeric);
                         }
+                        addToMap(vars, name, values);
+                    }
+                    else if (expression.matches(OBJECTSARRAY)){
+                        String tmp = expression.substring(1, expression.length()-1);
+                        String vals[] = tmp.split(",( ?)+");
+                        ArrayList<String> values = new ArrayList<>();
+                        values.addAll(Arrays.asList(vals));
                         addToMap(vars, name, values);
                     }
                 }

@@ -17,9 +17,9 @@ public class Network {
     private HashMap<String,HashMap<String,Object>> config; // contenu du fichier config.txt
     private int production, consumption;
     private ArrayList<Node> nodes;
-    private Network() throws IOException{
+    private Network() throws IOException {
         nodes = new ArrayList<>();
-        config = ConfigParser.parse("config");
+        config = ConfigParser.parse("network");
         System.out.print(ConfigParser.stringify(config));
         initNetwork();
         TESTInitNetwork();
@@ -48,7 +48,7 @@ public class Network {
      * Analyse le réseau à la recherche d'erreurs
      * @return la liste des erreurs rencontrées
      */
-    public ArrayList<NetworkError> analyse(){
+    public ArrayList<NetworkError> analyze(){
         ArrayList<NetworkError> errors = new ArrayList<>();
         for (Node n : nodes){
             if (!n.isConnected()){
@@ -113,7 +113,7 @@ public class Network {
     public ArrayList<NetworkError> runOnce(){
         // todo : mise à jour consommation
         // todo : mise à jour sous-stations
-        return handleErrors(analyse());
+        return handleErrors(analyze());
     }
     
     
