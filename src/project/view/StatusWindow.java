@@ -14,17 +14,17 @@ import javax.swing.JPanel;
 import project.network.*;
 
 /**
- * @author yoann
- * 
  * Classe gérant la fenêtre de statut de réseau.
  * 
  * Elle créé la fenêtre, récupère les sous-station du réseau, créé leur affichage et celui des éléments
  * qui lui sont connectés. Le réseau se créé en trois temps :
  * 
- *  1. Utiliser le constructeur StatusWindow(Network) pour créer la fenêtre principale
- *  2. Utiliser StatusWindow.createDisplay() pour créer l'affichage du réseau
- *  3. Utiliser StatusWindow.updateDisplay() pour mettre à jour l'affichage des paramètres des éléments du réseau
+ *  1. Utiliser le constructeur StatusWindow(Network) pour créer la fenêtre principale.
+ *  2. Utiliser StatusWindow.createDisplay() pour créer l'affichage du réseau.
+ *  3. Utiliser StatusWindow.updateDisplay() pour mettre à jour l'affichage des paramètres des éléments du réseau.
  * 
+ * @author yoann
+ *  
  * TODO : Tester un autre type de Layout pour la fenêtre 
  */
 public class StatusWindow extends JFrame {

@@ -11,14 +11,11 @@ import javax.swing.JPanel;
 
 import project.network.*;
 /**
- * 
- * @author yoann
- * Classe représentant une sous-station dans la vue.
- * 
+ * Classe qui décrit la vue d'une sous-station.
  * Elle s'occupe de gérer l'affichage des paramètres propres à la sous-station ainsi qu'aux éléments qui lui sont
  * sont connectés.
+ * @author yoann
  */
-
 public class StatusWindowSubStation extends StatusWindowElement {
 
 	// liste des éléments connectés à la sous-station
@@ -38,7 +35,7 @@ public class StatusWindowSubStation extends StatusWindowElement {
 	}
 
 	/**
-	 * Créé l'affichage statique de la sous-station est des éléments connectés
+	 * Créé l'affichage statique de la sous-station et des éléments connectés
 	 */
 	public void createDisplay() {
 

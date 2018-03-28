@@ -9,10 +9,8 @@ import javax.swing.JPanel;
 import project.network.*;
 
 /**
- * 
- * @author yoann
- *
  * Classe qui décrit la vue d'un élément groupe de consommation
+ * @author yoann 
  */
 public class StatusWindowGroup extends StatusWindowElement {
 	
@@ -25,11 +23,7 @@ public class StatusWindowGroup extends StatusWindowElement {
 
 		// 1 ligne - espacement horizontal 5px
 		this.elementDisplay.setLayout(new GridLayout(1,0,5,0));
-		//this.elementDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 2, false));
-				
-		for(String data : formatData()) {
-			this.content.add(new JLabel(data));
-		}
+
 	}
 
 

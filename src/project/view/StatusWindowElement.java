@@ -7,12 +7,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import project.network.*;
-/**
- * 
- * @author yoann
- * Classe abstraite qui décrit un élément de la vue calqué sur son équivalent modèle
- */
 
+
+/**
+ *Classe abstraite qui décrit un élément de la vue calqué sur son équivalent modèle
+ * @author yoann
+ */
 public abstract class StatusWindowElement {
 
 	// node référent au model
@@ -23,7 +23,7 @@ public abstract class StatusWindowElement {
 
 	// JPanel de l'élément
 	protected JPanel elementDisplay;
-	
+
 	/**
 	 * Récupère et met en forme les données du modèle pour l'affichage
 	 * @return tableaux de {@code Strings} pour chaque champ à afficher dans la ligne
@@ -40,18 +40,21 @@ public abstract class StatusWindowElement {
 			it.next().setText(param);
 		}
 	}
-	
+
 	/**
-	 * Créé les labels dans elementDisplay à partir de content
+	 * Ajoute les labels de l'élément à son panel d'affichage
 	 */
 	public void createDisplay() {
-		
+
 		// efface tous les labels
 		this.elementDisplay.removeAll();
 
-		// rajoute les nouveaux labels
-		for(JLabel label : this.content) {
-			this.elementDisplay.add(label);
+		
+		// création des labels
+		for(String data : formatData()) {
+			JLabel block = new JLabel(data);
+			this.content.add(block);
+			this.elementDisplay.add(block);
 		}
 
 		// Rajoute des labels vides pour l'affichage
@@ -68,7 +71,7 @@ public abstract class StatusWindowElement {
 	public boolean isAlive() {
 		return modelNode != null;
 	}
-	
+
 	/**
 	 * Retourne le panel de l'élément
 	 * @return JPanel

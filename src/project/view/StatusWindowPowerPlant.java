@@ -10,12 +10,9 @@ import project.network.PowerPlant;
 import project.network.PowerPlant.State;
 
 /**
- * 
- * @author yoann
- * 
- * Classe qui décrit la vue d'une centrale électrique selon le Modèle
+ * Classe qui décrit la vue d'une centrale électrique.
+ * @author yoann 
  */
-
 public class StatusWindowPowerPlant extends StatusWindowElement {
 
 	public StatusWindowPowerPlant(PowerPlant plant) {
@@ -27,10 +24,6 @@ public class StatusWindowPowerPlant extends StatusWindowElement {
 
 		// 1 ligne - espacement horizontal 5px
 		this.elementDisplay.setLayout(new GridLayout(1,0,5,0));
-
-		for(String data : formatData()) {
-			this.content.add(new JLabel(data));
-		}
 	}
 
 	@Override
