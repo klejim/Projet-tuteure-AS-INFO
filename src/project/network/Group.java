@@ -33,20 +33,20 @@ public class Group extends Node{
     // getters/setters
     
     /**
-	 * @return the originalconsumption
+	 * @return la puissance moyenne consommée par le groupe.
 	 */
 	public int getOriginalconsumption() {
 		return originalconsumption;
 	}
 	/**
-	 * @param originalconsumption the originalconsumption to set
+	 * @param originalconsumption la nouvelle consommation moyenne.
 	 */
 	public void setOriginalconsumption(int originalconsumption) {
 		this.originalconsumption = originalconsumption;
 	}
     
     /**
-     * @return la puissance consommée par le groupe. 
+     * @return la puissance consommée par le groupe (après calcul). 
      */
     public int getConsumption() {
         return consumption;
@@ -67,7 +67,7 @@ public class Group extends Node{
         this.station = station;
     }
     /**
-     * @return la sous-station
+     * @return la sous-station.
      * @see SubStation
      */
     public SubStation getStation() {
@@ -75,7 +75,7 @@ public class Group extends Node{
     }
     /**
      * Met à jour la consommation d'un groupe et les sous stations associées sur une valeur précise, supposée être appellée par update (laissé en public pour le test)
-     * @param Nouvelle Consommation
+     * @param consumption la nouvelle consommation.
      * @see SubStation
      */
     public void updateConsumption(int consumption){
@@ -85,13 +85,4 @@ public class Group extends Node{
     	}
     	
     }
-    /**
-     * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur, et limite éventuellement la consommation si une limitation IN venait à venir
-     * @param Nouvelle Consommation
-     * @see SubStation
-     */
-    public void update(int factor,int maxPower){
-    	
-    }
-    
 }

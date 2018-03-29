@@ -17,11 +17,9 @@ public class View {
     * @param network le réseau à représenter
     * @return une chaîne représentant le réseau.
     */ 
-    public String rapport(Network network,int iteration){
+    public String rapport(Network network){
         ArrayList<Node> unconnected = new ArrayList<>();
-        String str="Itération n°";
-        str+=String.valueOf(iteration);
-        str += "Eléments connectés : \n";
+        String str = "Eléments connectés : \n";
         for (Node n : network.getNodes()){
             if (n instanceof SubStation){
                 str += "" + n.getName() + "\n";
