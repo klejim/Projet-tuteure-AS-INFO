@@ -3,6 +3,8 @@ package project.network;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import project.network.PowerPlant.State;
+
 /**
  * Classe représentant le réseau de distribution.
  * 
@@ -13,9 +15,13 @@ public class Network {
     private int production, consumption;
     private ArrayList<Node> nodes;
     private Network(){
-        nodes = new ArrayList<>();
+        nodes = new ArrayList<>(); //AAAAAAAAAAH B.G.
     }
-    /**
+    
+    
+    
+    
+	/**
      * Constructeur. Bidon pour l'instant, l'initialisation du réseau se fait dans {#TESTInitNetwork TESTInitNetwork}.
      * @param nStations non utilisé
      * @param nPowerPlants non utilisé
@@ -132,4 +138,47 @@ public class Network {
     public ArrayList<Node> getNodes() {
         return nodes;
     }
+    /**
+     * @return vrai si la centrale est OFF. 
+     */
+    
+    
+    
+    //Fonction de testing, non définitive et en travaux/ démonstration de fonctionnalité
+    //Itérations tout juste implémentés non testées : IMplémenter dans la vue, terminer cette fonction de test et vérifier le temps d'allumage
+    public void run(int numIte){  	
+    	
+    		
+    		
+    		for (Node n : nodes){
+    			
+    			//Partie destinée à rester
+    	    	
+    		    
+	    		if (n instanceof PowerPlant){
+	    			((PowerPlant) n).update();
+	    		}
+	    		/*
+	    		if (n instanceof Group){
+	    			((Group) n).update(this.factor.getFactor());
+	    		}
+	    	*/
+    		
+    		//Partie destiner à tester
+	    		if (n instanceof NuclearPlant&&numIte==1){
+	    			((NuclearPlant)n).stop();
+	    		}
+	    		
+	    		if(n instanceof NuclearPlant&&numIte==3){
+	    			((NuclearPlant)n).start();
+	    		}
+	    		
+		   		if (n instanceof Group){
+		   			((Group)n).updateConsumption(2000);
+		   		}
+		   	
+    		}
+    	
+    	}
+    
 }

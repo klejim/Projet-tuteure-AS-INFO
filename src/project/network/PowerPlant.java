@@ -13,6 +13,8 @@ abstract public class PowerPlant extends Node{
     private State state;
     private int power, startDelay;
     private ArrayList<Line> lines;
+    private int framesSinceStart;
+    
     /**
      * Constructeur par défaut.
      */
@@ -27,7 +29,7 @@ abstract public class PowerPlant extends Node{
      * @param p la puissance produite par la centrale
      * @param sd le délai de démarrage pour la centrale
      */
-    PowerPlant(String s, int p, int sd){
+    PowerPlant(String s, int p,int sd){
         this();
         setName(s);
         power = p;
@@ -56,7 +58,7 @@ abstract public class PowerPlant extends Node{
      * Met à jour la puissance distribuée par la centrale à chaque ligne. 
      */
     void updateLines(){
-        lines.forEach(line -> line.setPower(power/lines.size())); // naïf mais il fallait quelque chose et c'est aussi bien ainsi
+        lines.forEach(line -> line.setPower(this.getActivePower()/lines.size())); // naïf mais il fallait quelque chose et c'est aussi bien ainsi
     }
     /**
      * Relie des lignes de transmission à la centrale.
@@ -73,7 +75,7 @@ abstract public class PowerPlant extends Node{
         return (state == State.ON)?power:0;
     }
     /**
-     * Arrête la centrale si c'est possible.
+     * Arrête la centrale si c'est possible.Met à jour les lignes et stations correspondantes.
      * @return true si la centrale a été arrêtée et false sinon.
      */
     boolean stop(){
@@ -82,19 +84,49 @@ abstract public class PowerPlant extends Node{
             state = State.OFF;
             stopped = true;
         }
+        this.updateLines();
+		this.updateStations();
         return stopped;
     }
     /**
-     * Met en marche la centrale si c'est possible.
+     * Met en marche la centrale si c'est possible.Met à jour les lignes et stations correspondantes.
      * @return true si la centrale a été mise en marche et false sinon.
      */
     boolean start(){
         boolean started = false;
         if (state == State.OFF){
-            state = State.ON;
-            started = true;
+        	if(this.startDelay==0){
+        		state = State.ON;
+                started = true;
+        	}
+        	else{
+        		state=State.STARTING;
+        		this.framesSinceStart=0;
+        		started=true; //Il faudrait passer started en int éventuellement, pour distinguer ON OFF & STARTING
+        	}
+            
         }
+        this.updateLines();
+		this.updateStations(); 
         return started;
+    }
+    /**
+     * met à jour la centrale, en vue du temps de démarrage
+     * 
+     */
+    public void update(){
+    	if (this.state==State.STARTING){
+    		if (this.framesSinceStart>=this.startDelay){
+    			this.state=State.ON;
+    			this.framesSinceStart=0;
+    			this.updateLines();
+    			this.updateStations();
+    			
+    		}
+    		else{
+    			this.framesSinceStart++;
+    		}
+    	}
     }
     
     /** getters/setters **/
@@ -155,4 +187,6 @@ abstract public class PowerPlant extends Node{
     public ArrayList<Line> getLines() {
         return lines;
     }
+    
+    
 }
