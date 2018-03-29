@@ -1,9 +1,9 @@
 package project.network;
 
 import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Arrays;
-
-import project.network.PowerPlant.State;
+import java.util.HashMap;
 
 /**
  * Classe représentant le réseau de distribution.
@@ -12,26 +12,128 @@ import project.network.PowerPlant.State;
  * @author Jimenez
  */
 public class Network {
+    static final int SIMULATION_PERIOD = 24;
+    
+    private HashMap<String,HashMap<String,Object>> config; // contenu du fichier config.txt
     private int production, consumption;
     private ArrayList<Node> nodes;
-    private Network(){
-        nodes = new ArrayList<>(); //AAAAAAAAAAH B.G.
+    private Network() throws IOException {
+        nodes = new ArrayList<>();
+        config = ConfigParser.parse("network");
+        System.out.print(ConfigParser.stringify(config));
+        String networkFile = (String)config.get("DEFAULT").get("network");
+        initNetwork(ConfigParser.parse(networkFile));
+        TESTInitNetwork();
     }
-    
-    
-    
-    
-	/**
+    /**
      * Constructeur. Bidon pour l'instant, l'initialisation du réseau se fait dans {#TESTInitNetwork TESTInitNetwork}.
      * @param nStations non utilisé
      * @param nPowerPlants non utilisé
      * @param nGroups  non utilisé
+     * @throws java.io.IOException une erreur s'est produite lors de la lecture des fichiers de configuration
      */
     // todo : un vrai constructeur
-    public Network(int nStations, int nPowerPlants, int nGroups){
+    
+    public Network(int nStations, int nPowerPlants, int nGroups) throws IOException{ // l'exception indique le contrôleur qu'une erreur critique a eu lieu lors de la création du réseau
         this();
-        TESTInitNetwork();
     }
+    /**
+     * Initialisation du réseau à partir de la valeur de config
+     * @param network un tableau associatif représentant le réseau
+     * @see ConfigParser
+     */
+    private void initNetwork(HashMap<String,HashMap<String,Object>> network){
+        for(String key : network.keySet()){
+            if(key.matches("GROUP_.+")){
+                HashMap<String, Object> group = network.get(key);
+                if(group.containsKey("name") && group.containsKey("consumption")){
+                    String name = (String)group.get("name");
+                    int consumption = Integer.parseInt((String)group.get("consumption"));
+                    nodes.add(new Group(consumption, name));
+                }
+                else{
+                }
+            }
+        }
+    }
+    /**
+     * Analyse le réseau à la recherche d'erreurs
+     * @return la liste des erreurs rencontrées
+     */
+    public ArrayList<NetworkError> analyze(){
+        ArrayList<NetworkError> errors = new ArrayList<>();
+        for (Node n : nodes){
+            if (!n.isConnected()){
+                errors.add(new NodeNotConnectedError(n));
+            }
+            if (n instanceof SubStation){
+                // todo : ajuster seuils
+                SubStation station = (SubStation)n;
+                if (station.getDiff() > 0){ // demande supérieure à l'entrée
+                    errors.add(new TooMuchPowerError(station, station.getDiff()));
+                }
+                else if (station.getDiff() < 0){
+                    errors.add(new NotEnoughPowerError(station, Math.abs(station.getDiff())));
+                }
+            }
+        }
+        return errors;
+    }
+    /**
+     * Gestion des erreurs.
+     * @param rawErrors liste des erreurs brutes générées par l'analyse.
+     * @return liste d'erreurs définitive.
+     */
+    private ArrayList<NetworkError> handleErrors(ArrayList<NetworkError> rawErrors){
+        ArrayList<NetworkError> errors = new ArrayList<>(rawErrors.size());
+        for (NetworkError e : rawErrors){
+            if (e instanceof NotEnoughPowerError){
+                NotEnoughPowerError err = (NotEnoughPowerError) e;
+                if (solve1(err.getStation(), err.getPower())){
+                    e.setSolved(true);
+                }
+                else{
+                    e.setMessage("Correction automatique impossible");
+                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
+                    errors.add(newError);
+                }
+            }
+            else if (e instanceof TooMuchPowerError){
+                TooMuchPowerError err = (TooMuchPowerError) e;
+                if (solvePowerOverflow(err.getStation(), err.getPower())){
+                    e.setSolved(true);
+                }
+                else{
+                    e.setMessage("Correction automatique impossible");
+                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
+                    errors.add(newError);
+                }
+            }
+            else if (e instanceof NodeNotConnectedError){
+                e.setMessage("Connexion manuelle nécessaire");
+            }
+        }
+        return errors;
+    }
+    private boolean solve1(SubStation station, int p){
+        return true;
+    }
+    private boolean solvePowerOverflow(SubStation station, int overflow){
+        ArrayList<PowerPlant> tmp = new ArrayList<>();
+        for (Line line : station.getLines()){
+            PowerPlant plant = line.getIn();
+            
+        }
+        return true;
+    }
+    
+    public ArrayList<NetworkError> runOnce(){
+        // todo : mise à jour consommation
+        // todo : mise à jour sous-stations
+        return handleErrors(analyze());
+    }
+    
+    
     /**
      * Initialise un réseau relativement simple.
      */
@@ -80,7 +182,7 @@ public class Network {
             p.updateStations();
         }
         computeProduction();
-    }
+    }   
     /**
      * Met à jour la consommation totale du réseau en fonction des besoins de chaque sous-station.
      */
@@ -137,48 +239,34 @@ public class Network {
      */
     public ArrayList<Node> getNodes() {
         return nodes;
-    }
-    /**
-     * @return vrai si la centrale est OFF. 
-     */
-    
-    
-    
+    } 
     //Fonction de testing, non définitive et en travaux/ démonstration de fonctionnalité
     //Itérations tout juste implémentés non testées : IMplémenter dans la vue, terminer cette fonction de test et vérifier le temps d'allumage
-    public void run(int numIte){  	
-    	
-    		
-    		
-    		for (Node n : nodes){
-    			
-    			//Partie destinée à rester
-    	    	
-    		    
-	    		if (n instanceof PowerPlant){
-	    			((PowerPlant) n).update();
-	    		}
-	    		/*
+    
+    public void run(int numIte) {
+        for (Node n : nodes) {
+            //Partie destinée à rester
+            if (n instanceof PowerPlant) {
+                ((PowerPlant) n).update();
+            }
+            /*
 	    		if (n instanceof Group){
 	    			((Group) n).update(this.factor.getFactor());
 	    		}
-	    	*/
-    		
-    		//Partie destiner à tester
-	    		if (n instanceof NuclearPlant&&numIte==1){
-	    			((NuclearPlant)n).stop();
-	    		}
-	    		
-	    		if(n instanceof NuclearPlant&&numIte==3){
-	    			((NuclearPlant)n).start();
-	    		}
-	    		
-		   		if (n instanceof Group){
-		   			((Group)n).updateConsumption(2000);
-		   		}
-		   	
-    		}
-    	
-    	}
-    
+             */
+
+            //Partie destiner à tester
+            if (n instanceof NuclearPlant && numIte == 1) {
+                ((NuclearPlant) n).stop();
+            }
+
+            if (n instanceof NuclearPlant && numIte == 3) {
+                ((NuclearPlant) n).start();
+            }
+
+            if (n instanceof Group) {
+                ((Group) n).updateConsumption(2000);
+            }
+        }
+    }
 }

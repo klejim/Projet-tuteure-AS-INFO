@@ -117,5 +117,8 @@ public class SubStation extends Node{
         return lines;
     }
     
-   
+    public int getDiff(){
+        // alimentation - demande
+        return powerIn - powerOut;
+    }
 }
