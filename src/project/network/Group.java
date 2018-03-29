@@ -7,7 +7,10 @@ package project.network;
  */
 public class Group extends Node{
     private int consumption;
+    private int originalconsumption; // a manipulé avec le facteur
     private SubStation station;
+    
+    	
     /**
      * Constructeur.
      * @param power la puissance consommée par le groupe.
@@ -16,6 +19,7 @@ public class Group extends Node{
     Group(int power, String s){
         super(s);
         consumption = power;
+        originalconsumption=power;
     }
     /**
      * Un groupe est considéré connecté s'il est relié à une sous-station.
@@ -27,6 +31,20 @@ public class Group extends Node{
     }
     
     // getters/setters
+    
+    /**
+	 * @return the originalconsumption
+	 */
+	public int getOriginalconsumption() {
+		return originalconsumption;
+	}
+	/**
+	 * @param originalconsumption the originalconsumption to set
+	 */
+	public void setOriginalconsumption(int originalconsumption) {
+		this.originalconsumption = originalconsumption;
+	}
+    
     /**
      * @return la puissance consommée par le groupe. 
      */
@@ -34,7 +52,7 @@ public class Group extends Node{
         return consumption;
     }
     /**
-     * Modifie la consommation du groupe.
+     * Modifie la consommation du groupe. 
      * @param consumption la nouvelle consommation.
      */
     public void setConsumption(int consumption) {
@@ -55,4 +73,25 @@ public class Group extends Node{
     public SubStation getStation() {
         return station;
     }
+    /**
+     * Met à jour la consommation d'un groupe et les sous stations associées sur une valeur précise, supposée être appellée par update (laissé en public pour le test)
+     * @param Nouvelle Consommation
+     * @see SubStation
+     */
+    public void updateConsumption(int consumption){
+    	this.setConsumption(consumption);
+    	if(this.getStation()!=null){
+    		this.getStation().updatePowers();
+    	}
+    	
+    }
+    /**
+     * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur, et limite éventuellement la consommation si une limitation IN venait à venir
+     * @param Nouvelle Consommation
+     * @see SubStation
+     */
+    public void update(int factor,int maxPower){
+    	
+    }
+    
 }

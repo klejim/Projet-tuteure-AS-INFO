@@ -116,4 +116,6 @@ public class SubStation extends Node{
     public ArrayList<Line> getLines() {
         return lines;
     }
+    
+   
 }
