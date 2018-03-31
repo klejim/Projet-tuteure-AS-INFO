@@ -24,13 +24,13 @@ public class View {
             if (n instanceof SubStation){
                 str += "" + n.getName() + "\n";
                 for (Line l : ((SubStation)n).getLines()){
-                    str += "| <-- " + l.getIn().getName()+ "  " + l.getPower()+ "kW \n";
+                    str += "| <-- " + l.getIn().getName()+ "  " + l.getActivePower()+ "kW \n";
                 }
                 for (Group g : ((SubStation)n).getGroups()){
                     str += "| --> " + g.getName() +" " + g.getConsumption()+" kW" + "\n";
                 }
             
-            str+= "TotalIN: "+ ((SubStation)n).getPowerIn() + "TotalOUT: "+ ((SubStation)n).getPowerOut()+ "\n";
+            str+= "Total IN: "+ ((SubStation)n).getPowerIn() + " | Total OUT: "+ ((SubStation)n).getPowerOut()+ "\n";
             }
             else if ((n instanceof Group || n instanceof PowerPlant) && !n.isConnected()){
                 unconnected.add(n);

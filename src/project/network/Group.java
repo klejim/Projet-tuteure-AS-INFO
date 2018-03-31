@@ -5,6 +5,7 @@ package project.network;
  * @author Jimenez
  * @see SubStation
  */
+// TODO : alimentation des groupes
 public class Group extends Node{
     private int consumption;
     private int originalconsumption; // a manipulé avec le facteur
@@ -81,8 +82,12 @@ public class Group extends Node{
     public void updateConsumption(int consumption){
     	this.setConsumption(consumption);
     	if(this.getStation()!=null){
-    		this.getStation().updatePowers();
+    		this.getStation().update();
     	}
     	
+    }
+    @Override
+    public void update(){
+        
     }
 }
