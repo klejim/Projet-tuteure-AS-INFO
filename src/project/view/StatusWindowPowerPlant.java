@@ -3,7 +3,6 @@ package project.view;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import project.network.PowerPlant;

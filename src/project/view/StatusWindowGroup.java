@@ -3,10 +3,9 @@ package project.view;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import project.network.*;
+import project.network.Group;
 
 /**
  * Classe qui décrit la vue d'un élément groupe de consommation

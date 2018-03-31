@@ -1,6 +1,3 @@
-/**
- * 
- */
 package project.view;
 
 
@@ -10,7 +7,6 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import project.network.*;
 
 /**
@@ -27,6 +23,7 @@ import project.network.*;
  *  
  * TODO : Tester un autre type de Layout pour la fenêtre 
  */
+@SuppressWarnings("serial")
 public class StatusWindow extends JFrame {
 
 	private Network modelNetwork;
@@ -102,10 +99,10 @@ public class StatusWindow extends JFrame {
 					System.out.println("Groupe " + group.getId());
 					station.addElement(new StatusWindowGroup(group));
 				}
-				
+
 				// creation de l'affichage sous-station
 				station.createDisplay();
-				
+
 				// ajout à la fenêtre
 				this.getContentPane().add(station.getDisplay());
 			}
@@ -139,18 +136,18 @@ public class StatusWindow extends JFrame {
 		StatusWindow myWindow = new StatusWindow(myNetwork);
 
 		myWindow.createDisplay();
-		
+
 		// TEST update data
 		Group group7 = null;
 		Group group12 = null;
 		if(myWindow.TESTNetworkElements.containsKey(7)) {
 			group7 = (Group) myWindow.TESTNetworkElements.get(7);
 		}
-		
+
 		if(myWindow.TESTNetworkElements.containsKey(7)) {
 			group12 = (Group) myWindow.TESTNetworkElements.get(12);
 		}
-		
+
 		while(true) {
 			Thread.sleep(2000);
 			if(group7 != null)
@@ -158,7 +155,7 @@ public class StatusWindow extends JFrame {
 			if(group12 != null)
 				group12.setConsumption(300000);
 			myWindow.updateDisplay();
-			
+
 			Thread.sleep(2000);
 			if(group7 != null)
 				group7.setConsumption(400000);
