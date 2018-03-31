@@ -36,13 +36,18 @@ public class Network {
      * Initialise un réseau relativement simple.
      */
     private void TESTInitNetwork(){
+    	Consumption Cnspt=new Consumption();
+    	Cnspt.initTestTab();
+    	
         NuclearPlant np = new NuclearPlant("nucléaire");
         HydraulicPlant hp1 = new HydraulicPlant("hydraulique 1"), hp2 = new HydraulicPlant("hydraulique 2");
         GasPlant gp1 = new GasPlant("gaz 1");
+        
         SubStation s1 = new SubStation("station 1"), s2 = new SubStation("station 2"), s3 = new SubStation("station 3");
-        Group g1 = new Group(400000, "groupe 1"), g2 = new Group(250000, "groupe 2"), g3 = new Group(610000,"groupe 3");
-        Group g4 = new Group(30000, "groupe 4"), g5 = new Group(200000, "groupe 5"), g6 = new Group(400000, "groupe 6");
-        Group g7 = new Group(240000, "groupe 7"), g8 = new Group(250000, "groupe 8");
+        
+        Group g1 = new Group(400000, "groupe 1",Cnspt,"test"), g2 = new Group(250000, "groupe 2",Cnspt,"test"), g3 = new Group(610000,"groupe 3",Cnspt,"test");
+        Group g4 = new Group(30000, "groupe 4",Cnspt,"test"), g5 = new Group(200000, "groupe 5",Cnspt,"test"), g6 = new Group(400000, "groupe 6",Cnspt,"test");
+        Group g7 = new Group(240000, "groupe 7",Cnspt,"test"), g8 = new Group(250000, "groupe 8",Cnspt,"test");
         Node tab[] = {np, hp1, hp2, s1, s2, s3, g1, g2, g3, g4, g5, g6, g7, gp1, g8};
         nodes.addAll(Arrays.asList(tab));
         addGroupsToStation(s1, g1, g2);
@@ -158,11 +163,12 @@ public class Network {
 	    		if (n instanceof PowerPlant){
 	    			((PowerPlant) n).update();
 	    		}
-	    		/*
+	    		
+	    		
 	    		if (n instanceof Group){
-	    			((Group) n).update(this.factor.getFactor());
+	    			((Group) n).update(numIte);
 	    		}
-	    	*/
+	    	
     		
     		//Partie destiner à tester
 	    		if (n instanceof NuclearPlant&&numIte==1){
@@ -173,9 +179,7 @@ public class Network {
 	    			((NuclearPlant)n).start();
 	    		}
 	    		
-		   		if (n instanceof Group){
-		   			((Group)n).updateConsumption(2000);
-		   		}
+		   		
 		   	
     		}
     	

@@ -9,7 +9,8 @@ public class Group extends Node{
     private int consumption;
     private int originalconsumption; // a manipulé avec le facteur
     private SubStation station;
-    
+    private Consumption consumObject;
+    private String consumName;
     	
     /**
      * Constructeur.
@@ -20,6 +21,19 @@ public class Group extends Node{
         super(s);
         consumption = power;
         originalconsumption=power;
+    }
+    
+    /**
+     * Constructeur. Version avec la variation de consommation
+     * @param power la puissance consommée par le groupe.
+     * @param s le nom du groupe.
+     */
+    Group(int power, String s,Consumption consumObject, String consumName){
+        super(s);
+        consumption = power;
+        originalconsumption=power;
+        this.consumName=consumName;
+        this.consumObject=consumObject;
     }
     /**
      * Un groupe est considéré connecté s'il est relié à une sous-station.
@@ -73,25 +87,40 @@ public class Group extends Node{
     public SubStation getStation() {
         return station;
     }
-    /**
+    
+    
+    public Consumption getConsumObject() {
+		return consumObject;
+	}
+	public void setConsumObject(Consumption consumObject) {
+		this.consumObject = consumObject;
+	}
+	public String getConsumName() {
+		return consumName;
+	}
+	public void setConsumName(String consumName) {
+		this.consumName = consumName;
+	}
+	/**
      * Met à jour la consommation d'un groupe et les sous stations associées sur une valeur précise, supposée être appellée par update (laissé en public pour le test)
      * @param Nouvelle Consommation
      * @see SubStation
      */
-    public void updateConsumption(int consumption){
-    	this.setConsumption(consumption);
+    public void updateConsumption(){
     	if(this.getStation()!=null){
     		this.getStation().updatePowers();
     	}
     	
     }
     /**
-     * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur, et limite éventuellement la consommation si une limitation IN venait à venir
-     * @param Nouvelle Consommation
+     * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur
+     * @param Iteration
      * @see SubStation
      */
-    public void update(int factor,int maxPower){
-    	
+    public void update(int ite){
+    	Double factor=this.consumObject.getIteTabValue(consumName, ite);
+    	this.consumption=(int) (this.originalconsumption*factor);
+    	this.updateConsumption();    	
     }
     
 }
