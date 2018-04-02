@@ -15,7 +15,7 @@ public class Test {
     public static void main(String... args){
         Network network = new Network(1, 2, 10);
         System.out.println(Arrays.toString(network.count(SubStation.class, Group.class, PowerPlant.class, Node.class, NuclearPlant.class)));
-        View view = new View();
-        System.out.print(view.rapport(network));
+        View view = new View(network);
+        System.out.print(view.rapport());
     }
 }
