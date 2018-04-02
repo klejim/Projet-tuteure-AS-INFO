@@ -24,13 +24,14 @@ public class Test {
             System.out.println("Erreur de lecture du fichier config");
         }
         if (network != null){
-            View view = new View(network);
+            System.out.println(Arrays.toString(network.count(SubStation.class, Group.class, PowerPlant.class, Node.class, NuclearPlant.class)));
+            View view = new View();
             System.out.println("=== Etat initial ===");
             System.out.print(view.rapport(network));
             for (int i=0;i<10;i++){
                 ArrayList<NetworkError> runOnce = network.runOnce();
                 System.out.println("=== Itération n°" + i + " ===");
-                System.out.print(view.rapport());
+                System.out.print(view.rapport(network));
             }
         }
     }

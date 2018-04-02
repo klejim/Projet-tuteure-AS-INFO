@@ -1,8 +1,6 @@
 package project.view;
 
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
-import java.util.Scanner;
 import project.network.Group;
 import project.network.Line;
 import project.network.Network;
@@ -14,35 +12,7 @@ import project.network.SubStation;
  * @author Jimenez
  */
 public class View {
-	private StatusWindow statWin;
-	private Network net;
-	
-	/**
-	 * Créé l'IHM à partir du réseau
-	 * @param network le modèle de réseau
-	 */
-	public View(Network network) {
-		this.net = network;
-		this.statWin = new StatusWindow(network);
-		this.statWin.createDisplay();
-	}
-
-   	/**
-   	 * Met à jour l'IHM
-   	 */
-	public void updateView() {
-		statWin.updateDisplay();
-	}
-	
-	/**
-	 * Ferme l'IHM
-	 */
-	public void deleteView() {
-		statWin.dispatchEvent(new WindowEvent(statWin, WindowEvent.WINDOW_CLOSING));
-	}
-	
-	
-	/**
+   /**
     * Génère une chaîne représentant le réseau donné en paramètre.
     * @param network le réseau à représenter
     * @return une chaîne représentant le réseau.
@@ -73,35 +43,5 @@ public class View {
             }    
         }
         return str;
-    }
-
-    public static void main(String[] args) {
-    	
-    	Network myNetwork = new Network(0,0,0);
-    	
-    	View myView = new View(myNetwork);
-    	
-    	Scanner sc = new Scanner(System.in);
-    	
-    	while(true) {
-    		System.out.print("entrer un id de groupe (0 pour fermer) : ");
-    		int id = sc.nextInt();
-    		if(id == 0) {
-    			myView.deleteView();
-    			System.exit(0);
-    		}
-    		System.out.print("entrer une conso pour le groupe : ");
-    		int conso = sc.nextInt();
-    		
-    		for (Node n : myNetwork.getNodes()) {
-    			if( n.getClass().equals(Group.class) && ((Group)n).getId() == id) {
-    				((Group)n).setConsumption(conso);
-    				myView.updateView();
-    			}
-    		}
-    		
-    		
-    	}
-    	
     }
 }
