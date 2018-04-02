@@ -5,17 +5,22 @@ package project.network;
  * @author Jimenez
  */
 public class NetworkError {
-    public class NotEnoughPower extends NetworkError{
-        public int power;
-        public SubStation station;
+    private boolean solved;
+    private String message;
+    NetworkError(){
+        solved = false;
+        message = "";
     }
-    
-    public class TooMuchPower extends NetworkError{
-        public int power;
-        public SubStation station;
+    void setMessage(String str){
+        message = str;
     }
-    
-    public class NodeNotConnected extends NetworkError{
-        public Node node;
+    public String getMessage(){
+        return message;
+    }
+    void setSolved(boolean s){
+        solved = s;
+    }
+    public boolean isSolved() {
+        return solved;
     }
 }
