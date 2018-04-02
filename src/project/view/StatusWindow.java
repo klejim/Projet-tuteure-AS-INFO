@@ -2,6 +2,7 @@ package project.view;
 
 
 import java.awt.GridLayout;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -121,12 +122,8 @@ public class StatusWindow extends JFrame {
 	}
 
 
-	/**
-	 * Main de test pour StatusWindows
-	 * @param args aucun parametre nécessaire
-	 * @throws InterruptedException thread.sleep() exception
-	 */
-	public static void main(String[] args) throws InterruptedException {
+	
+	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
 		// réseau de test basé sur l'archi en dur de Network
 		Network myNetwork = new Network(0,0,0);

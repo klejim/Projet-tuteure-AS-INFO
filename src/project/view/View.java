@@ -1,6 +1,7 @@
 package project.view;
 
 import java.awt.event.WindowEvent;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -75,7 +76,7 @@ public class View {
         return str;
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
     	
     	Network myNetwork = new Network(0,0,0);
     	
@@ -102,6 +103,5 @@ public class View {
     		
     		
     	}
-    	
     }
 }

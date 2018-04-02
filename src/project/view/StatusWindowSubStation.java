@@ -2,6 +2,7 @@ package project.view;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -110,12 +111,8 @@ public class StatusWindowSubStation extends StatusWindowElement {
 		return data;
 	}
 
-	/**
-	 * Main de test de SubstationElement
-	 * @param args Aucun
-	 * @throws InterruptedException Thread.sleep() exception
-	 */
-	public static void main(String[] args) throws InterruptedException {
+	
+	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
 		Network myNetwork = new Network(0,0,0);
 
