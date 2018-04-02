@@ -4,6 +4,7 @@ manifest.mf
 .classpath
 .project
 *.bat
+.vscode
 # Compiled class file
 *.class
 
