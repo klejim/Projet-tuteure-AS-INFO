@@ -1,9 +1,8 @@
 # Générer la javadoc
 
-Ouvrez un terminal depuis la racine du projet et entrez les commandes suivantes:
+Ouvrez un terminal depuis la racine du projet et entrez la commande suivante:
 ```
-cd src  
-javadoc -d ../docs/html project -subpackages project.network:project.view -private -overview ../docs/added/overview.html  
-cd ../  
+javadoc -locale fr_FR -d docs/html --source-path src -subpackages project -private -overview project/doc-files/overview.html  
 ```
 
+Vous pouvez lire la documentation hors-ligne en ouvrant docs/index.html.

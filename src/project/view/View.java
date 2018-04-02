@@ -3,7 +3,6 @@ package project.view;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import project.network.Group;
 import project.network.Line;
 import project.network.Network;
@@ -15,7 +14,6 @@ import project.network.SubStation;
  * @author Jimenez
  */
 public class View {
-	
 	private StatusWindow statWin;
 	private Network net;
 	
@@ -49,18 +47,20 @@ public class View {
     * @param network le réseau à représenter
     * @return une chaîne représentant le réseau.
     */ 
-    public String rapport(){
+    public String rapport(Network network){
         ArrayList<Node> unconnected = new ArrayList<>();
         String str = "Eléments connectés : \n";
-        for (Node n : this.net.getNodes()){
+        for (Node n : network.getNodes()){
             if (n instanceof SubStation){
                 str += "" + n.getName() + "\n";
                 for (Line l : ((SubStation)n).getLines()){
-                    str += "| <-- " + l.getIn().getName() + "\n";
+                    str += "| <-- " + l.getIn().getName()+ "  " + l.getActivePower()+ "kW \n";
                 }
                 for (Group g : ((SubStation)n).getGroups()){
-                    str += "| --> " + g.getName() + "\n";
+                    str += "| --> " + g.getName() +" " + g.getConsumption()+" kW" + "\n";
                 }
+            
+            str+= "Total IN: "+ ((SubStation)n).getPowerIn() + " | Total OUT: "+ ((SubStation)n).getPowerOut()+ "\n";
             }
             else if ((n instanceof Group || n instanceof PowerPlant) && !n.isConnected()){
                 unconnected.add(n);
@@ -74,7 +74,7 @@ public class View {
         }
         return str;
     }
-    
+
     public static void main(String[] args) {
     	
     	Network myNetwork = new Network(0,0,0);
