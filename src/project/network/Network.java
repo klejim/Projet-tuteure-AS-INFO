@@ -161,16 +161,13 @@ public class Network {
     }
     /**
      * @return vrai si la centrale est OFF. 
-     */
-    
+     */   
     
     
     //Fonction de testing, non définitive et en travaux/ démonstration de fonctionnalité
     //Itérations tout juste implémentés non testées : IMplémenter dans la vue, terminer cette fonction de test et vérifier le temps d'allumage
-    public void run(int numIte){  	
-    	
-    		
-    		
+    public void run(int numIte){  	   	
+    		    		
     		for (Node n : nodes){
     			
     			//Partie destinée à rester
@@ -194,10 +191,8 @@ public class Network {
 	    		
 	    		if(n instanceof NuclearPlant&&numIte==3){
 	    			((NuclearPlant)n).start();
-	    		}
-	    		
-	    		
-	    		
+	    		}    		
+	    			    		
     		}
     		this.consumpMacro.incrementCursor();
     	}

@@ -118,7 +118,6 @@ public class Group extends Node{
     }
     /**
      * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur
-     * @param Iteration
      * @see SubStation
      */
     public void update(){
