@@ -1,6 +1,9 @@
 package project;
 
 import java.util.Arrays;
+
+import project.network.ConsumptionMacro;
+import project.network.ConsumptionType;
 import project.network.Group;
 import project.network.Network;
 import project.network.Node;
@@ -18,6 +21,9 @@ public class Test {
     public static void main(String... args){
     	int iteration; //compteur des itérations.
         final int MAX_ITE=10; //Itération maximale (sisi)
+        
+        
+    		
         
         
     	Network network = new Network(1, 2, 10);

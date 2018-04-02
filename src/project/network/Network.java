@@ -14,6 +14,9 @@ import project.network.PowerPlant.State;
 public class Network {
     private int production, consumption;
     private ArrayList<Node> nodes;
+    
+    private ConsumptionMacro consumpMacro; //Solution de facilité pour le rendre accessible pour le moment
+    
     private Network(){
         nodes = new ArrayList<>(); //AAAAAAAAAAH B.G.
     }
@@ -36,8 +39,19 @@ public class Network {
      * Initialise un réseau relativement simple.
      */
     private void TESTInitNetwork(){
-    	Consumption Cnspt=new Consumption();
-    	Cnspt.initTestTab();
+    	
+    	
+		Double [] testConsumpTab=new Double[10];
+		for(int i=0;i<10;i++) {
+			testConsumpTab[i]=1+i*0.1;
+		}	
+		
+    	ConsumptionMacro cnspt=new ConsumptionMacro();
+    	cnspt.setConsumptionTab(ConsumptionType.Test, testConsumpTab);
+    	this.consumpMacro=cnspt;
+    	
+    	
+    	
     	
         NuclearPlant np = new NuclearPlant("nucléaire");
         HydraulicPlant hp1 = new HydraulicPlant("hydraulique 1"), hp2 = new HydraulicPlant("hydraulique 2");
@@ -45,9 +59,11 @@ public class Network {
         
         SubStation s1 = new SubStation("station 1"), s2 = new SubStation("station 2"), s3 = new SubStation("station 3");
         
-        Group g1 = new Group(400000, "groupe 1",Cnspt,"test"), g2 = new Group(250000, "groupe 2",Cnspt,"test"), g3 = new Group(610000,"groupe 3",Cnspt,"test");
-        Group g4 = new Group(30000, "groupe 4",Cnspt,"test"), g5 = new Group(200000, "groupe 5",Cnspt,"test"), g6 = new Group(400000, "groupe 6",Cnspt,"test");
-        Group g7 = new Group(240000, "groupe 7",Cnspt,"test"), g8 = new Group(250000, "groupe 8",Cnspt,"test");
+        
+        
+        Group g1 = new Group(400000, "groupe 1",cnspt,ConsumptionType.Test), g2 = new Group(250000, "groupe 2",ConsumptionType.Test), g3 = new Group(610000,"groupe 3",cnspt,ConsumptionType.Test);
+        Group g4 = new Group(30000, "groupe 4",cnspt,ConsumptionType.Test), g5 = new Group(200000, "groupe 5",cnspt,ConsumptionType.Test), g6 = new Group(400000, "groupe 6",cnspt,ConsumptionType.Test);
+        Group g7 = new Group(240000, "groupe 7",cnspt,ConsumptionType.Test), g8 = new Group(250000, "groupe 8",cnspt,ConsumptionType.Test);
         Node tab[] = {np, hp1, hp2, s1, s2, s3, g1, g2, g3, g4, g5, g6, g7, gp1, g8};
         nodes.addAll(Arrays.asList(tab));
         addGroupsToStation(s1, g1, g2);
@@ -166,7 +182,8 @@ public class Network {
 	    		
 	    		
 	    		if (n instanceof Group){
-	    			((Group) n).update(numIte);
+	    			((Group) n).update();
+	    			
 	    		}
 	    	
     		
@@ -179,10 +196,10 @@ public class Network {
 	    			((NuclearPlant)n).start();
 	    		}
 	    		
-		   		
-		   	
+	    		
+	    		
     		}
-    	
+    		this.consumpMacro.incrementCursor();
     	}
     
 }

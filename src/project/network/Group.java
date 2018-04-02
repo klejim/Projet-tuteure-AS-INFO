@@ -9,8 +9,10 @@ public class Group extends Node{
     private int consumption;
     private int originalconsumption; // a manipulé avec le facteur
     private SubStation station;
-    private Consumption consumObject;
-    private String consumName;
+    private static ConsumptionMacro consumpMacro;
+    private ConsumptionType consumpType;
+    
+    
     	
     /**
      * Constructeur.
@@ -24,16 +26,23 @@ public class Group extends Node{
     }
     
     /**
-     * Constructeur. Version avec la variation de consommation
+     * Constructeur. Version avec la variation de consommation,Assignation du gestionnaire & du type
      * @param power la puissance consommée par le groupe.
      * @param s le nom du groupe.
      */
-    Group(int power, String s,Consumption consumObject, String consumName){
-        super(s);
-        consumption = power;
-        originalconsumption=power;
-        this.consumName=consumName;
-        this.consumObject=consumObject;
+    Group(int power, String s,ConsumptionMacro consumMacro, ConsumptionType consumpType){
+        this(power,s);
+        this.consumpMacro=consumMacro;
+        this.consumpType=consumpType;
+    }
+    /**
+     * Constructeur. Version avec la variation de consommation,Assignation du gestionnaire & du type
+     * @param power la puissance consommée par le groupe.
+     * @param s le nom du groupe.
+     */
+    Group(int power, String s,ConsumptionType consumpType){
+        this(power,s);
+        this.consumpType=consumpType;
     }
     /**
      * Un groupe est considéré connecté s'il est relié à une sous-station.
@@ -89,18 +98,13 @@ public class Group extends Node{
     }
     
     
-    public Consumption getConsumObject() {
-		return consumObject;
+    public ConsumptionMacro getconsumMode() {
+		return consumpMacro;
 	}
-	public void setConsumObject(Consumption consumObject) {
-		this.consumObject = consumObject;
+	public void setconsumMode(ConsumptionMacro consumpMacro) {
+		this.consumpMacro = consumpMacro;
 	}
-	public String getConsumName() {
-		return consumName;
-	}
-	public void setConsumName(String consumName) {
-		this.consumName = consumName;
-	}
+	
 	/**
      * Met à jour la consommation d'un groupe et les sous stations associées sur une valeur précise, supposée être appellée par update (laissé en public pour le test)
      * @param Nouvelle Consommation
@@ -117,10 +121,12 @@ public class Group extends Node{
      * @param Iteration
      * @see SubStation
      */
-    public void update(int ite){
-    	Double factor=this.consumObject.getIteTabValue(consumName, ite);
-    	this.consumption=(int) (this.originalconsumption*factor);
-    	this.updateConsumption();    	
+    public void update(){
+    	if(this.consumpType!=null&&this.consumpMacro!=null) {
+    		this.consumption=(int) (this.consumpMacro.getConsumFactor(this.consumpType)*this.originalconsumption);
+    	}
+    	else {
+    		System.err.println("Erreur pas de régime de conso. ou de gestionnaire assigné");
+    	}
     }
-    
 }
