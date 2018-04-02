@@ -46,7 +46,7 @@ public class Network {
 			testConsumpTab[i]=1+i*0.1;
 		}	
 		
-    	ConsumptionMacro cnspt=new ConsumptionMacro();
+    	ConsumptionMacro cnspt=new ConsumptionMacro(10);
     	cnspt.setConsumptionTab(ConsumptionType.Test, testConsumpTab);
     	this.consumpMacro=cnspt;
     	
@@ -167,7 +167,7 @@ public class Network {
     //Fonction de testing, non définitive et en travaux/ démonstration de fonctionnalité
     //Itérations tout juste implémentés non testées : IMplémenter dans la vue, terminer cette fonction de test et vérifier le temps d'allumage
     public void run(int numIte){  	   	
-    		    		
+    	this.consumpMacro.incrementCursor();
     		for (Node n : nodes){
     			
     			//Partie destinée à rester
@@ -194,7 +194,7 @@ public class Network {
 	    		}    		
 	    			    		
     		}
-    		this.consumpMacro.incrementCursor();
+    		
     	}
     
 }

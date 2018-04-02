@@ -8,21 +8,24 @@ public class ConsumptionMacro {
 	private ConsumptionType consumpType;
 	private static int Cursor;
 	public HashMap<ConsumptionType,Double[]> consumpModes;
+	private int tabSize; //Taille des tableaux de variat° de conso
 	
 	
-	public ConsumptionMacro() {
+	public ConsumptionMacro(int tabSize) {
 		consumpModes=new HashMap<ConsumptionType,Double[]>();
 		this.Cursor=0;
+		this.tabSize=tabSize;
 		
 	}
-	
-	public ConsumptionMacro(HashMap<ConsumptionType,Double[]> consumpModes){
-		this.Cursor=0;
-		this.consumpModes=consumpModes;
-	}
-	
+			
 	public void setConsumptionTab(ConsumptionType consumpType,Double[] consumpTab) {
-		consumpModes.put(consumpType, consumpTab);
+		if(consumpTab.length==this.tabSize) {
+			consumpModes.put(consumpType, consumpTab);
+		}
+		else {
+			System.err.println("Erreur assignation tab Consommation mauvaise taille");
+		}
+		
 	}
 
 	public Double [] getConsumptionTab(ConsumptionType consumpType) {
@@ -37,8 +40,11 @@ public class ConsumptionMacro {
 		Cursor = cursor;
 	}
 	
-	protected static void incrementCursor() {
+	protected void incrementCursor() {
 		Cursor=Cursor+1;
+		if (Cursor>=this.tabSize) {
+			Cursor=0;
+		}
 	}
 	
 	public Double getConsumFactor(ConsumptionType consumpType) {

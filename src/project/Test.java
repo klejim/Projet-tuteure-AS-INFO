@@ -20,7 +20,7 @@ public class Test {
 	
     public static void main(String... args){
     	int iteration; //compteur des itérations.
-        final int MAX_ITE=10; //Itération maximale (sisi)
+        final int MAX_ITE=20; //Itération maximale (sisi)
         
         
     		
