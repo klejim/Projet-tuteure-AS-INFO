@@ -98,13 +98,22 @@ public class Group extends Node{
     }
     
     
-    public ConsumptionMacro getconsumMode() {
+    public ConsumptionMacro getconsumMacro() {
 		return consumpMacro;
 	}
-	public void setconsumMode(ConsumptionMacro consumpMacro) {
+	public void setconsumMacro(ConsumptionMacro consumpMacro) {
 		this.consumpMacro = consumpMacro;
 	}
 	
+	
+	public ConsumptionType getConsumpType() {
+		return consumpType;
+	}
+
+	public void setConsumpType(ConsumptionType consumpType) {
+		this.consumpType = consumpType;
+	}
+
 	/**
      * Met à jour la consommation d'un groupe et les sous stations associées sur une valeur précise, supposée être appellée par update (laissé en public pour le test)
      * @param Nouvelle Consommation
