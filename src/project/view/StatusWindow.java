@@ -91,7 +91,7 @@ public class StatusWindow extends JFrame {
 
 				// pour chaque centrale reliée à la station
 				for(Line line : ((SubStation)node).getLines()) {
-					station.addElement(new StatusWindowPowerPlant(line.getIn()));
+					station.addElement(new StatusWindowPowerPlant(line));
 				}
 
 				// pour chaque groupe relié à la station

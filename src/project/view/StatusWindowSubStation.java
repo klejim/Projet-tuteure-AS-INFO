@@ -131,7 +131,7 @@ public class StatusWindowSubStation extends StatusWindowElement {
 				for(Line line : ((SubStation)node).getLines()) {
 					plants.add(line.getIn());
 					System.out.println("Plant " + line.getIn().getId());
-					local.addElement(new StatusWindowPowerPlant(line.getIn()));
+					local.addElement(new StatusWindowPowerPlant(line));
 				}
 
 				// pour chaque groupe relié à la station
