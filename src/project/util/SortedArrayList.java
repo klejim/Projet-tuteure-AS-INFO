@@ -1,25 +1,23 @@
 package project.util;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.RandomAccess;
 
 /**
  * Classe générique implémentant une ArrayList triée.
  * @author Jimenez
  */
-public class SortedArray<T> implements Serializable, Cloneable, Iterable<T>, Collection<T>, RandomAccess{
+public class SortedArrayList<T> extends ArrayList<T>{
     private final ArrayList<T> array;
     private Comparator<? super T> comparator;
     /**
      * Construit un SortedArray vide obéissant à la règle de tri spécifiée grâce au paramètre cmp.
      * @param cmp la règle de tri que l'instance doit suivre.
      */
-    public SortedArray(Comparator<T> cmp){
+    public SortedArrayList(Comparator<T> cmp){
         array = new ArrayList<>();
         comparator = cmp;
     }
