@@ -15,11 +15,6 @@ public class ConsumptionMacro {
 		tabSize=10;
 	}
 	
-	
-	public ConsumptionMacro() {
-		
-	}
-	
 			
 	public static int getTabSize() {
 		return tabSize;
