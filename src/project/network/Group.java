@@ -5,11 +5,12 @@ package project.network;
  * @author Jimenez
  * @see SubStation
  */
-// TODO : alimentation des groupes
 public class Group extends Node{
     private int consumption;
     private int originalconsumption; // a manipulé avec le facteur
     private SubStation station;
+    private ConsumptionType consumpType;
+    
     
     	
     /**
@@ -21,6 +22,17 @@ public class Group extends Node{
         super(s);
         consumption = power;
         originalconsumption=power;
+    }
+    
+   
+    /**
+     * Constructeur. Version avec la variation de consommation,Assignation du gestionnaire & du type
+     * @param power la puissance consommée par le groupe.
+     * @param s le nom du groupe.
+     */
+    Group(int power, String s,ConsumptionType consumpType){
+        this(power,s);
+        this.consumpType=consumpType;
     }
     /**
      * Un groupe est considéré connecté s'il est relié à une sous-station.
@@ -34,20 +46,20 @@ public class Group extends Node{
     // getters/setters
     
     /**
-	 * @return la puissance moyenne consommée par le groupe.
+	 * @return the originalconsumption
 	 */
 	public int getOriginalconsumption() {
 		return originalconsumption;
 	}
 	/**
-	 * @param originalconsumption la nouvelle consommation moyenne.
+	 * @param originalconsumption the originalconsumption to set
 	 */
 	public void setOriginalconsumption(int originalconsumption) {
 		this.originalconsumption = originalconsumption;
 	}
     
     /**
-     * @return la puissance consommée par le groupe (après calcul). 
+     * @return la puissance consommée par le groupe. 
      */
     public int getConsumption() {
         return consumption;
@@ -68,26 +80,53 @@ public class Group extends Node{
         this.station = station;
     }
     /**
-     * @return la sous-station.
+     * @return la sous-station
      * @see SubStation
      */
     public SubStation getStation() {
         return station;
     }
-    /**
+    
+	
+	public ConsumptionType getConsumpType() {
+		return consumpType;
+	}
+
+	public void setConsumpType(ConsumptionType consumpType) {
+		this.consumpType = consumpType;
+	}
+
+	/**
      * Met à jour la consommation d'un groupe et les sous stations associées sur une valeur précise, supposée être appellée par update (laissé en public pour le test)
-     * @param consumption la nouvelle consommation.
+     * @param Nouvelle Consommation
      * @see SubStation
      */
-    public void updateConsumption(int consumption){
-    	this.setConsumption(consumption);
+    public void updateConsumption(){
     	if(this.getStation()!=null){
-    		this.getStation().update();
+    		this.getStation().updatePowers();
     	}
     	
     }
-    @Override
+    /**
+     * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur
+     * @see SubStation
+     */
     public void update(){
-        
+    	if(this.consumpType!=null) {
+    		this.consumption=(int) (ConsumptionMacro.getConsumFactor(this.consumpType)*this.originalconsumption);
+    	}
+    	else {
+    		System.err.println("Erreur pas de régime de conso. ou de gestionnaire assigné");
+    	}
+    }
+    
+    public int getFutureConsumption(int ahead_Ite) {
+    	if(this.consumpType!=null) {
+    		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType)*this.originalconsumption);
+    	}
+    	else {
+    		System.err.println("Erreur pas de régime de conso. ou de gestionnaire assigné");
+    		return -1;
+    	}
     }
 }
