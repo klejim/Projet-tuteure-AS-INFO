@@ -47,6 +47,7 @@ public class SubStation extends Node{
         
     }
     /**
+     * 
      * @return true (une station est par définition toujours connectée). 
      */
     @Override
@@ -58,7 +59,7 @@ public class SubStation extends Node{
      */
     void updateInput(){
         powerIn = 0;
-        lines.forEach(line -> powerIn += line.getActivePower());
+        lines.forEach(line -> powerIn += line.getPower());
     }
     /**
      * Met à jour la puissance de sortie à partir de la demande de chaque groupe alimenté par la station.
@@ -68,27 +69,13 @@ public class SubStation extends Node{
         groups.forEach(g -> powerOut += g.getConsumption());
     }
     /**
-     * Met à jour les puissances d'entrée et de sortie de la sous-station.
+     * Raccourci pour {@link #updateInput() updateInput} et {@link #updateOutput() updateOutput}.
      */
-    @Override
-    public void update(){
+    void updatePowers(){
         updateInput();
         updateOutput();
     }
-    /**
-     * Retourne une certaine quantité de puissance à la centrale la fournissant, augmentant sa puissance disponible. 
-     * @param line la ligne de transmission concernée menant à la centrale.
-     * @param p la puissance à rendre.
-     * @return la puissance restituée ou 0
-     * @see Line#substractPower(int) 
-     */
-    int giveBackPower(Line line, int p){
-        int returned = line.substractPower(p);
-        // on pourrait se contenter de mettre à jour la puissance disponible de la centrale au prochain début de cycle
-        // mais il est mieux de le faire maintenant car elle pourrait être nécessaire pour gérer une autre erreur.
-        line.getIn().computeActivePower();
-        return returned;
-    }
+    /** méthodes acessibles **/
     /**
      * Ajoute des groupes de consommation à la station.
      * @param gr les groupes à ajouter.
@@ -129,11 +116,6 @@ public class SubStation extends Node{
     public ArrayList<Line> getLines() {
         return lines;
     }
-    /**
-     * @return La différence entre la puissance d'entrée et la puissance de sortie.
-     */
-    public int getDiff(){
-        // alimentation - demande
-        return powerIn - powerOut;
-    }
+    
+   
 }

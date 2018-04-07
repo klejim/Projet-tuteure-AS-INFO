@@ -1,33 +1,10 @@
 package project.network;
 
-import java.util.Comparator;
-
 /**
  * Classe abstraite représentant un élément du réseau, qu'il soit une centrale, une sous-station ou un groupe de consommation.
  * @author Jimenez
  */
 public abstract class Node {
-    
-    // Comparateur utilisé pour ordonner la liste de Node du réseau. L'ordre est le suivant : Group < PowerPlant < SubStation. 
-    public static final Comparator<Node> comparator = (n1, n2)->{
-            int cmp = 0;
-            if (n1.getClass() == n2.getClass()){
-                cmp = 0;
-            }
-            else if (n1 instanceof Group){
-                cmp = -1;
-            }
-            else if (n1 instanceof PowerPlant && n2 instanceof SubStation){
-                cmp = -1;
-            }
-            else if (n1 instanceof PowerPlant && n2 instanceof Group){
-                cmp = 1;
-            }
-            else if (n1 instanceof SubStation){
-                cmp = 1;
-            }
-            return cmp;
-        };
     public static int nextId = 0;
     private final int id;
     private String name;
@@ -51,10 +28,6 @@ public abstract class Node {
      * @return true si l'élement est connecté au réseau et false sinon.
      */
     public abstract boolean isConnected();
-    /**
-     * Méthode définissant la façon dont l'élément est mis à jour au début d'un cycle.
-     */
-    public abstract void update();
     
     @Override
     public int hashCode() {
