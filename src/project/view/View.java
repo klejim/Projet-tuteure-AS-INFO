@@ -42,7 +42,6 @@ public class View {
                 str += n.getName() + "\n";
             }    
         }
-        str+="\n \n \n";
         return str;
     }
 }

@@ -216,7 +216,6 @@ public class Network {
         // nodes étant trié le parcours suivant met à jour tous les groupes, puis toutes centrales et enfin les sous-stations
         consumption = 0;
         production = 0;
-        
         for (Node node : nodes){
             node.update();
             if (node instanceof SubStation){
@@ -234,9 +233,9 @@ public class Network {
      */
     private void TESTInitNetwork(){
     	
-    	Double[] consumpTab=new Double [10];
-    	for (int i=0;i<10;i++) {
-    		consumpTab[i]=(double) (i+10)/10;
+    	Double [] consumpTab=new Double [10];
+    	for(int i=0;i<10;i++) {
+    		consumpTab[i]= (double) (1+i*0.1);
     	}
     	ConsumptionMacro.setConsumptionTab("test", consumpTab);
     	

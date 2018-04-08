@@ -3,8 +3,6 @@ package project;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import project.network.ConsumptionMacro;
 import project.network.Group;
 import project.network.Network;
 import project.network.NetworkError;

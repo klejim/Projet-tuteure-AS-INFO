@@ -9,8 +9,9 @@ public class Group extends Node{
     private int consumption;
     private int originalconsumption; // a manipulé avec le facteur
     private SubStation station;
+
     private String consumpType;
-    
+
     
  
    
@@ -25,6 +26,9 @@ public class Group extends Node{
         originalconsumption=power;
         this.consumpType=consumpType;
     }
+    
+   
+
     /**
      * Un groupe est considéré connecté s'il est relié à une sous-station.
      * @return true si le groupe est lié à une sous-station et false sinon.
@@ -79,20 +83,25 @@ public class Group extends Node{
     }
     
 	
+
 	public String getConsumpType() {
 		return consumpType;
 	}
 
 	public void setConsumpType(String consumpType) {
-		this.consumpType = consumpType;
+		this.consumpType=consumpType;
 	}
+
 
 	/**
      * Met à jour la consommation d'un groupe et les sous stations associées sur une valeur précise, supposée être appellée par update (laissé en public pour le test)
      * @param Nouvelle Consommation
      * @see SubStation
-     */
-	//Cette fonction est bien inutile maintenant?
+
+	
+	
+	 */
+////Cette fonction est bien inutile maintenant?
 	/*
     public void updateConsumption(){
     	if(this.getStation()!=null){
@@ -101,6 +110,9 @@ public class Group extends Node{
     	
     }
     */
+
+    
+
     /**
      * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur
      * @see SubStation
@@ -116,7 +128,9 @@ public class Group extends Node{
     
     public int getFutureConsumption(int ahead_Ite) {
     	if(this.consumpType!=null) {
+
     		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType,ahead_Ite)*this.originalconsumption);
+
     	}
     	else {
     		System.err.println("Erreur pas de régime de conso. ou de gestionnaire assigné");
