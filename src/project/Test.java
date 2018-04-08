@@ -34,6 +34,5 @@ public class Test {
                 System.out.print(view.rapport());
             }
         }
-
     }
 }

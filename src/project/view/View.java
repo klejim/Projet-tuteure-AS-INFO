@@ -81,11 +81,14 @@ public class View {
     	
     	Network myNetwork = new Network(0,0,0);
     	
-    	View myView = new View(myNetwork);
-    	
+        View myView = new View(myNetwork);
+        // les flux sont supposés être libérés après usage afin d'éviter des fuites de ressources mais fermer System.in semble
+        // une mauvaise habitude, donc on se contente de préciser que l'on sait ce qu'on fait
+    	@SuppressWarnings("resource")
     	Scanner sc = new Scanner(System.in);
     	
     	while(true) {
+            myView.updateView();
     		System.out.print("entrer un id de groupe (0 pour fermer) : ");
     		int id = sc.nextInt();
     		if(id == 0) {
@@ -98,10 +101,9 @@ public class View {
     		for (Node n : myNetwork.getNodes()) {
     			if( n.getClass().equals(Group.class) && ((Group)n).getId() == id) {
     				((Group)n).setConsumption(conso);
-    				myView.updateView();
     			}
     		}
-    		
+    		myNetwork.runOnce();
     		
     	}
     }

@@ -7,7 +7,7 @@ package project.network;
  */
 public class NuclearPlant extends PowerPlant{
     public static final int DEFAULT_POWER = 1500000; // en kiloWatt
-    public static final int DEFAULT_DELAY = 5; // en heures / iterations
+    public static final int DEFAULT_DELAY = 20; // en heures
 
     /**
      * Constructeur.

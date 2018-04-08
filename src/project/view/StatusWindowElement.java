@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 
 import project.network.*;
 
-
 /**
  *Classe abstraite qui décrit un élément de la vue calqué sur son équivalent modèle
  * @author yoann
