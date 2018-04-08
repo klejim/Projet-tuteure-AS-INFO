@@ -9,29 +9,20 @@ public class Group extends Node{
     private int consumption;
     private int originalconsumption; // a manipulé avec le facteur
     private SubStation station;
-    private ConsumptionType consumpType;
+    private String consumpType;
     
     
-    	
-    /**
-     * Constructeur.
-     * @param power la puissance consommée par le groupe.
-     * @param s le nom du groupe.
-     */
-    Group(int power, String s){
-        super(s);
-        consumption = power;
-        originalconsumption=power;
-    }
-    
+ 
    
     /**
      * Constructeur. Version avec la variation de consommation,Assignation du gestionnaire & du type
      * @param power la puissance consommée par le groupe.
      * @param s le nom du groupe.
      */
-    Group(int power, String s,ConsumptionType consumpType){
-        this(power,s);
+    Group(int power, String s,String consumpType){
+    	super(s);
+        consumption = power;
+        originalconsumption=power;
         this.consumpType=consumpType;
     }
     /**
@@ -88,11 +79,11 @@ public class Group extends Node{
     }
     
 	
-	public ConsumptionType getConsumpType() {
+	public String getConsumpType() {
 		return consumpType;
 	}
 
-	public void setConsumpType(ConsumptionType consumpType) {
+	public void setConsumpType(String consumpType) {
 		this.consumpType = consumpType;
 	}
 
@@ -101,12 +92,15 @@ public class Group extends Node{
      * @param Nouvelle Consommation
      * @see SubStation
      */
+	//Cette fonction est bien inutile maintenant?
+	/*
     public void updateConsumption(){
     	if(this.getStation()!=null){
     		this.getStation().updatePowers();
     	}
     	
     }
+    */
     /**
      * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur
      * @see SubStation
@@ -122,7 +116,7 @@ public class Group extends Node{
     
     public int getFutureConsumption(int ahead_Ite) {
     	if(this.consumpType!=null) {
-    		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType)*this.originalconsumption);
+    		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType,ahead_Ite)*this.originalconsumption);
     	}
     	else {
     		System.err.println("Erreur pas de régime de conso. ou de gestionnaire assigné");

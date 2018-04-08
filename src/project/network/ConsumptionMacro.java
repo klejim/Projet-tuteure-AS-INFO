@@ -6,11 +6,11 @@ import java.util.HashMap;
 public class ConsumptionMacro {
 
 	private static int Cursor;
-	public static HashMap<ConsumptionType,Double[]> consumpModes;
+	public static HashMap<String,Double[]> consumpModes;
 	private static int tabSize; //Taille des tableaux de variat° de conso
 	
 	static {
-		consumpModes=new HashMap<ConsumptionType,Double[]>();
+		consumpModes=new HashMap<String,Double[]>();
 		Cursor=0;
 		tabSize=10;
 	}
@@ -24,7 +24,7 @@ public class ConsumptionMacro {
 		ConsumptionMacro.tabSize = tabSize;
 	}
 
-	public static void setConsumptionTab(ConsumptionType consumpType,Double[] consumpTab) {
+	public static void setConsumptionTab(String consumpType,Double[] consumpTab) {
 		if(consumpTab.length==tabSize) {
 			consumpModes.put(consumpType, consumpTab);
 		}
@@ -34,7 +34,7 @@ public class ConsumptionMacro {
 		
 	}
 
-	public static Double [] getConsumptionTab(ConsumptionType consumpType) {
+	public static Double [] getConsumptionTab(String consumpType) {
 		return consumpModes.get(consumpType);
 	}
 
@@ -53,7 +53,7 @@ public class ConsumptionMacro {
 		}
 	}
 	
-	public static Double getConsumFactor(ConsumptionType consumpType) {
+	public static Double getConsumFactor(String consumpType) {
 		return consumpModes.get(consumpType)[Cursor];
 	}
 	
@@ -64,7 +64,7 @@ public class ConsumptionMacro {
      * @see Group
      */
 	
-	public static Double getConsumFactor(ConsumptionType consumpType,int aheadIte) {
+	public static Double getConsumFactor(String consumpType,int aheadIte) {
 		return consumpModes.get(consumpType)[(Cursor+aheadIte)%tabSize];
 		
 	}
