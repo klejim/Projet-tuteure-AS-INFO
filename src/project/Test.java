@@ -11,24 +11,25 @@ import project.network.NuclearPlant;
 import project.network.PowerPlant;
 import project.network.SubStation;
 import project.view.View;
+
 /**
  * @author Jimenez
  */
 public class Test {
-    public static void main(String... args){
+    public static void main(String... args) {
         Network network = null;
-        try{
+        try {
             network = new Network(1, 2, 10);
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Erreur de lecture du fichier config");
         }
-        if (network != null){
-            System.out.println(Arrays.toString(network.count(SubStation.class, Group.class, PowerPlant.class, Node.class, NuclearPlant.class)));
+        if (network != null) {
+            System.out.println(Arrays.toString(
+                    network.count(SubStation.class, Group.class, PowerPlant.class, Node.class, NuclearPlant.class)));
             View view = new View(network);
             System.out.println("=== Etat initial ===");
             System.out.print(view.rapport());
-            for (int i=0;i<10;i++){
+            for (int i = 0; i < 10; i++) {
                 ArrayList<NetworkError> runOnce = network.runOnce();
                 System.out.println("=== Itération n°" + i + " ===");
                 System.out.print(view.rapport());

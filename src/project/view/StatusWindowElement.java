@@ -29,13 +29,12 @@ public abstract class StatusWindowElement {
 	 */
 	public abstract String[] formatData();
 
-
 	/**
 	 * Met à jour l'affichage par rapport au modèle.
 	 */
 	public void updateDisplay() {
 		Iterator<JLabel> it = content.iterator();
-		for(String param : this.formatData()) {
+		for (String param : this.formatData()) {
 			it.next().setText(param);
 		}
 	}
@@ -48,16 +47,15 @@ public abstract class StatusWindowElement {
 		// efface tous les labels
 		this.elementDisplay.removeAll();
 
-		
 		// création des labels
-		for(String data : formatData()) {
+		for (String data : formatData()) {
 			JLabel block = new JLabel(data);
 			this.content.add(block);
 			this.elementDisplay.add(block);
 		}
 
 		// Rajoute des labels vides pour l'affichage
-		for(int i= 4-this.content.size(); i > 0; i--) {
+		for (int i = 4 - this.content.size(); i > 0; i--) {
 			this.elementDisplay.add(new JLabel(""));
 		}
 	}
@@ -74,12 +72,9 @@ public abstract class StatusWindowElement {
 	/**
 	 * Retourne le panel de l'élément
 	 * @return JPanel
-	 */	
+	 */
 	public JPanel getDisplay() {
 		return this.elementDisplay;
 	}
-
-
-
 
 }

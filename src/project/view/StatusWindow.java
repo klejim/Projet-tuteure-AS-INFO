@@ -1,6 +1,5 @@
 package project.view;
 
-
 import java.awt.GridLayout;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -36,13 +35,12 @@ public class StatusWindow extends JFrame {
 	 * Constructeur
 	 * @param ntw Le réseau à afficher
 	 */
-	public StatusWindow (Network ntw) {
+	public StatusWindow(Network ntw) {
 		super();
 		this.modelNetwork = ntw;
 
 		this.subStations = new ArrayList<>();
 		buildWindow();
-
 
 		TESTNetworkElements = new HashMap<>();
 	}
@@ -54,22 +52,21 @@ public class StatusWindow extends JFrame {
 
 		// init fenêtre
 		this.setTitle("Statut Réseau");
-		this.setSize(1200,600);
-		this.setLocationRelativeTo(null); 
+		this.setSize(1200, 600);
+		this.setLocationRelativeTo(null);
 		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JPanel panel = new JPanel();
 
 		// Layout principal - 2 colonnes et autant de lignes que nécessaires - espacement de 5px
-		panel.setLayout(new GridLayout(0,2,5,5));
+		panel.setLayout(new GridLayout(0, 2, 5, 5));
 
 		this.setContentPane(panel);
 		this.validate();
-		this.repaint();		
+		this.repaint();
 		this.setVisible(true);
 	}
-
 
 	/**
 	 * Créé l'affichage à partir du réseau. N'utiliser qu'une fois, à la création de la fenêtre
@@ -78,24 +75,24 @@ public class StatusWindow extends JFrame {
 
 		ArrayList<Node> nodes = this.modelNetwork.getNodes();
 
-		for(Node node : nodes) {
+		for (Node node : nodes) {
 			// Sauvegarde node pour test
 			TESTNetworkElements.put(node.getId(), node);
 
 			// pour chaque station
-			if(node.getClass().equals(SubStation.class)) {
-				StatusWindowSubStation station = new StatusWindowSubStation((SubStation)node);
+			if (node.getClass().equals(SubStation.class)) {
+				StatusWindowSubStation station = new StatusWindowSubStation((SubStation) node);
 
 				// ajout de la sous-station à la collection
 				this.subStations.add(station);
 
 				// pour chaque centrale reliée à la station
-				for(Line line : ((SubStation)node).getLines()) {
+				for (Line line : ((SubStation) node).getLines()) {
 					station.addElement(new StatusWindowPowerPlant(line));
 				}
 
 				// pour chaque groupe relié à la station
-				for(Group group : ((SubStation)node).getGroups()) {
+				for (Group group : ((SubStation) node).getGroups()) {
 					station.addElement(new StatusWindowGroup(group));
 				}
 
@@ -116,17 +113,15 @@ public class StatusWindow extends JFrame {
 	 * Met à jour l'affichage des valeurs de paramètres. Utiliser après createDisplay()
 	 */
 	public void updateDisplay() {
-		for(StatusWindowSubStation station : this.subStations) {
+		for (StatusWindowSubStation station : this.subStations) {
 			station.updateDisplay();
 		}
 	}
 
-
-	
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
 		// réseau de test basé sur l'archi en dur de Network
-		Network myNetwork = new Network(0,0,0);
+		Network myNetwork = new Network(0, 0, 0);
 
 		StatusWindow myWindow = new StatusWindow(myNetwork);
 
@@ -135,28 +130,28 @@ public class StatusWindow extends JFrame {
 		// TEST update data
 		Group group7 = null;
 		Group group12 = null;
-		if(myWindow.TESTNetworkElements.containsKey(7)) {
+		if (myWindow.TESTNetworkElements.containsKey(7)) {
 			group7 = (Group) myWindow.TESTNetworkElements.get(7);
 		}
 
-		if(myWindow.TESTNetworkElements.containsKey(7)) {
+		if (myWindow.TESTNetworkElements.containsKey(7)) {
 			group12 = (Group) myWindow.TESTNetworkElements.get(12);
 		}
 
-		while(true) {
+		while (true) {
 			Thread.sleep(2000);
-			if(group7 != null)
+			if (group7 != null)
 				group7.setConsumption(0);
-			if(group12 != null)
+			if (group12 != null)
 				group12.setConsumption(300000);
 			myWindow.updateDisplay();
 
 			Thread.sleep(2000);
-			if(group7 != null)
+			if (group7 != null)
 				group7.setConsumption(400000);
-			if(group12 != null)
+			if (group12 != null)
 				group12.setConsumption(0);
-			myWindow.updateDisplay();			
+			myWindow.updateDisplay();
 		}
 	}
 

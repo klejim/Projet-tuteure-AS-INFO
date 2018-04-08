@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import project.network.*;
+
 /**
  * Classe qui décrit la vue d'une sous-station.
  * Elle s'occupe de gérer l'affichage des paramètres propres à la sous-station ainsi qu'aux éléments qui lui sont
@@ -41,15 +42,15 @@ public class StatusWindowSubStation extends StatusWindowElement {
 	public void createDisplay() {
 
 		// Layout de la sous-station - 1 colonne - espacement vertical 5px
-		this.elementDisplay.setLayout(new GridLayout(0,1,0,5));
+		this.elementDisplay.setLayout(new GridLayout(0, 1, 0, 5));
 		this.elementDisplay.setBorder(BorderFactory.createLineBorder(Color.black, 2, false));
 
 		// Affichage infos sous-station - Layout 1 ligne - espacement horizontal 5px.
 		JPanel localDisplay = new JPanel();
-		localDisplay.setLayout(new GridLayout(1,0,5,0));
+		localDisplay.setLayout(new GridLayout(1, 0, 5, 0));
 		localDisplay.setBorder(BorderFactory.createLineBorder(Color.blue, 1, true));
 
-		for(String param : this.formatData()) {
+		for (String param : this.formatData()) {
 			JLabel parametre = new JLabel(param);
 			this.content.add(parametre);
 			localDisplay.add(parametre);
@@ -58,7 +59,7 @@ public class StatusWindowSubStation extends StatusWindowElement {
 		this.elementDisplay.add(localDisplay);
 
 		// Affichage des groupes et centrales
-		for(StatusWindowElement elt : this.connectedElements) {
+		for (StatusWindowElement elt : this.connectedElements) {
 			this.elementDisplay.add(elt.getDisplay());
 		}
 
@@ -67,10 +68,10 @@ public class StatusWindowSubStation extends StatusWindowElement {
 	/**
 	 * Ajout d'une centrale ou d'un groupe connecté à la sous-station
 	 * @param elt l'élément de réseau à rajouter
-	 */	
+	 */
 	public void addElement(StatusWindowElement elt) {
 		elt.createDisplay();
-		this.connectedElements.add(elt);		
+		this.connectedElements.add(elt);
 	}
 
 	@Override
@@ -79,18 +80,17 @@ public class StatusWindowSubStation extends StatusWindowElement {
 	 */
 	public void updateDisplay() {
 		// maj des éléments connectés
-		for(StatusWindowElement elt : this.connectedElements) {
+		for (StatusWindowElement elt : this.connectedElements) {
 			elt.updateDisplay();
 		}
 
 		// maj des éléments locaux
 		String[] data = this.formatData();
-		for(int i = 0; i<data.length; i++) {
+		for (int i = 0; i < data.length; i++) {
 			this.content.get(i).setText(data[i]);
 		}
 
 	}
-
 
 	@Override
 	/**
@@ -99,48 +99,46 @@ public class StatusWindowSubStation extends StatusWindowElement {
 	public String[] formatData() {
 		String[] data = new String[4];
 
-		int pin = ((SubStation)this.modelNode).getPowerIn();
-		int pout = ((SubStation)this.modelNode).getPowerOut();
-		int id = ((SubStation)this.modelNode).getId();
+		int pin = ((SubStation) this.modelNode).getPowerIn();
+		int pout = ((SubStation) this.modelNode).getPowerOut();
+		int id = ((SubStation) this.modelNode).getId();
 
-		data[0] = ("Sous-station "+ id);
-		data[1] = "Pin: "+pin+" kW";
-		data[2] = "Pout: "+pout+" kW";
-		data[3] = (pin>=pout?"OK":"P. INSUFISANTE");
+		data[0] = ("Sous-station " + id);
+		data[1] = "Pin: " + pin + " kW";
+		data[2] = "Pout: " + pout + " kW";
+		data[3] = (pin >= pout ? "OK" : "P. INSUFISANTE");
 
 		return data;
 	}
 
-	
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
-		Network myNetwork = new Network(0,0,0);
+		Network myNetwork = new Network(0, 0, 0);
 
 		ArrayList<StatusWindowSubStation> stations = new ArrayList<>();
 		ArrayList<PowerPlant> plants = new ArrayList<>();
 		ArrayList<Group> groups = new ArrayList<>();
 
 		JPanel globalPanel = new JPanel();
-		globalPanel.setLayout(new GridLayout(0,2,10,10));
+		globalPanel.setLayout(new GridLayout(0, 2, 10, 10));
 
-		for(Node node : myNetwork.getNodes()) {
-			if(node.getClass().equals(SubStation.class)) {
-				StatusWindowSubStation local = new StatusWindowSubStation((SubStation)node);
+		for (Node node : myNetwork.getNodes()) {
+			if (node.getClass().equals(SubStation.class)) {
+				StatusWindowSubStation local = new StatusWindowSubStation((SubStation) node);
 
 				// pour chaque centrale reliée à la station
-				for(Line line : ((SubStation)node).getLines()) {
+				for (Line line : ((SubStation) node).getLines()) {
 					plants.add(line.getIn());
 					System.out.println("Plant " + line.getIn().getId());
 					local.addElement(new StatusWindowPowerPlant(line));
 				}
 
 				// pour chaque groupe relié à la station
-				for(Group group : ((SubStation)node).getGroups()) {
+				for (Group group : ((SubStation) node).getGroups()) {
 					groups.add(group);
 					System.out.println("Groupe " + group.getId());
 					local.addElement(new StatusWindowGroup(group));
 				}
-
 
 				local.createDisplay();
 				stations.add(local);
@@ -148,16 +146,15 @@ public class StatusWindowSubStation extends StatusWindowElement {
 			}
 		}
 
-
 		JFrame testWindow = new JFrame();
 		testWindow.setTitle("Test Substation");
-		testWindow.setSize(1200,600);
-		testWindow.setLocationRelativeTo(null); 
+		testWindow.setSize(1200, 600);
+		testWindow.setLocationRelativeTo(null);
 		testWindow.setResizable(true);
 		testWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		testWindow.setContentPane(globalPanel);
 		testWindow.validate();
-		testWindow.repaint();		
+		testWindow.repaint();
 		testWindow.setVisible(true);
 
 		while (true) {
@@ -165,19 +162,17 @@ public class StatusWindowSubStation extends StatusWindowElement {
 			groups.get(0).setConsumption(0);
 			groups.get(1).setConsumption(300000);
 
-			for(StatusWindowSubStation station : stations) {
+			for (StatusWindowSubStation station : stations) {
 				station.updateDisplay();
 			}
 
-			
 			Thread.sleep(1000);
 			groups.get(0).setConsumption(100000);
 			groups.get(1).setConsumption(0);
 
-			for(StatusWindowSubStation station : stations) {
+			for (StatusWindowSubStation station : stations) {
 				station.updateDisplay();
 			}
-
 
 		}
 

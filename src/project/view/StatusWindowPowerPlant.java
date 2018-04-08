@@ -15,7 +15,7 @@ import project.network.SubStation;
  * @author yoann 
  */
 public class StatusWindowPowerPlant extends StatusWindowElement {
-	
+
 	private Line connexion;
 
 	/**
@@ -31,7 +31,7 @@ public class StatusWindowPowerPlant extends StatusWindowElement {
 		this.elementDisplay = new JPanel();
 
 		// 1 ligne - espacement horizontal 5px
-		this.elementDisplay.setLayout(new GridLayout(1,0,5,0));
+		this.elementDisplay.setLayout(new GridLayout(1, 0, 5, 0));
 	}
 
 	@Override
@@ -41,13 +41,13 @@ public class StatusWindowPowerPlant extends StatusWindowElement {
 	public String[] formatData() {
 		String[] data = new String[3];
 
-		State state = ((PowerPlant)this.modelNode).getState();
-		int id = ((PowerPlant)this.modelNode).getId();
+		State state = ((PowerPlant) this.modelNode).getState();
+		int id = ((PowerPlant) this.modelNode).getId();
 		int usedPower = connexion.getActivePower();
 
-		data[0] = "| <-- PowerPlant "+ id;
-		data[1] = "Etat: "+state;
-		data[2] = "P. utilisée: "+usedPower+" kW";
+		data[0] = "| <-- PowerPlant " + id;
+		data[1] = "Etat: " + state;
+		data[2] = "P. utilisée: " + usedPower + " kW";
 
 		return data;
 	}
