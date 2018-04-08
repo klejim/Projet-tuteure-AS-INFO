@@ -120,6 +120,7 @@ public class Group extends Node{
     public void update(){
     	if(this.consumpType!=null) {
     		this.consumption=(int) (ConsumptionMacro.getConsumFactor(this.consumpType)*this.originalconsumption);
+    		
     	}
     	else {
     		System.err.println("Erreur pas de régime de conso. ou de gestionnaire assigné");

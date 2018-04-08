@@ -24,12 +24,14 @@ public class ConsumptionMacro {
 		ConsumptionMacro.tabSize = tabSize;
 	}
 
-	public static void setConsumptionTab(String consumpType,Double[] consumpTab) {
-		if(consumpTab.length==tabSize) {
+	public static int setConsumptionTab(String consumpType,Double[] consumpTab) {
+		if(consumpTab.length==tabSize || consumpTab==null) {
 			consumpModes.put(consumpType, consumpTab);
+			return 1;
 		}
 		else {
 			System.err.println("Erreur assignation tab Consommation mauvaise taille");
+			return 0;
 		}
 		
 	}
