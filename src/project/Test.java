@@ -28,11 +28,14 @@ public class Test {
             View view = new View();
             System.out.println("=== Etat initial ===");
             System.out.print(view.rapport(network));
-            for (int i=0;i<10;i++){
-                ArrayList<NetworkError> runOnce = network.runOnce();
-                System.out.println("=== Itération n°" + i + " ===");
-                System.out.print(view.rapport(network));
+            for (int i=0;i<20;i++){
+            	ArrayList<NetworkError> runOnce = network.runOnce(); 
+            	System.out.println("=== Itération n°" + i + " ===");
+            	System.out.print(view.rapport(network));
+                       
+                
             }
+            
         }
     }
 }

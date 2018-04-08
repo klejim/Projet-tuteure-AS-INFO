@@ -25,7 +25,7 @@ public class ConsumptionMacro {
 	}
 
 	public static int setConsumptionTab(String consumpType,Double[] consumpTab) {
-		if(consumpTab.length==tabSize || consumpTab==null) {
+		if(consumpTab.length==tabSize && consumpTab!=null) {
 			consumpModes.put(consumpType, consumpTab);
 			return 1;
 		}

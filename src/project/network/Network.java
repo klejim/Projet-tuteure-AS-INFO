@@ -216,6 +216,7 @@ public class Network {
         // nodes étant trié le parcours suivant met à jour tous les groupes, puis toutes centrales et enfin les sous-stations
         consumption = 0;
         production = 0;
+        
         for (Node node : nodes){
             node.update();
             if (node instanceof SubStation){

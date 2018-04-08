@@ -28,6 +28,8 @@ public class View {
                 }
                 for (Group g : ((SubStation)n).getGroups()){
                     str += "| --> " + g.getName() +" " + g.getConsumption()+" kW" + "\n";
+                    str += "| --> " + g.getName() +" dans 1 tours " + g.getFutureConsumption(1)+" kW" + "\n";
+                    str += "| --> " + g.getName() +" dans 2 tours " + g.getFutureConsumption(2)+" kW" + "\n";
                 }
             
             str+= "Total IN: "+ ((SubStation)n).getPowerIn() + " | Total OUT: "+ ((SubStation)n).getPowerOut()+ "\n";
