@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package project.view;
+package project.fxview;
 
 import static java.awt.SystemColor.window;
 import java.net.URL;
