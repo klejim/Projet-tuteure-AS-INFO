@@ -94,7 +94,7 @@ public class Network {
      * @see #solvePowerOverflow(project.network.SubStation, int)
      * @see #solvePowerShortage(project.network.SubStation, int) 
      */
-    private ArrayList<NetworkError> handleErrors(ArrayList<NetworkError> rawErrors){
+    public ArrayList<NetworkError> handleErrors(ArrayList<NetworkError> rawErrors){
         ArrayList<NetworkError> errors = new ArrayList<>(rawErrors.size());
         errors.addAll(rawErrors);
         for (NetworkError e : rawErrors){
@@ -197,7 +197,7 @@ public class Network {
     /**
      * Réalise une itération du réseau.
      * 
-     * <p>Les étapes sont les suivantes :</p>
+     * <p>Les étapes de l'itération sont les suivantes :</p>
      * <ul>
      * <li>Faire avancer les modes de consommation (incrémenter leurs curseurs internes)</li>
      * <li>Mettre à jour les groupes</li>
@@ -207,9 +207,10 @@ public class Network {
      * <li>Gérer les erreurs</li>
      * <li>Renvoyer le résultat</li>
      * </ul>
+     * <p>Cette fonction se charge de la mise à jour (étapes 1 à 4).</p>
      * @return la liste d'erreur générées par {@link #handleErrors(java.util.ArrayList) handleErrors()}. 
      */
-    public ArrayList<NetworkError> runOnce(){
+    public void update(){
         // TODO : mise à jour consommation des groupes
         // remarque : on suppose que la puissance de base d'une centrale est constante. Si cela change dans le futur il faudra modiier
         // la gestion des centrales et de leur puissance disponible.
@@ -223,7 +224,6 @@ public class Network {
                 production += ((SubStation) node).getPowerIn();
             }
         }
-        return handleErrors(analyze());
     }
     
     

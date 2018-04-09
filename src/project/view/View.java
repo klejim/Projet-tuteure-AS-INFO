@@ -88,6 +88,7 @@ public class View {
         Scanner sc = new Scanner(System.in);
 
         while (true) {
+            myNetwork.update();
             myView.updateView();
             System.out.print("entrer un id de groupe (0 pour fermer) : ");
             int id = sc.nextInt();
@@ -100,11 +101,14 @@ public class View {
 
             for (Node n : myNetwork.getNodes()) {
                 if (n.getClass().equals(Group.class) && ((Group) n).getId() == id) {
-                    ((Group) n).setConsumption(conso);
+                    ((Group) n).updateConsumption(conso);
                 }
             }
-            myNetwork.runOnce();
-
+            myNetwork.handleErrors(myNetwork.analyze());
+            
+            
+            
+           
         }
     }
 }
