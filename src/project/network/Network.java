@@ -2,7 +2,7 @@ package project.network;
 
 import java.io.FileNotFoundException;
 import project.util.ConfigParser;
-import project.util.SortedArray;
+import project.util.SortedArrayList;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,9 +17,9 @@ import java.util.HashMap;
 public class Network {
     private HashMap<String,HashMap<String,Object>> config; // contenu du fichier config
     private int production, consumption;
-    private SortedArray<Node> nodes;
+    private SortedArrayList<Node> nodes;
     private Network() throws FileNotFoundException {
-        nodes = new SortedArray<>(Node.comparator);
+        nodes = new SortedArrayList<>(Node.comparator);
         config = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(config));
         String networkFile = (String)config.get("DEFAULT").get("network");
