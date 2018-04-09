@@ -1,10 +1,11 @@
-package project.network;
+package project.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 
 /**
@@ -44,9 +45,9 @@ public class ConfigParser {
      * et les valeurs le tableau associatif de chaque section.
      * @param filename le nom du fichier à lire
      * @return un tableau associatif contenant les variables de configuration
-     * @throws IOException
+     * @throws java.io.FileNotFoundException fichier introuvable
      */
-    public static HashMap<String, HashMap<String,Object>> parse(String filename) throws IOException{
+    public static HashMap<String, HashMap<String,Object>> parse(String filename) throws FileNotFoundException{
         HashMap<String,HashMap<String,Object>> config = new HashMap<>();
         try (Scanner scan = new Scanner(new FileInputStream(filename))) {
             String section = "DEFAULT";
