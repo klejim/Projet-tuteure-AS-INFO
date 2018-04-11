@@ -125,7 +125,11 @@ public class Group extends Node{
     public int getFutureConsumption(int ahead_Turn) {
     	if(this.consumpType!=null) {
 
+
     		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType,ahead_Turn)*this.originalconsumption);
+
+   
+
 
     	}
     	else {

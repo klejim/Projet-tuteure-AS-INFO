@@ -51,7 +51,9 @@ public class ConsumptionMacro {
      * Association des doubles de consommations et d'un String 
      */
 	public static int setConsumptionTab(String consumpType,Double[] consumpTab) {
-		if(consumpTab!=null && consumpTab.length==tabSize ) {
+
+		if(consumpTab.length==tabSize && consumpTab!=null) {
+
 			consumpModes.put(consumpType, consumpTab);
 			return 1;
 		}
