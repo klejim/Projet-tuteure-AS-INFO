@@ -8,10 +8,12 @@ package project.network;
 public class Group extends Node{
     private int consumption;
     private int originalconsumption; // a manipulé avec le facteur
+    private static boolean RAND_ON=true;
+    
     private SubStation station;
 
     private String consumpType;
-
+    private ClusterGroup cluster;
     
  
    
@@ -25,6 +27,7 @@ public class Group extends Node{
         consumption = power;
         originalconsumption=power;
         this.consumpType=consumpType;
+
     }
     
    
@@ -91,35 +94,21 @@ public class Group extends Node{
 	public void setConsumpType(String consumpType) {
 		this.consumpType=consumpType;
 	}
-
-
-	/**
-     * Met à jour la consommation d'un groupe et les sous stations associées sur une valeur précise, supposée être appellée par update (laissé en public pour le test)
-     * @param Nouvelle Consommation
-     * @see SubStation
-
-	
-	
-	 */
-////Cette fonction est bien inutile maintenant?
-	/*
-    public void updateConsumption(){
-    	if(this.getStation()!=null){
-    		this.getStation().updatePowers();
-    	}
-    	
-    }
-    */
-
     
 
     /**
      * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur
      * @see SubStation
+     * @see ConsumptionMacro
      */
     public void update(){
+    	
+    	// Bloc de randomisation éventuel
+    	
+    	
+    	//Bloc systématique
     	if(this.consumpType!=null) {
-    		this.consumption=(int) (ConsumptionMacro.getConsumFactor(this.consumpType)*this.originalconsumption);
+    		this.consumption=(int) (ConsumptionMacro.getConsumFactor(this.consumpType,0)*this.originalconsumption*this.cluster.getRandomFactor());
     		
     	}
     	else {
@@ -127,10 +116,16 @@ public class Group extends Node{
     	}
     }
     
-    public int getFutureConsumption(int ahead_Ite) {
+    
+    /**
+     * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur
+     * @see SubStation
+     * @see ConsumptionMacro
+     */
+    public int getFutureConsumption(int ahead_Turn) {
     	if(this.consumpType!=null) {
 
-    		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType,ahead_Ite)*this.originalconsumption);
+    		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType,ahead_Turn)*this.originalconsumption);
 
     	}
     	else {
