@@ -13,7 +13,7 @@ public class Group extends Node{
     private SubStation station;
 
     private String consumpType;
-    private ClusterGroup cluster;
+    private double randomConsumption;
     
  
    
@@ -27,6 +27,7 @@ public class Group extends Node{
         consumption = power;
         originalconsumption=power;
         this.consumpType=consumpType;
+        this.randomConsumption=(double) 1;
 
     }
     
@@ -108,7 +109,7 @@ public class Group extends Node{
     	
     	//Bloc systématique
     	if(this.consumpType!=null) {
-    		this.consumption=(int) (ConsumptionMacro.getConsumFactor(this.consumpType,0)*this.originalconsumption*this.cluster.getRandomFactor());
+    		this.consumption=(int) (ConsumptionMacro.getConsumFactor(this.consumpType,0)*this.originalconsumption*(this.randomConsumption));
     		
     	}
     	else {
@@ -124,17 +125,32 @@ public class Group extends Node{
      */
     public int getFutureConsumption(int ahead_Turn) {
     	if(this.consumpType!=null) {
-
-
-    		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType,ahead_Turn)*this.originalconsumption);
-
-   
-
-
+    		return (int) (ConsumptionMacro.getConsumFactor(this.consumpType,ahead_Turn)*this.originalconsumption); 
     	}
+    	
     	else {
     		System.err.println("Erreur pas de régime de conso. ou de gestionnaire assigné");
     		return -1;
     	}
     }
+
+
+
+	/**
+	 * @return the randomConsumption
+	 */
+	public Double getRandomConsumption() {
+		return randomConsumption;
+	}
+
+
+
+	/**
+	 * @param randomConsumption the randomConsumption to set
+	 */
+	public void setRandomConsumption(Double randomConsumption) {
+		this.randomConsumption = randomConsumption;
+	}
+    
+    
 }

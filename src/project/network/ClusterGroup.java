@@ -11,12 +11,8 @@ public class ClusterGroup {
 	private Double randomFactor;
 	
 	
-	public void init(Network net) {
-		
-		ArrayList<Node> nodes=net.getNodes();
-		this.groupList=new ArrayList<Group>();
-		
-		randomFactor=(double) 1;
+	public ClusterGroup(ArrayList<Group> groupList) {
+		this.groupList=groupList;
 		
 	}
 
@@ -35,7 +31,12 @@ public class ClusterGroup {
 	public void setRandomFactor(Double randomFactor) {
 		this.randomFactor = randomFactor;
 	}
-
+	
+	public void applyRandomFactor() {
+		for(Group group : this.groupList) {
+			group.setRandomConsumption(this.randomFactor);
+		}
+	}
 
 	
 	

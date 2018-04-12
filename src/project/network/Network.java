@@ -255,6 +255,7 @@ public class Network {
         addPlantsToStation(s1, np, gp1);
         addPlantsToStation(s2, np, gp1, hp2);
         addPlantsToStation(s3, np, hp2);
+        ConsumptionMacro.initClusterGroupAndRand(this);
         
     }
     /**
@@ -340,4 +341,20 @@ public class Network {
     public ArrayList<Node> getNodes() {
         return nodes.getArray();
     }
+    
+   //La solution la plus pertinente me parait au final de créer des getters pour les différents types de nodes
+   //Ainsi on évite la duplication de code lors de ce besoin dans les différents modules
+   // Mais on s'assure que les données soient synchronisées
+    public ArrayList<SubStation> getSubStation(){
+    	ArrayList<SubStation> substation=new ArrayList<SubStation>();
+    	for(Node node : nodes) {
+    		if (node instanceof SubStation) {
+    			substation.add((SubStation) node);
+    		}
+    	}
+    	
+    	
+    	return substation;
+    }
+    
 }

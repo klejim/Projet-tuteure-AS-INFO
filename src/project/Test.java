@@ -27,12 +27,10 @@ public class Test {
             System.out.println(Arrays.toString(network.count(SubStation.class, Group.class, PowerPlant.class, Node.class, NuclearPlant.class)));
             View view = new View();
             System.out.println("=== Etat initial ===");
-            System.out.print(view.rapport(network));
-<<<<<<< HEAD
-            for (int i=0;i<1;i++){
-=======
+            System.out.print(view.rapport(network));       
+
             for (int i=0;i<20;i++){
->>>>>>> 44d55280bd38ea0b9f5724ee0cb6ce96e384e23d
+
             	ArrayList<NetworkError> runOnce = network.runOnce(); 
             	System.out.println("=== Itération n°" + i + " ===");
             	System.out.print(view.rapport(network));

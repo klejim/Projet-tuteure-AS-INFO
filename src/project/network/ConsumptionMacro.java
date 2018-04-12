@@ -15,6 +15,7 @@ public class ConsumptionMacro {
 	private static Random rand;
 	private static final int RANDPERIOD;
 	private static int randTurnLeft;
+	private static boolean RANDOM_ON;
 	
 	private static ArrayList<ClusterGroup> clusterList;
 	
@@ -22,14 +23,18 @@ public class ConsumptionMacro {
      * Initialisation 
      */
 	static {
+		RANDFACTOR=0.1; 
+		RANDPERIOD=3;
+		RANDOM_ON=true;
+		
 		consumpModes=new HashMap<String,Double[]>();
 		Cursor=0;
 		tabSize=10;
 		rand=new Random();
-		randTurnLeft=0;
+		randTurnLeft=RANDPERIOD-1;
 		
-		RANDFACTOR=0.1; 
-		RANDPERIOD=24;
+		
+		
 		
 		
 	}
@@ -83,16 +88,20 @@ public class ConsumptionMacro {
 	}
 	
 	/** 
-     * Passe les consommations à l'itération suivante 
+     * Passe les consommations à l'itération suivante
+     * Met à jour les valeurs de randomisation
      */
 	public static void incrementCursor() {
 		Cursor++;
 		if (Cursor>=tabSize) {
 			Cursor=0;
 		}
-		if(randTurnLeft<=0) {
+		//actualisation de la randomisation
+		if(randTurnLeft<=0&&RANDOM_ON) {
 			randTurnLeft=RANDPERIOD;
 			randTurnLeft--;
+			applyClustersRandValue();
+			
 		}
 	}
 	
@@ -113,7 +122,7 @@ public class ConsumptionMacro {
      * @see ClusterGroup
      */	
 	private static Double getRandomGaussConsumBonus() {
-		return RANDFACTOR*rand.nextGaussian();
+		return RANDFACTOR*rand.nextGaussian()+1;
 		
 	}
 	
@@ -132,13 +141,27 @@ public class ConsumptionMacro {
 		return randTurnLeft;
 	}
 	
-	public static void setClustersRandValue() {
+	public static void applyClustersRandValue() {
 		for(ClusterGroup cluster: clusterList) {
 			cluster.setRandomFactor(getRandomGaussConsumBonus());
+			cluster.applyRandomFactor();
 		}
 		
 	}
-	/**
-	 * @param randTurnLeft the randTurnLeft to set
-	 */
+	
+	public static void initClusterGroupAndRand(Network net) {
+		ArrayList<SubStation> subStation=net.getSubStation();
+		clusterList=new ArrayList<ClusterGroup>();
+		for(SubStation sub : subStation) {
+			ArrayList<Group> group=sub.getGroups();
+			clusterList.add(new ClusterGroup(group));			
+		}
+		if(RANDOM_ON) {
+			applyClustersRandValue();
+		}
+	}
+	
+	
+	
+	
 }
