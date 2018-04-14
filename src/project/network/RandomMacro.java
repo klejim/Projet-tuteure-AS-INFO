@@ -9,7 +9,7 @@ import project.network.Group;
 import project.network.Network;
 import project.network.SubStation;
 
-public class RandomMacro extends ConsumptionMacro {
+public class RandomMacro  {
 	
 	private static ArrayList<ClusterGroup> clusterList;
 	private static final double RANDFACTOR;
