@@ -10,6 +10,7 @@ import java.util.Iterator;
  * Classe générique implémentant une ArrayList triée.
  * @author Jimenez
  */
+@SuppressWarnings("serial") // l'attribut serialVersionUID n'est utile que si on prévoit de sérialiser la classe
 public class SortedArrayList<T> extends ArrayList<T>{
     private final ArrayList<T> array;
     private Comparator<? super T> comparator;
