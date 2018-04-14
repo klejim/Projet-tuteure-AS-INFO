@@ -255,7 +255,7 @@ public class Network {
         addPlantsToStation(s1, np, gp1);
         addPlantsToStation(s2, np, gp1, hp2);
         addPlantsToStation(s3, np, hp2);
-        ConsumptionMacro.initClusterGroupAndRand(this);
+        ConsumptionMacro.init(this);
         
     }
     /**

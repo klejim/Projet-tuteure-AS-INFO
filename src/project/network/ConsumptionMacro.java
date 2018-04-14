@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
+import project.network.RandomMacro;
+
 public class ConsumptionMacro {
 
 	private static int Cursor;
@@ -11,33 +13,37 @@ public class ConsumptionMacro {
 	private static int tabSize; //Taille des tableaux de variat° de conso
 	
 	
-	private static final double RANDFACTOR;
-	private static Random rand;
-	private static final int RANDPERIOD;
-	private static int randTurnLeft;
+	
 	private static boolean RANDOM_ON;
 	
-	private static ArrayList<ClusterGroup> clusterList;
+	
 	
 	/** 
      * Initialisation 
      */
 	static {
-		RANDFACTOR=0.1; 
-		RANDPERIOD=3;
-		RANDOM_ON=true;
+		
+		RANDOM_ON=false;
 		
 		consumpModes=new HashMap<String,Double[]>();
 		Cursor=0;
 		tabSize=10;
-		rand=new Random();
-		randTurnLeft=RANDPERIOD-1;
-		
-		
-		
-		
 		
 	}
+	
+
+	/** 
+     * Initialise les fonctions ayant besoin du réseau
+     * Pour l'instant nécessaire uniquement pour le random
+     */
+			
+	public static void init(Network net) {
+		if(RANDOM_ON) {
+			RandomMacro.initClusterGroupAndRand(net);
+		}
+		
+	}
+	
 	/** 
      * @return la taille des doubles de consommations 
      */
@@ -96,13 +102,12 @@ public class ConsumptionMacro {
 		if (Cursor>=tabSize) {
 			Cursor=0;
 		}
-		//actualisation de la randomisation
-		if(randTurnLeft<=0&&RANDOM_ON) {
-			randTurnLeft=RANDPERIOD;
-			randTurnLeft--;
-			applyClustersRandValue();
-			
+		if(RANDOM_ON) {
+			RandomMacro.routineRandom();
 		}
+		//actualisation de la randomisation
+		
+		
 	}
 	
 	/**
@@ -113,18 +118,27 @@ public class ConsumptionMacro {
      */
 	
 	public static Double getConsumFactor(String consumpType,int aheadTurn) {
-		return consumpModes.get(consumpType)[(Cursor+aheadTurn)%tabSize];
+		try {
+			return consumpModes.get(consumpType)[(Cursor+aheadTurn-1)%tabSize];	
+		}
+		catch(ArrayIndexOutOfBoundsException e){
+			System.err.println("Demande de prediction erroné,valeur du curseur renvoyée"+e.getMessage());
+			return (double) 0;
+			//return consumpModes.get(consumpType)[Cursor];
+		}		
 		
 	}
-		
 	/**
-     * Renvoie une charge de consommation aléatoire à la gaussienne aléatoire
-     * @see ClusterGroup
-     */	
-	private static Double getRandomGaussConsumBonus() {
-		return RANDFACTOR*rand.nextGaussian()+1;
+     * Cette version renvoie le facteur de consommation du curseur actuel
+     * @return Double de consommation de l'itération
+     * @see Group
+     */
+	public static Double getConsumFactor(String consumpType) {		
+			return consumpModes.get(consumpType)[(Cursor)%tabSize];			
 		
 	}
+		
+	
 	
 	/**
      * Renvoie la hashmap de consommation
@@ -134,32 +148,11 @@ public class ConsumptionMacro {
 		return consumpModes;
 	}
 	
-	/**
-	 * @return the randTurnLeft
-	 */
-	public static int getRandTurnLeft() {
-		return randTurnLeft;
-	}
 	
-	public static void applyClustersRandValue() {
-		for(ClusterGroup cluster: clusterList) {
-			cluster.setRandomFactor(getRandomGaussConsumBonus());
-			cluster.applyRandomFactor();
-		}
-		
-	}
 	
-	public static void initClusterGroupAndRand(Network net) {
-		ArrayList<SubStation> subStation=net.getSubStation();
-		clusterList=new ArrayList<ClusterGroup>();
-		for(SubStation sub : subStation) {
-			ArrayList<Group> group=sub.getGroups();
-			clusterList.add(new ClusterGroup(group));			
-		}
-		if(RANDOM_ON) {
-			applyClustersRandValue();
-		}
-	}
+	
+	
+	
 	
 	
 	

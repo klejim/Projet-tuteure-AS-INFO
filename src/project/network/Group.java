@@ -8,7 +8,6 @@ package project.network;
 public class Group extends Node{
     private int consumption;
     private int originalconsumption; // a manipulé avec le facteur
-    private static boolean RAND_ON=true;
     
     private SubStation station;
 
@@ -103,13 +102,9 @@ public class Group extends Node{
      * @see ConsumptionMacro
      */
     public void update(){
-    	
-    	// Bloc de randomisation éventuel
-    	
-    	
     	//Bloc systématique
     	if(this.consumpType!=null) {
-    		this.consumption=(int) (ConsumptionMacro.getConsumFactor(this.consumpType,0)*this.originalconsumption*(this.randomConsumption));
+    		this.consumption=(int) (ConsumptionMacro.getConsumFactor(this.consumpType)*this.originalconsumption*(this.randomConsumption));
     		
     	}
     	else {
