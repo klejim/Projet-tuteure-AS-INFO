@@ -123,8 +123,8 @@ public class ConsumptionMacro {
 		}
 		catch(ArrayIndexOutOfBoundsException e){
 			System.err.println("Demande de prediction erroné,valeur du curseur renvoyée"+e.getMessage());
-			return (double) 0;
-			//return consumpModes.get(consumpType)[Cursor];
+			
+			return consumpModes.get(consumpType)[Cursor];
 		}		
 		
 	}

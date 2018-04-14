@@ -221,7 +221,7 @@ public class Network {
             node.update();
             if (node instanceof SubStation){
                 consumption += ((SubStation) node).getPowerOut();
-                production += ((SubStation) node).getPowerIn();
+                production += ((SubStation) node).getPowerIn();                         
             }
         }
         ConsumptionMacro.incrementCursor();
