@@ -59,8 +59,10 @@ public class View {
                 for (Line l : ((SubStation) n).getLines()) {
                     str += "| <-- " + l.getIn().getName() + " " + l.getActivePower() + " kW\n";
                 }
-                for (Group g : ((SubStation) n).getGroups()) {
-                    str += "| --> " + g.getName() + " " + g.getConsumption() + " kW\n";
+                for (Group g : ((SubStation)n).getGroups()){
+                    str += "| --> " + g.getName() + " " + g.getConsumption()+" kW" + "\n";
+                    str += "| --> " + g.getName() + " dans 1 tours " + g.getFutureConsumption(1) + " kW" + "\n";
+                    str += "| --> " + g.getName() + " dans 2 tours " + g.getFutureConsumption(2) + " kW" + "\n";
                 }
                 str += "Total IN: " + ((SubStation) n).getPowerIn() + " | Total OUT: " + ((SubStation) n).getPowerOut()
                         + "\n";
@@ -74,6 +76,7 @@ public class View {
                 str += n.getName() + "\n";
             }
         }
+        str+="\n \n \n";
         return str;
     }
 
@@ -105,10 +108,6 @@ public class View {
                 }
             }
             myNetwork.handleErrors(myNetwork.analyze());
-            
-            
-            
-           
         }
     }
 }

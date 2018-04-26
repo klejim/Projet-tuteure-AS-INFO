@@ -1,18 +1,7 @@
-default1 = 12;
-defaultstring = "bonjour";
-// déclaration d'une section
 ### DATA_CONSUMPTION ###  
-// déclaration d'une variable "var" de valeur "15" (convertie en Double)
-var = 15; 
-// déclaration d'un tableau
-data = [12, 25.0, 2.2, 0]; 
-// déclaration d'une chaîne
-chaine = "Le Chat";
+default = "test";
+test = [0.9822,0.9159,0.8996,0.8728,0.8504,0.8584,0.9163,1.0256,1.0930,1.1049,1.0959,1.0792,1.0678,1.0456,1.0129,0.9807,0.9670,0.9894,1.0689,1.1089,1.0717,1.0095,0.9647, 0.9968]; 
  
-### NETWORK_FILES ###  // la syntaxe doit être strictement respectée autant pour les sections que les variables
-Toutes les lignes ne définissant pas une section ou une variables sont ignorées.
-
+### NETWORK_FILES ###
 network = "path/to/file";
-### SECTION_2 ### //test comment
-testvar = 42;
 

@@ -34,6 +34,7 @@ public class Test {
                 System.out.println("=== Itération n°" + i + " ===");
                 System.out.print(view.rapport());
             }
+            
         }
     }
 }
