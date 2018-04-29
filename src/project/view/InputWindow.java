@@ -7,12 +7,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import project.network.Network;
-import project.network.Node;
-import project.network.SubStation;
+
 /**
- * Classe qui génère une fenêtre pour les entrées utilisateur
+ * Classe qui génère une fenêtre pour les entrées utilisateur. Cette fenêtre peut regrouper plusieurs interfaces utilisateur
+ * sous la forme d'élements qui héritent de InputWindowElement.
+ * 
  * @author yoann
- *
  */
 
 @SuppressWarnings("serial")

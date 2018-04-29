@@ -8,10 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import project.network.Network;
-import project.network.Node;
 
 /**
- * Classe qui génère le bloc d'affichage et de modification des consommations des groupes présents sur le réseau
+ * Classe abstraite qui représente un élément dans la fenêtre InputWindow. 
  * 
  * @author yoann
  *
@@ -55,12 +54,12 @@ public abstract class InputWindowElement {
 	}
 	
 	/**
-	 * Créé et initialisé l'élément
+	 * Créé et initialise l'élément
 	 */
 	public abstract void createElement();
 	
 	/**
-	 * Met à jour l'affichage de l'éléementd
+	 * Met à jour l'affichage de l'éléement
 	 */
 	public abstract void updateElement();
 	

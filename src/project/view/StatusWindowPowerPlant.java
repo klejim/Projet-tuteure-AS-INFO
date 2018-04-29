@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import project.network.Line;
 import project.network.PowerPlant;
 import project.network.PowerPlant.State;
-import project.network.SubStation;
 
 /**
  * Classe qui décrit la vue d'une centrale électrique.

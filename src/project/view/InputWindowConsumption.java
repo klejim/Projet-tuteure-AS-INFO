@@ -1,14 +1,11 @@
 package project.view;
 
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,12 +18,13 @@ import project.network.Group;
 
 public class InputWindowConsumption extends InputWindowElement implements ActionListener {
 
-
+	// consommations courantes
 	private Map<Integer, Integer> consumptions;
+	
+	// champs textuels
 	private Map<Integer, JTextField> fields;
-	private Map<Integer, JPanel> groupsPanels;
-
-
+	
+	
 	/**
 	 * Constructeur
 	 * @param model le réseau à paramétrer
@@ -35,12 +33,14 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 		super(model, "Réglage Consommation");
 		this.consumptions = new HashMap<>();
 		this.fields = new HashMap<>();
-		this.groupsPanels = new HashMap<>();
 
 		createElement();	
 		System.out.println("construct");
 	}
 
+	/**
+	 * @see project.view.InputWindowElement#createElement()
+	 */
 	@Override
 	public void createElement() {
 
@@ -67,7 +67,6 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 			groupPanel.setLayout(new GridLayout(1, 2, 0, 0));
 			groupPanel.add(legend);
 			groupPanel.add(field);
-			this.groupsPanels.put(groupId, groupPanel);
 
 			// ajout sous panel groupe à panel principal
 			this.elementDisplay.add(groupPanel);
@@ -94,12 +93,19 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 
 		this.elementDisplay.add(buttonsPanel);
 	}
-
+	
+	
+	/**
+	 * @see project.view.InputWindowElement#updateElement()
+	 */
 	@Override
 	public void updateElement() {
 		// rien à faire
 	}
 	
+	/**
+	 * Récupère les valeurs courantes de consommation depuis le réseau
+	 */
 	private void updateConsumptions() {
 
 		this.consumptions.clear();
@@ -123,8 +129,8 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 			try {
 				valeur = Integer.parseInt(this.fields.get(groupId).getText());
 			}catch(NumberFormatException e) {
-				// valeur non convertible en nombre entier
-				break;
+				// valeur non convertible en nombre entier - on ignore cette valeur
+				continue;
 			}
 			this.consumptions.put(groupId, valeur);
 		}
@@ -139,7 +145,7 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 	
 	
 	/**
-	 * Récupère les consommations courantes du réseau
+	 * Synchronise la fenêtre avec les consommations courantes du réseau
 	 */
 	public void resetConsumptions() {
 		updateConsumptions();
