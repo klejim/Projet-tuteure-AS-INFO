@@ -83,7 +83,7 @@ public class View {
         return str;
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 
         Network myNetwork = new Network(0, 0, 0);
 
@@ -95,21 +95,8 @@ public class View {
 
         while (true) {
             myView.updateView();
-            System.out.print("entrer un id de groupe (0 pour fermer) : ");
-            int id = sc.nextInt();
-            if (id == 0) {
-                myView.deleteView();
-                System.exit(0);
-            }
-            System.out.print("entrer une conso pour le groupe : ");
-            int conso = sc.nextInt();
-
-            for (Node n : myNetwork.getNodes()) {
-                if (n.getClass().equals(Group.class) && ((Group) n).getId() == id) {
-                    ((Group) n).setConsumption(conso);
-                }
-            }
             myNetwork.runOnce();
+            Thread.sleep(2000);
 
         }
     }

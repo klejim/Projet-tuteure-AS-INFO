@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import project.network.Network;
 import project.network.Node;
@@ -30,16 +31,20 @@ public abstract class InputWindowElement {
 
 	/**
 	 * Constructeur
+	 * @param ntw le réseau rattaché à l'élément
+	 * @param titre le titre de l'élément
 	 */
 	public InputWindowElement(Network ntw, String titre) {
-		this.titre = new JLabel(titre);
+		this.titre = new JLabel(titre, SwingConstants.CENTER);
 		this.model = ntw;
 		
 		this.elementDisplay = new JPanel();
 		
 		// ajout du titre au panel
+		this.titre.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 		this.elementDisplay.add(this.titre);
-		this.elementDisplay.setBorder(BorderFactory.createLineBorder(Color.blue, 1, true));
+		this.elementDisplay.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
+
 	}
 	
 	/**
@@ -49,8 +54,14 @@ public abstract class InputWindowElement {
 		return elementDisplay;
 	}
 	
+	/**
+	 * Créé et initialisé l'élément
+	 */
 	public abstract void createElement();
 	
+	/**
+	 * Met à jour l'affichage de l'éléementd
+	 */
 	public abstract void updateElement();
 	
 
