@@ -1,5 +1,8 @@
 package project.view;
 
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -33,6 +36,10 @@ public abstract class InputWindowElement {
 		this.model = ntw;
 		
 		this.elementDisplay = new JPanel();
+		
+		// ajout du titre au panel
+		this.elementDisplay.add(this.titre);
+		this.elementDisplay.setBorder(BorderFactory.createLineBorder(Color.blue, 1, true));
 	}
 	
 	/**

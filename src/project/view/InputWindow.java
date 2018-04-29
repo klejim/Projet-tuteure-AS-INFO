@@ -68,9 +68,11 @@ public class InputWindow extends JFrame {
 	 */
 	public void createElements() {
 		
-		// Modif des consommations des groupes
+		// Modification des consommations des groupes
 		InputWindowElement elt = new InputWindowConsumption(modelNetwork);
 		inputElements.add(elt);
+		
+		// Ajouter les nouveaux blocs d'input/output ici
 	}
 	
 	/**
