@@ -44,9 +44,6 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 	@Override
 	public void createElement() {
 
-		// 1 colone  - espacement horizontal et vertical 5px
-		this.elementDisplay.setLayout(new GridLayout(0, 1, 5, 5));
-
 		// premiere recupération des consommation
 		updateConsumptions();
 

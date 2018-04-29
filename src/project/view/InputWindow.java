@@ -47,7 +47,7 @@ public class InputWindow extends JFrame {
 
 		// init fenêtre
 		this.setTitle("Commandes Réseau");
-		this.setSize(300, 400);
+		this.setSize(600, 400);
 		this.setLocationRelativeTo(null);
 		this.setResizable(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,6 +71,11 @@ public class InputWindow extends JFrame {
 		// Modification des consommations des groupes
 		InputWindowElement elt = new InputWindowConsumption(modelNetwork);
 		inputElements.add(elt);
+		
+		// Compteur d'itérations simulateur
+		InputWindowElement elt2 = new InputWindowTimeCounter(modelNetwork);	
+		inputElements.add(elt2);
+		
 		
 		// Ajouter les nouveaux blocs d'input/output ici
 	}
