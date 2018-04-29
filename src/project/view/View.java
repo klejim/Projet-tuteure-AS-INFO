@@ -19,6 +19,7 @@ import project.network.SubStation;
 public class View {
 
     private StatusWindow statWin;
+    private InputWindow inputWin;
     private Network net;
 
     /**
@@ -29,6 +30,9 @@ public class View {
         this.net = network;
         this.statWin = new StatusWindow(network);
         this.statWin.createDisplay();
+        
+        this.inputWin = new InputWindow(network);
+        this.inputWin.createDisplay();
     }
 
     /**
@@ -36,6 +40,7 @@ public class View {
      */
     public void updateView() {
         statWin.updateDisplay();
+        inputWin.updateDisplay();
     }
 
     /**
@@ -43,6 +48,7 @@ public class View {
      */
     public void deleteView() {
         statWin.dispatchEvent(new WindowEvent(statWin, WindowEvent.WINDOW_CLOSING));
+        inputWin.dispatchEvent(new WindowEvent(inputWin, WindowEvent.WINDOW_CLOSING) );
     }
 
     /**
