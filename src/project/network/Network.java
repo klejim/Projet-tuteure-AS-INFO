@@ -70,15 +70,9 @@ public class Network {
             if (n instanceof SubStation){
                 SubStation station = (SubStation)n;
                 int diff = station.getDiff();
-                // on  définit l'erreur relative selon le type d'erreur
-                // si surcharge : erreur = surcharge/entrée
-                // si demande trop grande : erreur = différence/sortie
-                // Ainsi l'erreur est un pourcentage de la puissance d'entrée ou de la puissance de sortie
-                double erreur = (double)diff/((diff>0)?station.getPowerIn():station.getPowerOut());
-                if (erreur > 0.10){ // demande supérieure à l'entrée
+                if (diff > 0) {
                     errors.add(new TooMuchPowerError(station, station.getDiff()));
-                }
-                else if (station.getDiff() < -0.10){
+                } else {
                     errors.add(new NotEnoughPowerError(station, Math.abs(station.getDiff())));
                 }
             }
