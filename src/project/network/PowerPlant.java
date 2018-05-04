@@ -186,6 +186,9 @@ abstract public class PowerPlant extends Node{
     	if (this.state==State.STARTING){
             if (this.framesSinceStart>=this.startDelay){
                 this.state=State.ON;
+                for(Line l : lines){
+                    l.setState(Line.State.ONLINE);
+                }
                 this.framesSinceStart=0;
             }
             else{
