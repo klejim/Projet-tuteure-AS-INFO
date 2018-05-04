@@ -121,17 +121,20 @@ public class ConsumptionMacro {
 	}
 
 	/**
-	 * Cette version permet de renvoyer un facteur de consommation ultérieur
+	 * Cette version permet de renvoyer un facteur de consommation avec un offset.
 	 * @param Type de conso, nombre d'itération d'avance
 	 * @return Double de consommation de l'itération
 	 * @see Group
 	 */
-	public static Double getConsumFactor(String consumpType, int aheadTurn) {
+	public static Double getConsumFactor(String consumpType, int offset) {
 		try {
-			return consumpModes.get(consumpType)[(Cursor + aheadTurn - 1) % tabSize];
+			int i = Cursor + offset % tabSize;
+			if (i < 0){
+				i += tabSize;
+			}
+			return consumpModes.get(consumpType)[i];
 		} catch (ArrayIndexOutOfBoundsException e) {
 			System.err.println("Demande de prediction erroné,valeur du curseur renvoyée" + e.getMessage());
-
 			return consumpModes.get(consumpType)[Cursor];
 		}
 
