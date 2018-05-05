@@ -14,7 +14,7 @@ import project.network.SubStation;
 
 /**
  * Classe chargée du formatage et de l'affichage des données du réseau.
- * @author Jimenez
+ * @author yoann
  */
 public class View {
 
@@ -105,10 +105,6 @@ public class View {
                 }
             }
             myNetwork.handleErrors(myNetwork.analyze());
-            
-            
-            
-           
         }
     }
 }

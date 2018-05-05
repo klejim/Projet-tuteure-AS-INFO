@@ -19,7 +19,7 @@ abstract public class PowerPlant extends Node{
     static final Comparator<PowerPlant> stateAndPowerComparator = (p1, p2)->{
         int cmp = 0;
         if (p1.getState() == p2.getState()){
-            cmp = p1.getActivePower() - p2.getActivePower();
+            cmp = p2.getActivePower() - p1.getActivePower();
         }
         else if (p1.getState() == PowerPlant.State.ON){
             cmp = -1;
@@ -49,7 +49,7 @@ abstract public class PowerPlant extends Node{
      */
     private PowerPlant(){
         super();
-        state = State.ON; // jusqu'à ce qu'on gère un réseau dynamique, pour avoir des centrales qui produisent
+        state = State.OFF; // jusqu'à ce qu'on gère un réseau dynamique, pour avoir des centrales qui produisent
         lines = new ArrayList<>();
     }
     /**
@@ -120,10 +120,10 @@ abstract public class PowerPlant extends Node{
         boolean ok = false;
         if (Math.abs(activePower) >= p && (state == State.ON || state == State.STARTING)){
             for (Line line : lines){
-                if (line.getOut() == station){
+                if (line.getOut() == station && p > line.getPower()){
                     if (state == State.STARTING){
                         activePower += p;
-                        line.setState(Line.State.DISABLED);
+                        line.setState(Line.State.WAITING);
                     }
                     else{
                         activePower -= p;
@@ -133,7 +133,7 @@ abstract public class PowerPlant extends Node{
                 }
             }
         }
-        return ok?p:-1;
+        return ok?p:0;
     }
     /**
      * @return la puissance disponible.
@@ -183,20 +183,25 @@ abstract public class PowerPlant extends Node{
     @Override
     public void update(){
         computeActivePower();
-    	if (this.state==State.STARTING){
-            if (this.framesSinceStart>=this.startDelay){
-                this.state=State.ON;
-                for(Line l : lines){
-                    l.setState(Line.State.ONLINE);
+        if (this.state == State.STARTING) {
+            if (this.framesSinceStart >= this.startDelay) {
+                this.state = State.ON;
+                // on active les lignes en attente (elles représentent des puissances réclamées par des stations qui attendaient
+                // que la centrale soit prête pour alimenter la sous-station)
+                for (Line l : lines) {
+                    if (l.getState() == Line.State.WAITING) {
+                        l.setState(Line.State.ONLINE);
+                    }
                 }
-                this.framesSinceStart=0;
-            }
-            else{
+                this.framesSinceStart = 0;
+            } else {
                 this.framesSinceStart++;
             }
     	}
+        else if (state == State.ON && activePower == power){
+            stop();
+        }
     }
-    
     /** getters/setters **/
     /**
      * Modifie le délai au démarrage. Ne fait rien si la valeur donnée en paramètre est négative.

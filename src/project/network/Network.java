@@ -144,7 +144,7 @@ public class Network {
             plants.add(line.getIn());
         }
         // avant de poursuivre on trie les centrales
-        // ordre : off > online > starting et à catégorie égale la centrale ayant la plus grande puissance disponible est placée avant
+        // ordre : ON < STARTING < OFF et à catégorie égale la centrale ayant la plus grande puissance disponible est placée avant
         plants.sort(PowerPlant.stateAndPowerComparator);
         // Recherche de solution
         int i = 0, powerNeeded = p;
@@ -154,7 +154,7 @@ public class Network {
                 if (plant.getState() == PowerPlant.State.OFF){
                     plant.start();
                 }
-                int powerAsked = (powerNeeded <= plant.getActivePower())?powerNeeded:plant.getActivePower();
+                int powerAsked = (powerNeeded <= Math.abs(plant.getActivePower()))?powerNeeded:Math.abs(plant.getActivePower());
                 powerNeeded -= plant.grantToStation(station, powerAsked);
                 ok = powerNeeded <= 0;
             }
