@@ -17,24 +17,24 @@ abstract public class PowerPlant extends Node{
         };
     // ON  < STARTING < OFF | à état égal on compare la puissance
     static final Comparator<PowerPlant> stateAndPowerComparator = (p1, p2)->{
-            int cmp = 0;
-            if (p1.getState() == p2.getState()){
-                cmp = p1.getActivePower() - p2.getActivePower();
-            }
-            else if (p1.getState() == PowerPlant.State.OFF){
-                cmp = -1;
-            }
-            else if (p1.getState() == PowerPlant.State.ON && p2.getState() == PowerPlant.State.OFF){
-                cmp = 1;
-            }
-            else if (p1.getState() == PowerPlant.State.ON && p2.getState() == PowerPlant.State.STARTING){
-                cmp = -1;
-            }
-            else if (p1.getState() == PowerPlant.State.STARTING){
-                cmp = 1;
-            }     
-            return cmp;
-        };
+        int cmp = 0;
+        if (p1.getState() == p2.getState()){
+            cmp = p1.getActivePower() - p2.getActivePower();
+        }
+        else if (p1.getState() == PowerPlant.State.ON){
+            cmp = -1;
+        }
+        else if (p1.getState() == PowerPlant.State.STARTING && p2.getState() == PowerPlant.State.OFF){
+            cmp = -1;
+        }
+        else if (p1.getState() == PowerPlant.State.STARTING && p2.getState() == PowerPlant.State.ON){
+            cmp = 1;
+        }
+        else if (p1.getState() == PowerPlant.State.OFF){
+            cmp = 1;
+        }     
+        return cmp;
+    };
     // comparaison sur le délai de démarrage
     static final Comparator<PowerPlant> startDelayComparator = (p1, p2)->{
             return p1.startDelay - p2.startDelay;
