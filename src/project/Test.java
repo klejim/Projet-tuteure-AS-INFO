@@ -30,7 +30,7 @@ public class Test {
             System.out.println("=== Etat initial ===");
             System.out.print(view.rapport());
             for (int i = 0; i < 1000; i++) {
-                ArrayList<NetworkError> runOnce = network.runOnce();
+                network.update();
                 System.out.println("=== Itération n°" + i + " ===");
                 System.out.print(view.rapport());
                 

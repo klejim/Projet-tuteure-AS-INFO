@@ -70,15 +70,9 @@ public class Network {
             if (n instanceof SubStation){
                 SubStation station = (SubStation)n;
                 int diff = station.getDiff();
-                // on  définit l'erreur relative selon le type d'erreur
-                // si surcharge : erreur = surcharge/entrée
-                // si demande trop grande : erreur = différence/sortie
-                // Ainsi l'erreur est un pourcentage de la puissance d'entrée ou de la puissance de sortie
-                double erreur = (double)diff/((diff>0)?station.getPowerIn():station.getPowerOut());
-                if (erreur > 0.10){ // demande supérieure à l'entrée
+                if (diff > 0) {
                     errors.add(new TooMuchPowerError(station, station.getDiff()));
-                }
-                else if (station.getDiff() < -0.10){
+                } else {
                     errors.add(new NotEnoughPowerError(station, Math.abs(station.getDiff())));
                 }
             }
@@ -94,7 +88,7 @@ public class Network {
      * @see #solvePowerOverflow(project.network.SubStation, int)
      * @see #solvePowerShortage(project.network.SubStation, int) 
      */
-    private ArrayList<NetworkError> handleErrors(ArrayList<NetworkError> rawErrors){
+    public ArrayList<NetworkError> handleErrors(ArrayList<NetworkError> rawErrors){
         ArrayList<NetworkError> errors = new ArrayList<>(rawErrors.size());
         errors.addAll(rawErrors);
         for (NetworkError e : rawErrors){
@@ -150,7 +144,7 @@ public class Network {
             plants.add(line.getIn());
         }
         // avant de poursuivre on trie les centrales
-        // ordre : off > online > starting et à catégorie égale la centrale ayant la plus grande puissance disponible est placée avant
+        // ordre : ON < STARTING < OFF et à catégorie égale la centrale ayant la plus grande puissance disponible est placée avant
         plants.sort(PowerPlant.stateAndPowerComparator);
         // Recherche de solution
         int i = 0, powerNeeded = p;
@@ -160,7 +154,7 @@ public class Network {
                 if (plant.getState() == PowerPlant.State.OFF){
                     plant.start();
                 }
-                int powerAsked = (powerNeeded <= plant.getActivePower())?powerNeeded:plant.getActivePower();
+                int powerAsked = (powerNeeded <= Math.abs(plant.getActivePower()))?powerNeeded:Math.abs(plant.getActivePower());
                 powerNeeded -= plant.grantToStation(station, powerAsked);
                 ok = powerNeeded <= 0;
             }
@@ -197,7 +191,7 @@ public class Network {
     /**
      * Réalise une itération du réseau.
      * 
-     * <p>Les étapes sont les suivantes :</p>
+     * <p>Les étapes de l'itération sont les suivantes :</p>
      * <ul>
      * <li>Faire avancer les modes de consommation (incrémenter leurs curseurs internes)</li>
      * <li>Mettre à jour les groupes</li>
@@ -207,9 +201,10 @@ public class Network {
      * <li>Gérer les erreurs</li>
      * <li>Renvoyer le résultat</li>
      * </ul>
+     * <p>Cette fonction se charge de la mise à jour (étapes 1 à 4).</p>
      * @return la liste d'erreur générées par {@link #handleErrors(java.util.ArrayList) handleErrors()}. 
      */
-    public ArrayList<NetworkError> runOnce(){
+    public void update(){
         // TODO : mise à jour consommation des groupes
         // remarque : on suppose que la puissance de base d'une centrale est constante. Si cela change dans le futur il faudra modiier
         // la gestion des centrales et de leur puissance disponible.
@@ -223,7 +218,6 @@ public class Network {
                 production += ((SubStation) node).getPowerIn();
             }
         }
-        return handleErrors(analyze());
     }
     
     
