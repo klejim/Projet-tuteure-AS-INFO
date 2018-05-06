@@ -45,19 +45,19 @@ public class StatusWindowPowerPlant extends StatusWindowElement {
 
 		State state = ((PowerPlant) this.modelNode).getState();
 		Class type = ((PowerPlant)this.modelNode).getClass();
-		int id = ((PowerPlant) this.modelNode).getId();
+		String name = ((PowerPlant) this.modelNode).getName();
 		int usedPower = connexion.getActivePower();
 		
 
-		data[0] = "| <-- PowerPlant " + id;
+		data[0] = "| <-- " + name;
 		data[1] = "Etat: " + state;
 		data[2] = "P. utilisée: " + usedPower + " kW";
 		if(type.equals(NuclearPlant.class)) {
-			data[3] = "Nucléaire (1500000 kW)";
+			data[3] = " (Pmax : 1500000 kW)";
 		}else if (type.equals(HydraulicPlant.class)) {
-			data[3] = "Hydraulique (5000 kW)";
+			data[3] = "(Pmax : 5000 kW)";
 		}else if (type.equals(GasPlant.class)) {
-			data[3] = "Gaz (300000 kW)";
+			data[3] = "(Pmax : 300000 kW)";
 		}else {
 			data[3] = "type centrale inconnu";
 		}
