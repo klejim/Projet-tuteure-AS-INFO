@@ -57,7 +57,13 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 
 
 			// création légende
-			JLabel legend = new JLabel ("Group "+ groupId + " (MW) : ");
+			String name = "grp";
+			for(Node node : this.model.getNodes()) {
+				if(node.getId() == groupId) {
+					name = node.getName();
+				}
+			}
+			JLabel legend = new JLabel ( name + " (MW) : ");
 
 			// création Panel Groupes
 			JPanel groupPanel = new JPanel();
