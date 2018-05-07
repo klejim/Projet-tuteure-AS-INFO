@@ -117,6 +117,7 @@ public class Group extends Node {
         if (this.consumpType != null) {
             this.consumption = (int) (ConsumptionMacro.getConsumFactor(this.consumpType) * this.originalconsumption
                     * (this.randomConsumption));
+            this.consumption=(int) (this.consumption/100.0)*100;
         } else {
             System.err.println("Erreur pas de régime de conso. ou de gestionnaire assigné");
         }
