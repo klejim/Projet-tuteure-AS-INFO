@@ -31,6 +31,7 @@ public class Test {
             System.out.print(view.rapport());
             for (int i = 0; i < 1000; i++) {
                 network.update();
+                network.handleErrors(network.analyze());
                 System.out.println("=== Itération n°" + i + " ===");
                 System.out.print(view.rapport());
                 
