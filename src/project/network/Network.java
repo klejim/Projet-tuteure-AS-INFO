@@ -72,7 +72,7 @@ public class Network {
                 int diff = station.getDiff();
                 if (diff > 0) {
                     errors.add(new TooMuchPowerError(station, station.getDiff()));
-                } else {
+                } else if (diff < 0) {
                     errors.add(new NotEnoughPowerError(station, Math.abs(station.getDiff())));
                 }
             }
