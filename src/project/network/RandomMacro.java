@@ -11,12 +11,15 @@ import project.network.SubStation;
 
 public class RandomMacro {
 
+	
+	
 	private static ArrayList<ClusterGroup> clusterList;
 	private static final double RANDFACTOR;
 	private static Random rand;
 	private static final int RANDPERIOD;
 	private static int randTurnLeft;
 
+	
 	static {
 		RANDFACTOR = 0.1;
 		RANDPERIOD = 3;
@@ -24,7 +27,12 @@ public class RandomMacro {
 		rand = new Random();
 		randTurnLeft = RANDPERIOD - 1;
 	}
-
+	
+	/**
+	 * Initialisation des clustersLists, et de la première randomisation
+	 * Les Groupes sont regroupés en ClusterList par stations.
+	 * @param le network concerné
+	 */	
 	public static void initClusterGroupAndRand(Network net) {
 		ArrayList<SubStation> subStation = net.getSubStation();
 		clusterList = new ArrayList<ClusterGroup>();
@@ -37,6 +45,11 @@ public class RandomMacro {
 
 	}
 
+	/**
+	 * Applique un nouveau facteur aléatoire aux clusterGroups
+	 * @see ClusterGroup
+	 */
+	
 	public static void applyClustersRandValue() {
 		for (ClusterGroup cluster : clusterList) {
 			cluster.setRandomFactor(getRandomGaussConsumBonus());
@@ -46,21 +59,24 @@ public class RandomMacro {
 	}
 
 	/**
-	 * @return the randTurnLeft
+	 * @return Le nombre de tour restant avant la randomisation
 	 */
 	public static int getRandTurnLeft() {
 		return randTurnLeft;
 	}
 
 	/**
-	 * Renvoie une charge de consommation aléatoire à la gaussienne aléatoire
+	 * Renvoie un facteur de consommation aléatoire à la gaussienne aléatoire
 	 * @see ClusterGroup
 	 */
 	private static Double getRandomGaussConsumBonus() {
 		return RANDFACTOR * rand.nextGaussian() + 1;
 
 	}
-
+	/**
+	 * Routine décidant si un nouveau paramètre aléatoire doit être appliqué sur les ClustersGroup
+	 * @see ClusterGroup
+	 */
 	public static void routineRandom() {
 		if (randTurnLeft <= 0) {
 			randTurnLeft = RANDPERIOD;
