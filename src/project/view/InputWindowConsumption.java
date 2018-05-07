@@ -57,7 +57,7 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 
 
 			// création légende
-			JLabel legend = new JLabel ("Group "+ groupId + " (kW) : ");
+			JLabel legend = new JLabel ("Group "+ groupId + " (MW) : ");
 
 			// création Panel Groupes
 			JPanel groupPanel = new JPanel();
@@ -109,7 +109,7 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 
 		for(Node node : this.model.getNodes()) {
 			if(node.getClass().equals(Group.class)) {
-				this.consumptions.put(node.getId(),((Group)node).getConsumption());
+				this.consumptions.put(node.getId(),((Group)node).getConsumption()/1000);
 			}
 		}
 
@@ -125,6 +125,7 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 			int valeur;
 			try {
 				valeur = Integer.parseInt(this.fields.get(groupId).getText());
+				valeur = valeur*1000;
 			}catch(NumberFormatException e) {
 				// valeur non convertible en nombre entier - on ignore cette valeur
 				continue;
