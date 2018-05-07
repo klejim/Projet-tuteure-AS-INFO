@@ -51,13 +51,13 @@ public class StatusWindowPowerPlant extends StatusWindowElement {
 
 		data[0] = "| <-- " + name;
 		data[1] = "Etat: " + state;
-		data[2] = "P. utilisée: " + usedPower + " kW";
+		data[2] = "P. utilisée: " + usedPower/1000 + " MW";
 		if(type.equals(NuclearPlant.class)) {
-			data[3] = " (Pmax : 1500000 kW)";
+			data[3] = " (Pmax : 1500 MW)";
 		}else if (type.equals(HydraulicPlant.class)) {
-			data[3] = "(Pmax : 5000 kW)";
+			data[3] = "(Pmax : 5 MW)";
 		}else if (type.equals(GasPlant.class)) {
-			data[3] = "(Pmax : 300000 kW)";
+			data[3] = "(Pmax : 300 MW)";
 		}else {
 			data[3] = "type centrale inconnu";
 		}

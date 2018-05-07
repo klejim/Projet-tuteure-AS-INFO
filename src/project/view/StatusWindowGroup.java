@@ -33,7 +33,7 @@ public class StatusWindowGroup extends StatusWindowElement {
 
 		String[] data = new String[2];
 		data[0] = ("| --> " + this.modelNode.getName());
-		data[1] = "Conso: " + ((Group) modelNode).getConsumption() + " kW";
+		data[1] = "Conso: " + ((Group) modelNode).getConsumption()/1000 + " MW";
 		return data;
 	}
 
