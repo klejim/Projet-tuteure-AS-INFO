@@ -32,10 +32,12 @@ public class Network {
                     ArrayList<Double> tmp = (ArrayList<Double>) var;
                     Double tab[] = new Double[tmp.size()];
                     for (int i = 0; i < tmp.size(); i++) {
-                        tab[i] = tmp.get(i);
+                       tab[i] = tmp.get(i);
                     }
+                    
                     ConsumptionMacro.setConsumptionTab(varName, tab);
-
+                    
+                    
                 }
                 //ConsumptionMacro.setConsumptionTab(tabName, (Double[])data.get(tabName));
             }

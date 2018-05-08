@@ -3,11 +3,12 @@ package project.network;
 /**
  * Classe représentant un groupe de consommation (ou groupe de foyers, ou encore groupe d'habitations).
  * @author Jimenez
+ * @
  * @see SubStation
  */
 public class Group extends Node {
     private int consumption;
-    private int originalconsumption; // a manipulé avec le facteur
+    private int originalconsumption; // a manipuler avec le facteur
 
     private SubStation station;
 
@@ -36,8 +37,6 @@ public class Group extends Node {
     public boolean isConnected() {
         return station != null;
     }
-
-    // getters/setters
 
     /**
      * @return the originalconsumption
@@ -84,11 +83,16 @@ public class Group extends Node {
     public SubStation getStation() {
         return station;
     }
-
+    /**
+     * @return le type de variation de consommation du Groupe
+     */
     public String getConsumpType() {
         return consumpType;
     }
-
+    
+    /**
+     * Assigne le type de variation de consommation du Groupe
+     */
     public void setConsumpType(String consumpType) {
         this.consumpType = consumpType;
     }

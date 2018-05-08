@@ -30,22 +30,18 @@ public class ConsumptionMacro {
 	private static int tabSize; //Taille des tableaux de variat° de conso	
 	private static boolean RANDOM_ON;
 
-	/** 
-	 * Initialisation 
-	 */
-	//TODO : remplacer ce bloc par une méthode statique afin de pouvoir contrôler l'ordre d'initialisation
 	static {
-		RANDOM_ON = false;
+		RANDOM_ON = true;
 		consumpModes = new HashMap<String, Double[]>();
 		Cursor = 0;
 		tabSize = 24;
 	}
-
 	/** 
 	 * Initialise les fonctions ayant besoin du réseau
 	 * Pour l'instant nécessaire uniquement pour le random
 	 */
 	public static void init(Network net) {
+		
 		if (RANDOM_ON) {
 			RandomMacro.initClusterGroupAndRand(net);
 		}
@@ -60,7 +56,7 @@ public class ConsumptionMacro {
 	}
 
 	/** 
-	 * Modifie la taille (maximale?) actuelle 
+	 * Modifie la taille (maximale?) actuelle du tableau de variation 
 	 */
 	public static void setTabSize(int tabSize) {
 		ConsumptionMacro.tabSize = tabSize;
@@ -75,10 +71,15 @@ public class ConsumptionMacro {
 
 			consumpModes.put(consumpType, consumpTab);
 			return 1;
-		} else {
+		} else if (consumpTab.length != tabSize) {
 			System.err.println("Erreur assignation tab Consommation mauvaise taille");
 			return 0;
 		}
+		else if (consumpTab.equals(null)) {
+			System.err.println("Erreur assignation tab Consommation nul");
+			return 0;
+		}
+		return 0;
 
 	}
 
