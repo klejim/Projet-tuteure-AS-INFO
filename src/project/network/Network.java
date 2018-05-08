@@ -19,6 +19,8 @@ public class Network {
     private SortedArrayList<Node> nodes;
 
     private Network() throws FileNotFoundException {
+    	ConsumptionMacro.init();
+    	
         nodes = new SortedArrayList<>(Node.comparator);
         config = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(config));
@@ -276,7 +278,7 @@ public class Network {
         addPlantsToStation(s1, np, gp1);
         addPlantsToStation(s2, np, gp1, hp2);
         addPlantsToStation(s3, np, hp2);
-        ConsumptionMacro.init(this);
+        ConsumptionMacro.initNetwork(this);
 
     }
 

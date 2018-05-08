@@ -30,17 +30,23 @@ public class ConsumptionMacro {
 	private static int tabSize; //Taille des tableaux de variat° de conso	
 	private static boolean RANDOM_ON;
 
-	static {
+	/**
+	 * Initialisation des parties n'ayant pas besoin du network	 * 
+	 */
+	public static void init() {
 		RANDOM_ON = true;
 		consumpModes = new HashMap<String, Double[]>();
 		Cursor = 0;
 		tabSize = 24;
 	}
+	
 	/** 
-	 * Initialise les fonctions ayant besoin du réseau
+	 * Initialisiation des parties ayant besoin du réseau
 	 * Pour l'instant nécessaire uniquement pour le random
+	 * 
+	 * @see RandomMacro
 	 */
-	public static void init(Network net) {
+	public static void initNetwork(Network net) {
 		
 		if (RANDOM_ON) {
 			RandomMacro.initClusterGroupAndRand(net);
