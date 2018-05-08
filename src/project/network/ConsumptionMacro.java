@@ -46,12 +46,10 @@ public class ConsumptionMacro {
 	 * 
 	 * @see RandomMacro
 	 */
-	public static void initNetwork(Network net) {
-		
+	public static void initNetwork(Network net) {		
 		if (RANDOM_ON) {
 			RandomMacro.initClusterGroupAndRand(net);
 		}
-
 	}
 
 	/** 
@@ -74,10 +72,10 @@ public class ConsumptionMacro {
 	public static int setConsumptionTab(String consumpType, Double... consumpTab) {
 
 		if (consumpTab.length == tabSize && consumpTab != null) {
-
 			consumpModes.put(consumpType, consumpTab);
 			return 1;
-		} else if (consumpTab.length != tabSize) {
+		}
+		else if (consumpTab.length != tabSize) {
 			System.err.println("Erreur assignation tab Consommation mauvaise taille");
 			return 0;
 		}
@@ -124,7 +122,6 @@ public class ConsumptionMacro {
 			RandomMacro.routineRandom();
 		}
 		//actualisation de la randomisation
-
 	}
 
 	/**
@@ -141,7 +138,6 @@ public class ConsumptionMacro {
 
 			return consumpModes.get(consumpType)[Cursor];
 		}
-
 	}
 
 	/**
@@ -151,7 +147,6 @@ public class ConsumptionMacro {
 	 */
 	public static Double getConsumFactor(String consumpType) {
 		return consumpModes.get(consumpType)[(Cursor) % tabSize];
-
 	}
 
 	/**

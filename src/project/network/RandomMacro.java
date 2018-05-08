@@ -94,12 +94,10 @@ public class RandomMacro {
 	 */
 	public static void routineRandom() {
 		if (randTurnLeft <= 0) {
-			randTurnLeft = RANDPERIOD;
-			randTurnLeft--;
+			randTurnLeft = RANDPERIOD;			
 			applyClustersRandValue();
 		}
-		else {
 			randTurnLeft--;
-		}
+		
 	}
 }
