@@ -17,8 +17,6 @@ public class Network {
     private HashMap<String, HashMap<String, Object>> config; // contenu du fichier config
     private int production, consumption;
     private SortedArrayList<Node> nodes;
-    
-    private ArrayList<ClusterGroup> clusters;
 
     private Network() throws FileNotFoundException {
     	ConsumptionMacro.init();
@@ -111,15 +109,27 @@ public class Network {
                         	NuclearPlant np=new NuclearPlant(name);
                         	nodes.add(np);
                         case "HYDRAULIC" :
-                        	HydraulicPlant powerp=new NuclearPlant(name);
+                        	HydraulicPlant powerp=new HydraulicPlant(name);
+                        	nodes.add(powerp);
+                        case "GAS" :
+                        	GasPlant gasp=new GasPlant(name);
+                        	nodes.add(gasp);
                         }
             		
                     }
             		}
             		
             	}
+            else if (key.matches("SUBSTATION_.+")) {
+            	HashMap<String, Object> substation = network.get(key);
+            	if(substation.containsKey("name")&&substation.containsKey("groups")&&substation.containsKey("plants")) {
+            		
+            		
+            	}
+            	
             }
-        }
+       }
+        
     }
 
     /**
