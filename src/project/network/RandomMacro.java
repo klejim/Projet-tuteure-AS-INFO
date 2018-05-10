@@ -87,7 +87,11 @@ public class RandomMacro {
 	 * @see ClusterGroup
 	 */
 	private static Double getRandomGaussConsumBonus() {
-		return RANDFACTOR * rand.nextGaussian() + 1;
+		double factor=RANDFACTOR * rand.nextGaussian() + 1;
+		if (factor<0) {
+			factor=0.001;
+		}
+		return factor;
 
 	}
 	/**
