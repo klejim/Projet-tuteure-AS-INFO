@@ -1,10 +1,12 @@
 ### GROUP_1 ###
 name = "groupe 1";
 consumption = 250000; //kW
+clustergroup = 1;
 
 ### GROUP_2 ### 
 name = "groupe 2";
 consumption = 150000;
+clustergroup = 1;
 
 ### PLANT_1 ###
 type = "NUCLEAR";

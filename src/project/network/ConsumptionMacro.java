@@ -30,26 +30,26 @@ public class ConsumptionMacro {
 	private static int tabSize; //Taille des tableaux de variat° de conso	
 	private static boolean RANDOM_ON;
 
-	/** 
-	 * Initialisation 
+	/**
+	 * Initialisation des parties n'ayant pas besoin du network	 * 
 	 */
-	//TODO : remplacer ce bloc par une méthode statique afin de pouvoir contrôler l'ordre d'initialisation
-	static {
-		RANDOM_ON = false;
+	public static void init() {
+		RANDOM_ON = true;
 		consumpModes = new HashMap<String, Double[]>();
 		Cursor = 0;
 		tabSize = 24;
 	}
-
+	
 	/** 
-	 * Initialise les fonctions ayant besoin du réseau
+	 * Initialisiation des parties ayant besoin du réseau
 	 * Pour l'instant nécessaire uniquement pour le random
+	 * 
+	 * @see RandomMacro
 	 */
-	public static void init(Network net) {
+	public static void initNetwork(Network net) {		
 		if (RANDOM_ON) {
 			RandomMacro.initClusterGroupAndRand(net);
 		}
-
 	}
 
 	/** 
@@ -60,25 +60,24 @@ public class ConsumptionMacro {
 	}
 
 	/** 
-	 * Modifie la taille (maximale?) actuelle 
-	 */
-	public static void setTabSize(int tabSize) {
-		ConsumptionMacro.tabSize = tabSize;
-	}
-
-	/** 
 	 * Association des doubles de consommations et d'un String 
 	 */
 	public static int setConsumptionTab(String consumpType, Double... consumpTab) {
 
-		if (consumpTab.length == tabSize && consumpTab != null) {
-
+		if (consumpTab != null  && consumpTab.length == tabSize) {
 			consumpModes.put(consumpType, consumpTab);
 			return 1;
-		} else {
+		}
+		else if (consumpTab.equals(null)) {
+			System.err.println("Erreur assignation tab Consommation nul");
+			return 0;
+		}
+		else if (consumpTab.length != tabSize) {
 			System.err.println("Erreur assignation tab Consommation mauvaise taille");
 			return 0;
 		}
+		
+		return 0;
 
 	}
 
@@ -117,7 +116,6 @@ public class ConsumptionMacro {
 			RandomMacro.routineRandom();
 		}
 		//actualisation de la randomisation
-
 	}
 
 	/**
@@ -134,7 +132,6 @@ public class ConsumptionMacro {
 
 			return consumpModes.get(consumpType)[Cursor];
 		}
-
 	}
 
 	/**
@@ -144,7 +141,6 @@ public class ConsumptionMacro {
 	 */
 	public static Double getConsumFactor(String consumpType) {
 		return consumpModes.get(consumpType)[(Cursor) % tabSize];
-
 	}
 
 	/**
