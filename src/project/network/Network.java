@@ -2,10 +2,12 @@ package project.network;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import project.util.ConfigParser;
-import project.util.SortedArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
+
+import project.util.ConfigParser;
+import project.util.SortedArrayList;
 
 /**
  * Classe représentant le réseau de distribution.
@@ -22,7 +24,6 @@ public class Network {
     	ConsumptionMacro.init();
     	
         nodes = new SortedArrayList<>(Node.comparator);
-        this.clusters = new ArrayList<ClusterGroup>();
         config = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(config));
         String networkFile = (String) config.get("DEFAULT").get("network");
@@ -63,21 +64,35 @@ public class Network {
 
     /**
      * Initialisation du réseau à partir de la valeur de config.
+     * 
+     * Description de l'execution :
+     * 1)On parcours la hashmap network pour ajouter les nodes au network
+     * 2)Pendant ce parcours on répertorie les Groups et PowerPlants par nom, et on répertorie les SubStations avec les nodes qui y sont connectés
+     * 3)Une fois le premier parcours terminé, on parcours cette liste de SubStation/Nodes en vue de faire le lien avec la liste de Group/nom et PowerPlant/nom
+     * et de créer le lien à la sous-station s'il y'a lieu.
+     * 
      * @param network un tableau associatif représentant le réseau.
      * @throws Exception 
      * @see ConfigParser
      */
     // TODO : terminer le chargement du réseau
     private void initNetwork(HashMap<String, HashMap<String, Object>> network) throws Exception {
+    	//HashMaps destinés à stocker les nodes en vue de leur liason dans les sous-stations (après le for)
+    	HashMap<String,Group> groupsMap =new HashMap();
+    	HashMap<String,PowerPlant> powerpMap =new HashMap();
+    	HashMap<SubStation,ArrayList<String>> subsMap =new HashMap();
+    	
         for (String key : network.keySet()) {
             if (key.matches("GROUP_.+")) {            	
                 HashMap<String, Object> group = network.get(key);
+                
                 
                 if (group.containsKey("name") && group.containsKey("consumption")) {
                     String name = (String) group.get("name");
                     int consumption = Integer.parseInt((String) group.get("consumption"));
                     Group g=new Group(consumption, name, "test");
-                    nodes.add(g);
+                    this.nodes.add(g);
+                    groupsMap.put(name, g);
                     
                     if(group.containsKey("clustergroup")&&g!=null) {
                     	int clusterFound=0;
@@ -107,27 +122,54 @@ public class Network {
                         switch(type) {
                         case "NUCLEAR" :
                         	NuclearPlant np=new NuclearPlant(name);
-                        	nodes.add(np);
+                        	this.nodes.add(np);
+                        	powerpMap.put(name, np);
                         case "HYDRAULIC" :
                         	HydraulicPlant powerp=new HydraulicPlant(name);
-                        	nodes.add(powerp);
+                        	this.nodes.add(powerp);
+                        	powerpMap.put(name, powerp);
                         case "GAS" :
                         	GasPlant gasp=new GasPlant(name);
-                        	nodes.add(gasp);
+                        	this.nodes.add(gasp);
+                        	powerpMap.put(name, gasp);
                         }
             		
                     }
-            		}
-            		
             	}
+            		
+            }
             else if (key.matches("SUBSTATION_.+")) {
             	HashMap<String, Object> substation = network.get(key);
             	if(substation.containsKey("name")&&substation.containsKey("groups")&&substation.containsKey("plants")) {
+            		String name = (String) substation.get("name");
+            		SubStation ss=new SubStation(name);
+            		this.nodes.add(ss);
             		
-            		
+            		ArrayList<String> groupsSubsList=(ArrayList<String>) substation.get("groups");
+            		ArrayList<String> plantsSubsList=(ArrayList<String>) substation.get("plants");
+            		ArrayList<String> nodeSubsList= new ArrayList<String>();
+            		nodeSubsList.addAll(groupsSubsList);
+            		nodeSubsList.addAll(plantsSubsList);
+            		subsMap.put(ss, nodeSubsList);           		
+            		            		
             	}
             	
+            	
             }
+       }
+       for(Map.Entry singleSub : subsMap.entrySet()) {
+    	   ArrayList<String> nodeList=(ArrayList<String>) singleSub.getValue();
+    	   SubStation sub=(SubStation) singleSub.getKey();
+    	   for(String s : nodeList) {
+    		   if(groupsMap.containsKey(s)) {
+    			   sub.addGroups(groupsMap.get(s));
+    		   }
+    		   if(powerpMap.containsKey(s)) {
+       			   PowerPlant pp=powerpMap.get(s);
+    			   Line li=new Line(pp,sub);
+    			   sub.addLines(li);
+    		   }
+    	   }
        }
         
     }
