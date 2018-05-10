@@ -60,29 +60,23 @@ public class ConsumptionMacro {
 	}
 
 	/** 
-	 * Modifie la taille (maximale?) actuelle du tableau de variation 
-	 */
-	public static void setTabSize(int tabSize) {
-		ConsumptionMacro.tabSize = tabSize;
-	}
-
-	/** 
 	 * Association des doubles de consommations et d'un String 
 	 */
 	public static int setConsumptionTab(String consumpType, Double... consumpTab) {
 
-		if (consumpTab.length == tabSize && consumpTab != null) {
+		if (consumpTab != null  && consumpTab.length == tabSize) {
 			consumpModes.put(consumpType, consumpTab);
 			return 1;
-		}
-		else if (consumpTab.length != tabSize) {
-			System.err.println("Erreur assignation tab Consommation mauvaise taille");
-			return 0;
 		}
 		else if (consumpTab.equals(null)) {
 			System.err.println("Erreur assignation tab Consommation nul");
 			return 0;
 		}
+		else if (consumpTab.length != tabSize) {
+			System.err.println("Erreur assignation tab Consommation mauvaise taille");
+			return 0;
+		}
+		
 		return 0;
 
 	}
