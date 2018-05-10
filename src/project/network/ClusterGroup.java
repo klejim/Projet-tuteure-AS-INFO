@@ -13,13 +13,39 @@ import java.util.ArrayList;
 public class ClusterGroup {
 	private ArrayList<Group> groupList;
 	private Double randomFactor;
+	public static int nextId = 0;
+	public static ArrayList<Integer> listId;
+    private final int id;
+	
+    static {
+    	listId=new ArrayList<Integer>();
+    }
+    
 	/**
 	 * Constructeur du clusterGroup.
 	 * @param groupList Groupes appartenant au clusterGroup
 	 */
 	public ClusterGroup(ArrayList<Group> groupList) {
 		this.groupList = groupList;
-
+		int temp_id=0;
+		while(this.listId.contains(temp_id)) {
+			temp_id=nextId++;
+		}
+		this.id=temp_id;
+	}
+	
+	/**
+	 * Constructeur du clusterGroup.Version avec ID et un groupe unique destinée au parser
+	 * @param groupList Groupes appartenant au clusterGroup
+	 * @throws Exception 
+	 */
+	public ClusterGroup(Group group,int p_id) throws Exception {
+		this.groupList=new ArrayList<Group>();
+		this.groupList.add(group);
+		if(this.listId.contains(p_id)) {
+			throw new Exception("Erreur assignation id");
+		}		
+		this.id=p_id;
 	}
 
 	/**
@@ -43,5 +69,42 @@ public class ClusterGroup {
 			group.setRandomConsumption(this.randomFactor);
 		}
 	}
+
+	/**
+	 * @return the groupList
+	 */
+	public ArrayList<Group> getGroupList() {
+		return groupList;
+	}
+
+	/**
+	 * @param groupList the groupList to set
+	 */
+	public void setGroupList(ArrayList<Group> groupList) {
+		this.groupList = groupList;
+	}
+
+	/**
+	 * @return the nextId
+	 */
+	public static int getNextId() {
+		return nextId;
+	}
+
+	/**
+	 * @return the listId
+	 */
+	public static ArrayList<Integer> getListId() {
+		return listId;
+	}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	
+	
 
 }

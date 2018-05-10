@@ -38,7 +38,8 @@ public class RandomMacro {
 	static {
 		RANDFACTOR = 0.1;
 		RANDPERIOD = 3;
-
+		clusterList = new ArrayList<ClusterGroup>();
+		
 		rand = new Random();
 		randTurnLeft = RANDPERIOD - 1;
 	}
@@ -46,18 +47,19 @@ public class RandomMacro {
 	/**
 	 * Initialisation des clustersLists, et de la première randomisation
 	 * Les Groupes sont regroupés en ClusterList par stations.
+	 * BIENTOT OBSOLETE
 	 * @param le network concerné
 	 */	
-	public static void initClusterGroupAndRand(Network net) {
+	public static ArrayList<ClusterGroup> initClusterGroupAndRand(Network net) {
 		ArrayList<SubStation> subStation = net.getSubStation();
-		clusterList = new ArrayList<ClusterGroup>();
+		
 		for (SubStation sub : subStation) {
 			ArrayList<Group> group = sub.getGroups();
 			clusterList.add(new ClusterGroup(group));
 		}
 
 		applyClustersRandValue();
-
+		return clusterList;
 	}
 
 	/**
@@ -100,4 +102,13 @@ public class RandomMacro {
 			randTurnLeft--;
 		
 	}
+
+	/**
+	 * @return the clusterList
+	 */
+	public static ArrayList<ClusterGroup> getClusterList() {
+		return clusterList;
+	}
+	
+	
 }

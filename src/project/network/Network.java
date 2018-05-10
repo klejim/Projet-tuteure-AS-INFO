@@ -17,11 +17,14 @@ public class Network {
     private HashMap<String, HashMap<String, Object>> config; // contenu du fichier config
     private int production, consumption;
     private SortedArrayList<Node> nodes;
+    
+    private ArrayList<ClusterGroup> clusters;
 
     private Network() throws FileNotFoundException {
     	ConsumptionMacro.init();
     	
         nodes = new SortedArrayList<>(Node.comparator);
+        this.clusters = new ArrayList<ClusterGroup>();
         config = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(config));
         String networkFile = (String) config.get("DEFAULT").get("network");
@@ -63,19 +66,58 @@ public class Network {
     /**
      * Initialisation du réseau à partir de la valeur de config.
      * @param network un tableau associatif représentant le réseau.
+     * @throws Exception 
      * @see ConfigParser
      */
     // TODO : terminer le chargement du réseau
-    private void initNetwork(HashMap<String, HashMap<String, Object>> network) {
+    private void initNetwork(HashMap<String, HashMap<String, Object>> network) throws Exception {
         for (String key : network.keySet()) {
-            if (key.matches("GROUP_.+")) {
+            if (key.matches("GROUP_.+")) {            	
                 HashMap<String, Object> group = network.get(key);
+                
                 if (group.containsKey("name") && group.containsKey("consumption")) {
                     String name = (String) group.get("name");
                     int consumption = Integer.parseInt((String) group.get("consumption"));
-                    nodes.add(new Group(consumption, name, "test"));
-                } else {
+                    Group g=new Group(consumption, name, "test");
+                    nodes.add(g);
+                    
+                    if(group.containsKey("clustergroup")&&g!=null) {
+                    	int clusterFound=0;
+                    	int idCluster=Integer.parseInt((String) group.get("clustergroup"));
+                    	for (ClusterGroup cg : RandomMacro.getClusterList()) {                    		
+                    		if (cg.getId()==idCluster) {
+                    			cg.getGroupList().add(g);
+                    			clusterFound=1;
+                    		}
+                    	}
+                    	if(clusterFound==0) {
+                    		ClusterGroup clusterObj=new ClusterGroup(g,idCluster);
+                    		RandomMacro.getClusterList().add(clusterObj);                    		
+                    	}
+                    }
+                } 
+                
+                else {
                 }
+            }
+            else if (key.matches("PLANT_.+")) {
+            	HashMap<String, Object> plant = network.get(key);
+            	if(plant.containsKey("name") && plant.containsKey("type")) {
+            		String type =(String) plant.get("type");
+            		if(type=="NUCLEAR" || type=="HYDRAULIC" || type=="GAS") {
+            			String name = (String) plant.get("name");
+                        switch(type) {
+                        case "NUCLEAR" :
+                        	NuclearPlant np=new NuclearPlant(name);
+                        	nodes.add(np);
+                        case "HYDRAULIC" :
+                        	HydraulicPlant powerp=new NuclearPlant(name);
+                        }
+            		
+                    }
+            		}
+            		
+            	}
             }
         }
     }
