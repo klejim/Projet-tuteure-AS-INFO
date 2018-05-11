@@ -174,12 +174,14 @@ public class Network {
     		   int k=1;
     		   k++;
     		   if(groupsMap.containsKey(s)) {
-    			   sub.addGroups(groupsMap.get(s));
+    			   this.addGroupsToStation(sub,groupsMap.get(s));
+    			   //sub.addGroups(groupsMap.get(s));
     		   }
     		   if(powerpMap.containsKey(s)) {
        			   PowerPlant pp=powerpMap.get(s);
-    			   Line li=new Line(pp,sub);
-    			   sub.addLines(li);
+       			   this.addPlantsToStation(sub, pp);
+    			   //Line li=new Line(pp,sub);
+    			   //sub.addLines(li);
     		   }
     	   }
        }
