@@ -94,14 +94,16 @@ public class Network {
                 
                 if (group.containsKey("name") && group.containsKey("consumption")) {
                     String name = (String) group.get("name");
-                    int consumption = Integer.parseInt((String) group.get("consumption"));
+                    //System.err.println(((String) group.get("consumption")));
+                    //Double Dconsumption = (((Double) group.get("consumption"))).intValue();
+                    int consumption=(((Double) group.get("consumption"))).intValue();
                     Group g=new Group(consumption, name, "test");
                     this.nodes.add(g);
                     groupsMap.put(name, g);
                     
                     if(group.containsKey("clustergroup")&&g!=null) {
                     	int clusterFound=0;
-                    	int idCluster=Integer.parseInt((String) group.get("clustergroup"));
+                    	int idCluster=(((Double) group.get("clustergroup"))).intValue();
                     	for (ClusterGroup cg : RandomMacro.getClusterList()) {                    		
                     		if (cg.getId()==idCluster) {
                     			cg.getGroupList().add(g);

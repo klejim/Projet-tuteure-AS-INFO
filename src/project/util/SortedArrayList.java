@@ -50,6 +50,9 @@ public class SortedArrayList<T> extends ArrayList<T>{
     @Override
     public boolean add(T e) {
         int i = Collections.binarySearch(array, e, comparator);
+        if(i<0) {
+        	i=0;
+        }
         array.add(i, e);
         return true;
     }
