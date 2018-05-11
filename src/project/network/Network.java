@@ -91,7 +91,7 @@ public class Network {
                 int diff = station.getDiff();
                 if (diff > 0) {
                     errors.add(new TooMuchPowerError(station, station.getDiff()));
-                } else {
+                } else if (diff < 0) {
                     errors.add(new NotEnoughPowerError(station, Math.abs(station.getDiff())));
                 }
             }
@@ -110,16 +110,39 @@ public class Network {
      */
     public ArrayList<NetworkError> handleErrors(ArrayList<NetworkError> rawErrors) {
         ArrayList<NetworkError> errors = new ArrayList<>(rawErrors.size());
+        rawErrors.sort(NetworkError.typeAndPowerComparator);
         errors.addAll(rawErrors);
         for (NetworkError e : rawErrors) {
             if (e instanceof NotEnoughPowerError) {
                 NotEnoughPowerError err = (NotEnoughPowerError) e;
-                if (solvePowerShortage(err.getStation(), err.getPower())) {
-                    e.setSolved(true);
-                } else {
-                    e.setMessage("Correction automatique impossible");
-                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
-                    errors.add(newError);
+                /*
+                 * pour le cas où la résolution d'une erreur demande le démarrage d'une centrale
+                 * il est généralement nécessaire d'attendre plusieurs itérations avant la
+                 * résolution. J'ai pris la décision de toujours générer une erreur lors des
+                 * appels à la méthode analyze() (après tout le problème est réel tant que la
+                 * solution n'est pas en ligne) et de détecter les erreurs "en attente" dans
+                 * cette méthode.
+                 */
+                // s'il existe une ligne en attente qui pourra corriger l'erreur, on la marque
+                // comme déjà résolue
+                // TODO : amélioration possible pour le cas où l'attente serait plus longue que démarrer une autre centrale
+                for (Line line : err.getStation().getLines()) {
+                    if (line.getState() == Line.State.WAITING && line.getPower() >= err.getPower()) {
+                        e.setMessage(line.getIn().getName() + " en cours de démarrage");
+                        e.setSolved(true);
+                        break;
+                    }
+                }
+                // si ce n'est pas le cas on passe à la recherche normale
+                if (!e.isSolved()){
+                    if (solvePowerShortage(err.getStation(), err.getPower())){
+                        e.setSolved(true);
+                    }
+                    else{
+                        e.setMessage("Correction automatique impossible");
+                        CannotFindSolutionError newError = new CannotFindSolutionError(e);
+                        errors.add(newError);
+                    }
                 }
             } else if (e instanceof TooMuchPowerError) {
                 TooMuchPowerError err = (TooMuchPowerError) e;
@@ -161,7 +184,7 @@ public class Network {
             plants.add(line.getIn());
         }
         // avant de poursuivre on trie les centrales
-        // ordre : off > online > starting et à catégorie égale la centrale ayant la plus grande puissance disponible est placée avant
+        // ordre : ON < STARTING < OFF et à catégorie égale la centrale ayant la plus grande puissance disponible est placée avant
         plants.sort(PowerPlant.stateAndPowerComparator);
         // Recherche de solution
         int i = 0, powerNeeded = p;
@@ -171,7 +194,7 @@ public class Network {
                 if (plant.getState() == PowerPlant.State.OFF) {
                     plant.start();
                 }
-                int powerAsked = (powerNeeded <= plant.getActivePower()) ? powerNeeded : plant.getActivePower();
+                int powerAsked = (powerNeeded <= Math.abs(plant.getActivePower()))?powerNeeded:Math.abs(plant.getActivePower());
                 powerNeeded -= plant.grantToStation(station, powerAsked);
                 ok = powerNeeded <= 0;
             }
