@@ -120,7 +120,7 @@ abstract public class PowerPlant extends Node{
         boolean ok = false;
         if (Math.abs(activePower) >= p && (state == State.ON || state == State.STARTING)){
             for (Line line : lines){
-                if (line.getOut() == station && p > line.getPower()){
+                if (line.getOut() == station){
                     if (state == State.STARTING){
                         activePower += p;
                         line.setState(Line.State.WAITING);

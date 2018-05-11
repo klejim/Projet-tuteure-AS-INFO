@@ -94,13 +94,33 @@ public class Network {
         for (NetworkError e : rawErrors){
             if (e instanceof NotEnoughPowerError){
                 NotEnoughPowerError err = (NotEnoughPowerError) e;
-                if (solvePowerShortage(err.getStation(), err.getPower())){
-                    e.setSolved(true);
+                /*
+                 * pour le cas où la résolution d'une erreur demande le démarrage d'une centrale
+                 * il est généralement nécessaire d'attendre plusieurs itérations avant la
+                 * résolution. J'ai pris la décision de toujours générer une erreur lors des
+                 * appels à la méthode analyze() (après tout le problème est réel tant que la
+                 * solution n'est pas en ligne) et de détecter les erreurs "en attente" dans
+                 * cette méthode.
+                 */
+                // s'il existe une ligne en attente qui pourra corriger l'erreur, on la marque
+                // comme déjà résolue
+                for (Line line : err.getStation().getLines()) {
+                    if (line.getState() == Line.State.DISABLED && line.getPower() >= err.getPower()) {
+                        e.setMessage(line.getIn().getName() + " en cours de démarrage");
+                        e.setSolved(true);
+                        break;
+                    }
                 }
-                else{
-                    e.setMessage("Correction automatique impossible");
-                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
-                    errors.add(newError);
+                // si ce n'est pas le cas on passe à la recherche normale
+                if (!e.isSolved()){
+                    if (solvePowerShortage(err.getStation(), err.getPower())){
+                        e.setSolved(true);
+                    }
+                    else{
+                        e.setMessage("Correction automatique impossible");
+                        CannotFindSolutionError newError = new CannotFindSolutionError(e);
+                        errors.add(newError);
+                    }
                 }
             }
             else if (e instanceof TooMuchPowerError){
