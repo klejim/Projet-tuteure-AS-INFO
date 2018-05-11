@@ -96,10 +96,11 @@ public class Network {
                     String name = (String) group.get("name");
                     //System.err.println(((String) group.get("consumption")));
                     //Double Dconsumption = (((Double) group.get("consumption"))).intValue();
+                    
                     int consumption=(((Double) group.get("consumption"))).intValue();
                     Group g=new Group(consumption, name, "test");
                     this.nodes.add(g);
-                    groupsMap.put(name, g);
+                    groupsMap.put(key, g);
                     
                     if(group.containsKey("clustergroup")&&g!=null) {
                     	int clusterFound=0;
@@ -122,23 +123,24 @@ public class Network {
             }
             else if (key.matches("PLANT_.+")) {
             	HashMap<String, Object> plant = network.get(key);
+            	
             	if(plant.containsKey("name") && plant.containsKey("type")) {
             		String type =(String) plant.get("type");
-            		if(type=="NUCLEAR" || type=="HYDRAULIC" || type=="GAS") {
+            		if(type.equals("NUCLEAR") || type.equals("HYDRAULIC") || type.equals("GAS")) {
             			String name = (String) plant.get("name");
                         switch(type) {
                         case "NUCLEAR" :
                         	NuclearPlant np=new NuclearPlant(name);
                         	this.nodes.add(np);
-                        	powerpMap.put(name, np);
+                        	powerpMap.put(key, np);
                         case "HYDRAULIC" :
                         	HydraulicPlant powerp=new HydraulicPlant(name);
                         	this.nodes.add(powerp);
-                        	powerpMap.put(name, powerp);
+                        	powerpMap.put(key, powerp);
                         case "GAS" :
                         	GasPlant gasp=new GasPlant(name);
                         	this.nodes.add(gasp);
-                        	powerpMap.put(name, gasp);
+                        	powerpMap.put(key, gasp);
                         }
             		
                     }
@@ -169,6 +171,8 @@ public class Network {
     	   ArrayList<String> nodeList=(ArrayList<String>) singleSub.getValue();
     	   SubStation sub=(SubStation) singleSub.getKey();
     	   for(String s : nodeList) {
+    		   int k=1;
+    		   k++;
     		   if(groupsMap.containsKey(s)) {
     			   sub.addGroups(groupsMap.get(s));
     		   }
