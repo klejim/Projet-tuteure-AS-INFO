@@ -37,6 +37,7 @@ public class Network {
                     Double tab[] = new Double[tmp.size()];
                     for (int i = 0; i < tmp.size(); i++) {
                     	tab[i] = tmp.get(i);
+                    	//tab[i]=1.0;
                     }
                     
                     ConsumptionMacro.setConsumptionTab(varName, tab);
