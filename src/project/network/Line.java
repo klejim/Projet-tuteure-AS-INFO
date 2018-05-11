@@ -14,8 +14,10 @@ public class Line {
      * Représente l'état d'une ligne de transmission.
      * ONLINE: la ligne transmet l'énergie
      * DISABLED: la ligne ne transmet pas. Sa puissance peut ne pas être nulle.
+     * WAITING: la ligne est "en attente", c'est-à-dire qu'une station a réclamé de la puissance et que la centrale concernée
+     * est en train de démarrer. La ligne ne transmet pas encore.
      */
-    public enum State{ONLINE, DISABLED};
+    public enum State{ONLINE, DISABLED, WAITING};
     public static final Comparator<Line> powerComparator = (l1, l2)->{
             return l1.getActivePower() - l2.getActivePower();
         };
@@ -52,6 +54,7 @@ public class Line {
     /**
      * @return la puissance que transporte la ligne. La valeur retournée ne prend pas en compte l'état de la ligne et
      * peut ne pas correspondre à la valeur voulue si la ligne n'est pas dans son état normal.
+     * @see #getActivePower()
      */
     public int getPower() {
         return power;
