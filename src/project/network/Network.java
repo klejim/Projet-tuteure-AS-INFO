@@ -46,8 +46,13 @@ public class Network {
                 //ConsumptionMacro.setConsumptionTab(tabName, (Double[])data.get(tabName));
             }
         }
-        //initNetwork(ConfigParser.parse(networkFile)); // non fonctionnel pour l'instant
-        TESTInitNetwork();
+        try {
+			initNetwork(ConfigParser.parse(networkFile));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // non fonctionnel pour l'instant
+        //TESTInitNetwork();
     }
 
     /**
@@ -157,6 +162,7 @@ public class Network {
             	
             }
        }
+       //1Er parcours terminé on connecte maintenant les nodes aux sous stations
        for(Map.Entry singleSub : subsMap.entrySet()) {
     	   ArrayList<String> nodeList=(ArrayList<String>) singleSub.getValue();
     	   SubStation sub=(SubStation) singleSub.getKey();
@@ -171,7 +177,7 @@ public class Network {
     		   }
     	   }
        }
-        
+       ConsumptionMacro.initNetwork(this);
     }
 
     /**
