@@ -115,7 +115,7 @@ public class ConfigParser {
     }
     
     public static void main(String...args) throws IOException{
-        HashMap<String, HashMap<String,Object>> map = ConfigParser.parse("config.txt");
+        HashMap<String, HashMap<String,Object>> map = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(map));
     }
 }

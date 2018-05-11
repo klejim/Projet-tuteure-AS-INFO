@@ -26,7 +26,7 @@ public class Network {
         nodes = new SortedArrayList<>(Node.comparator);
         config = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(config));
-        String networkFile = (String) config.get("DEFAULT").get("network");
+        String networkFile = (String) config.get("NETWORK_FILES").get("network");
         if (config.containsKey("DATA_CONSUMPTION")) {
             HashMap<String, Object> data = config.get("DATA_CONSUMPTION");
             for (String varName : data.keySet()) {
