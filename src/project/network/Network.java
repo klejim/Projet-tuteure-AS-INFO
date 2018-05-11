@@ -90,6 +90,7 @@ public class Network {
      */
     public ArrayList<NetworkError> handleErrors(ArrayList<NetworkError> rawErrors){
         ArrayList<NetworkError> errors = new ArrayList<>(rawErrors.size());
+        rawErrors.sort(NetworkError.typeAndPowerComparator);
         errors.addAll(rawErrors);
         for (NetworkError e : rawErrors){
             if (e instanceof NotEnoughPowerError){
@@ -104,8 +105,9 @@ public class Network {
                  */
                 // s'il existe une ligne en attente qui pourra corriger l'erreur, on la marque
                 // comme déjà résolue
+                // TODO : amélioration possible pour le cas où l'attente serait plus longue que démarrer une autre centrale
                 for (Line line : err.getStation().getLines()) {
-                    if (line.getState() == Line.State.DISABLED && line.getPower() >= err.getPower()) {
+                    if (line.getState() == Line.State.WAITING && line.getPower() >= err.getPower()) {
                         e.setMessage(line.getIn().getName() + " en cours de démarrage");
                         e.setSolved(true);
                         break;
