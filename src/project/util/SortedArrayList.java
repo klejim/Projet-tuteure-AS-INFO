@@ -54,6 +54,11 @@ public class SortedArrayList<T> extends ArrayList<T>{
         array.add(i, e);
         return true;
     }
+    
+    @Override
+    public T get(int index){
+        return array.get(index);
+    }
 
     @Override
     public boolean remove(Object o) {
