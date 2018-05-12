@@ -128,7 +128,7 @@ public class ConsumptionMacro {
 	 */
 	public static Double getConsumFactor(String consumpType, int offset) {
 		try {
-			int i = Cursor + offset % tabSize;
+			int i = (Cursor + offset) % tabSize;
 			if (i < 0){
 				i += tabSize;
 			}
