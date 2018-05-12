@@ -171,7 +171,7 @@ abstract public class PowerPlant extends Node{
         	}
         	else{
                     state=State.STARTING;
-                    this.framesSinceStart=0;
+                    this.framesSinceStart = 1;
                     started=true; 
         	}    
         }
@@ -193,7 +193,7 @@ abstract public class PowerPlant extends Node{
                         l.setState(Line.State.ONLINE);
                     }
                 }
-                this.framesSinceStart = 0;
+                this.framesSinceStart = 1;
             } else {
                 this.framesSinceStart++;
             }
