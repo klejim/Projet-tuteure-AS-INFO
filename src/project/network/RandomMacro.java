@@ -26,7 +26,7 @@ public class RandomMacro {
 	}
 
 	public static void initClusterGroupAndRand(Network net) {
-		ArrayList<SubStation> subStation = net.getSubStation();
+		ArrayList<SubStation> subStation = net.getSubStations();
 		clusterList = new ArrayList<ClusterGroup>();
 		for (SubStation sub : subStation) {
 			ArrayList<Group> group = sub.getGroups();
