@@ -90,9 +90,27 @@ public class Network {
                 SubStation station = (SubStation) n;
                 int diff = station.getDiff();
                 if (diff > 0) {
-                    errors.add(new TooMuchPowerError(station, station.getDiff()));
+                    errors.add(new TooMuchPowerError(station, diff));
                 } else if (diff < 0) {
-                    errors.add(new NotEnoughPowerError(station, Math.abs(station.getDiff())));
+                    int powerNeeded = Math.abs(diff);
+                    /*
+                    * pour le cas où la résolution d'une erreur demande le démarrage d'une centrale
+                    * il est généralement nécessaire d'attendre plusieurs itérations avant la
+                    * résolution. Pour cette raison on doit vérifier que la puissance exigée n'est pas déjà affectée 
+                    */
+                    // gestion des lignes en attente : si l'erreur peut être résolue par les puissances venant de centrales en démarrage on considère
+                    // qu'il est inutile de la générer
+                    // TODO : amélioration possible pour le cas où l'attente serait plus longue que démarrer une autre centrale
+                    // quoique a priori l'algo démarre déjà les centrales les plus rapides, donc à voir. Ca peut être utile si les consommation varient énormément
+                    for (Line line : station.getLines()) {
+                        if (line.getState() == Line.State.WAITING){
+                            powerNeeded -= line.getPower();
+                        }
+                    }
+                    // si ce n'est pas suffisant on génère une erreur pour la différence
+                    if (powerNeeded > 0){
+                        errors.add(new NotEnoughPowerError(station, powerNeeded));
+                    }
                 }
             }
         }
@@ -115,34 +133,13 @@ public class Network {
         for (NetworkError e : rawErrors) {
             if (e instanceof NotEnoughPowerError) {
                 NotEnoughPowerError err = (NotEnoughPowerError) e;
-                /*
-                 * pour le cas où la résolution d'une erreur demande le démarrage d'une centrale
-                 * il est généralement nécessaire d'attendre plusieurs itérations avant la
-                 * résolution. J'ai pris la décision de toujours générer une erreur lors des
-                 * appels à la méthode analyze() (après tout le problème est réel tant que la
-                 * solution n'est pas en ligne) et de détecter les erreurs "en attente" dans
-                 * cette méthode.
-                 */
-                // s'il existe une ligne en attente qui pourra corriger l'erreur, on la marque
-                // comme déjà résolue
-                // TODO : amélioration possible pour le cas où l'attente serait plus longue que démarrer une autre centrale
-                for (Line line : err.getStation().getLines()) {
-                    if (line.getState() == Line.State.WAITING && line.getPower() >= err.getPower()) {
-                        e.setMessage(line.getIn().getName() + " en cours de démarrage");
-                        e.setSolved(true);
-                        break;
-                    }
+                if (solvePowerShortage(err.getStation(), err.getPower())){
+                    e.setSolved(true);
                 }
-                // si ce n'est pas le cas on passe à la recherche normale
-                if (!e.isSolved()){
-                    if (solvePowerShortage(err.getStation(), err.getPower())){
-                        e.setSolved(true);
-                    }
-                    else{
-                        e.setMessage("Correction automatique impossible");
-                        CannotFindSolutionError newError = new CannotFindSolutionError(e);
-                        errors.add(newError);
-                    }
+                else{
+                    e.setMessage("Correction automatique impossible");
+                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
+                    errors.add(newError);
                 }
             } else if (e instanceof TooMuchPowerError) {
                 TooMuchPowerError err = (TooMuchPowerError) e;
