@@ -89,7 +89,7 @@ public class RandomMacro {
 	 */
 	private static Double getRandomGaussConsumBonus() {
 		double factor=RANDFACTOR * rand.nextGaussian() + 1;
-		if (factor<0) {
+		if (factor<=0) {
 			factor=0.001;
 		}
 		return factor;
