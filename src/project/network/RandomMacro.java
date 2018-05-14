@@ -51,7 +51,7 @@ public class RandomMacro {
 	 * @param le network concerné
 	 */	
 	public static ArrayList<ClusterGroup> initClusterGroupAndRand(Network net) {
-		/* vieux code avant l'intégration du parser
+		/* ancien code avant l'intégration du parser
 		ArrayList<SubStation> subStation = net.getSubStation();
 		
 		for (SubStation sub : subStation) {

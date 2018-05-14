@@ -41,7 +41,7 @@ public class Network {
                     
                     ConsumptionMacro.setConsumptionTab(varName, tab);
                     
-                    
+                     
                 }
                 
             }
