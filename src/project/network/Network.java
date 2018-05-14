@@ -177,103 +177,14 @@ public class Network {
         ArrayList<NetworkError> errors = new ArrayList<>(rawErrors.size());
         rawErrors.sort(NetworkError.typeAndPowerComparator);
         errors.addAll(rawErrors);
-        for (NetworkError e : rawErrors) {
-            if (e instanceof NotEnoughPowerError) {
-                NotEnoughPowerError err = (NotEnoughPowerError) e;
-                if (solvePowerShortage(err.getStation(), err.getPower())){
-                    e.setSolved(true);
-                    err.getStation().updateInput();
-                }
-                else{
-                    e.setMessage("Correction automatique impossible");
-                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
-                    errors.add(newError);
-                }
-            } else if (e instanceof TooMuchPowerError) {
-                TooMuchPowerError err = (TooMuchPowerError) e;
-                if (solvePowerOverflow(err.getStation(), err.getPower())) {
-                    e.setSolved(true);
-                    err.getStation().updateInput();
-                } else {
-                    e.setMessage("Correction automatique impossible");
-                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
-                    errors.add(newError);
-                }
-            } else if (e instanceof NodeNotConnectedError) {
-                e.setMessage("Connexion manuelle nécessaire");
+        for (NetworkError error : rawErrors) {
+            error.solve();
+            if (!error.isSolved()){
+                CannotFindSolutionError newError = new CannotFindSolutionError(error);
+                errors.add(newError);
             }
         }
         return errors;
-    }
-
-    /**
-     * Tente de résoudre un manque de puissance au niveau d'une sous-station.
-     * <p>On effectue la recherche sur les centrales liées à la station et ordonnée par état (ON &lt; STARTING &lt; OFF) et par puissance
-     * disponible croissante.</p>
-     * <p>Ordre de recherche de solutions:</p>
-     * <ul>
-     * <li>on regarde si les centrales allumées ont encore de la puissance de disponible</li>
-     * <li>si ce n'est pas le cas on voit s'il existe une centrale en démarrage qui pourrait aider</li>
-     * <li>s'il n'y en a pas on essaie d'allumer une centrale</li>
-     * <li>si c'est impossible on panique et on retourne false</li>
-     * </ul>
-     * <p>L'ordre de recherche est assuré par le tri précédent. On emprunte en priorité aux centrales ayant le moins de puissance disponible.
-     *  Si une centrale ne peut pas combler toute l'erreur on prend ce qu'elle propose.</p>
-     * @param station la sous-station concernée par l'erreur.
-     * @param p la puissance qu'il manque pour alimenter correctement la sous-station.
-     * @return {@code true} si l'erreur a pu être corrigée et {@code false} sinon.
-     */
-    private boolean solvePowerShortage(SubStation station, int p) {
-        boolean ok = false;
-        ArrayList<PowerPlant> plants = new ArrayList<>();
-        for (Line line : station.getLines()) {
-            plants.add(line.getIn());
-        }
-        // avant de poursuivre on trie les centrales
-        // ordre : ON < STARTING < OFF et à catégorie égale la centrale ayant la plus grande puissance disponible est placée avant
-        plants.sort(PowerPlant.stateAndPowerComparator);
-        // Recherche de solution
-        int i = 0, powerNeeded = p;
-        while (i < plants.size() && !ok) {
-            PowerPlant plant = plants.get(i++);
-            if (Math.abs(plant.getActivePower()) > 0) {
-                if (plant.getState() == PowerPlant.State.OFF) {
-                    plant.start();
-                }
-                int powerAsked = (powerNeeded <= Math.abs(plant.getActivePower()))?powerNeeded:Math.abs(plant.getActivePower());
-                powerNeeded -= plant.grantToStation(station, powerAsked);
-                ok = powerNeeded <= 0;
-            }
-        }
-        return ok;
-    }
-
-    /**
-     * Tente de résoudre une surcharge au niveau d'une sous-station en libèrant de la puissance.
-     * <p>On travaille sur les lignes transmettant le moins de puissance en premier afin de privilégier les centrales les plus souples 
-     * (hydrauliques plutôt que nucléaires) et de libérer autant de centrales que possible.</p>
-     * @param station la sous-station concernée par l'erreur.
-     * @param overflow la puissance en trop.
-     * @return {@code true} si l'erreur a été corrigée et {@code false} sinon.
-     */
-    private boolean solvePowerOverflow(SubStation station, int overflow) {
-        boolean ok = false;
-        ArrayList<Line> lines = new ArrayList<>();
-        lines.addAll(station.getLines());
-        lines.sort(Line.TypeAndPowerComparator);
-        int i = 0, powerOverflow = overflow;
-        while (i < lines.size() && !ok) {
-            Line line = lines.get(i++);
-            PowerPlant plant = line.getIn();
-            int tmp = (powerOverflow > line.getActivePower()) ? line.getActivePower() : powerOverflow;
-            powerOverflow -= station.giveBackPower(line, tmp);
-            // on éteint ensuite la centrale si elle n'est plus utile
-            if (plant.getActivePower() == plant.getPower()) {
-                plant.stop();
-            }
-            ok = (powerOverflow == 0);
-        }
-        return ok;
     }
 
     /**

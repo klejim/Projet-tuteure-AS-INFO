@@ -6,7 +6,7 @@ import java.util.Comparator;
  * Une classe regroupant des modèles d'erreurs susceptibles d'être générées à l'analyse du réseau.
  * @author Jimenez
  */
-public class NetworkError {
+abstract public class NetworkError {
     public static final Comparator<PowerError> powerComparator = (n1, n2)->{
         return n1.getPower() - n2.getPower();
     };
@@ -40,6 +40,15 @@ public class NetworkError {
         solved = false;
         message = "";
     }
+    
+    /**
+     * Méthode indiquant comment tenter de résoudre une erreur donnée.
+     * Elle est utilisée par Network.handleErrors() et devrait être
+     * définie pour chaque type d'erreur nécessitant un traitement particulier.
+     * @see Network#handleErrors(java.util.ArrayList) 
+     */
+    public void solve(){};
+    
     void setMessage(String str){
         message = str;
     }
