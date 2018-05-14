@@ -14,11 +14,12 @@ import project.network.SubStation;
 
 /**
  * Classe chargée du formatage et de l'affichage des données du réseau.
- * @author yoann
+ * @author Jimenez
  */
 public class View {
 
     private StatusWindow statWin;
+    private InputWindow inputWin;
     private Network net;
 
     /**
@@ -29,6 +30,9 @@ public class View {
         this.net = network;
         this.statWin = new StatusWindow(network);
         this.statWin.createDisplay();
+        
+        this.inputWin = new InputWindow(network);
+        this.inputWin.createDisplay();
     }
 
     /**
@@ -36,6 +40,7 @@ public class View {
      */
     public void updateView() {
         statWin.updateDisplay();
+        inputWin.updateDisplay();
     }
 
     /**
@@ -43,6 +48,7 @@ public class View {
      */
     public void deleteView() {
         statWin.dispatchEvent(new WindowEvent(statWin, WindowEvent.WINDOW_CLOSING));
+        inputWin.dispatchEvent(new WindowEvent(inputWin, WindowEvent.WINDOW_CLOSING) );
     }
 
     /**
@@ -77,7 +83,7 @@ public class View {
         return str;
     }
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 
         Network myNetwork = new Network(0, 0, 0);
 
@@ -90,6 +96,7 @@ public class View {
         while (true) {
             myNetwork.update();
             myView.updateView();
+
             System.out.print("entrer un id de groupe (0 pour fermer) : ");
             int id = sc.nextInt();
             if (id == 0) {
@@ -105,6 +112,7 @@ public class View {
                 }
             }
             myNetwork.handleErrors(myNetwork.analyze());
+            
         }
     }
 }
