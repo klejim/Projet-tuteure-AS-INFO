@@ -21,6 +21,16 @@ public class Line {
     public static final Comparator<Line> powerComparator = (l1, l2)->{
             return l1.getActivePower() - l2.getActivePower();
         };
+    public static final Comparator<Line> TypeAndPowerComparator = (l1, l2)->{
+            int cmp = 0;
+            if (l1.getIn().getStartDelay() == l2.getIn().getStartDelay()){
+                cmp =  Line.powerComparator.compare(l1,l2);
+            }
+            else{
+                cmp = l1.getIn().getStartDelay() - l2.getIn().getStartDelay();
+            }
+            return cmp;
+        };
     public static int nextId = 0;
     private int id, power;
     private PowerPlant in;

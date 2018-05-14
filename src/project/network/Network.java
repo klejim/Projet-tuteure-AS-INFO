@@ -260,7 +260,7 @@ public class Network {
         boolean ok = false;
         ArrayList<Line> lines = new ArrayList<>();
         lines.addAll(station.getLines());
-        lines.sort(Line.powerComparator);
+        lines.sort(Line.TypeAndPowerComparator);
         int i = 0, powerOverflow = overflow;
         while (i < lines.size() && !ok) {
             Line line = lines.get(i++);
