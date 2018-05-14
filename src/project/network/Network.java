@@ -101,24 +101,26 @@ public class Network {
                     Group g=new Group(consumption, name, "test");
                     this.nodes.add(g);
                     groupsMap.put(key, g);
-                    
+                    int idCluster=0;
                     if(group.containsKey("clustergroup")&&g!=null) {
-                    	int clusterFound=0;
-                    	int idCluster=(((Double) group.get("clustergroup"))).intValue();
-                    	for (ClusterGroup cg : RandomMacro.getClusterList()) {                    		
-                    		if (cg.getId()==idCluster) {
-                    			cg.getGroupList().add(g);
-                    			clusterFound=1;
-                    		}
-                    	}
-                    	if(clusterFound==0) {
-                    		ClusterGroup clusterObj=new ClusterGroup(g,idCluster);
-                    		RandomMacro.getClusterList().add(clusterObj);                    		
-                    	}
+                    	idCluster=(((Double) group.get("clustergroup"))).intValue();
                     }
-                } 
-                
+                    	
+                	int clusterFound=0;
+                	for (ClusterGroup cg : RandomMacro.getClusterList()) {                    		
+                		if (cg.getId()==idCluster) {
+                			cg.getGroupList().add(g);
+                			clusterFound=1;
+                		}
+                	}
+                	if(clusterFound==0) {
+                		ClusterGroup clusterObj=new ClusterGroup(g,idCluster);
+                		RandomMacro.getClusterList().add(clusterObj);                    		
+                	}
+                    
+                }                 
                 else {
+                	throw new Exception("Un groupe n'est pas correctement configuré dans le fichier network");
                 }
             }
             else if (key.matches("PLANT_.+")) {
@@ -148,6 +150,9 @@ public class Network {
             		
                     }
             	}
+            	else {
+            		throw new Exception("Une Centrale n'est pas correctement configurée dans le fichier network");
+            	}
             		
             }
             else if (key.matches("SUBSTATION_.+")) {
@@ -165,6 +170,9 @@ public class Network {
             		subsMap.put(ss, nodeSubsList);           		
             		            		
             	}
+            	else {
+            		throw new Exception("Une Sous-Station n'est pas correctement configurée dans le fichier network");
+            	}
             	
             	
             }
@@ -178,6 +186,7 @@ public class Network {
     		   k++;
     		   if(groupsMap.containsKey(s)) {
     			   this.addGroupsToStation(sub,groupsMap.get(s));
+    			   groupsMap.remove(s);
     		   }
     		   if(powerpMap.containsKey(s)) {
        			   PowerPlant pp=powerpMap.get(s);

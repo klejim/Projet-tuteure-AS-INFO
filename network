@@ -34,6 +34,11 @@ name = "groupe 4";
 consumption = 150000;
 clustergroup = 3;
 
+### GROUP_4 ###
+name = "groupe 4";
+consumption = 150000;
+clustergroup = 3;
+
 ### PLANT_1 ###
 type = "NUCLEAR";
 name = "centrale 1";

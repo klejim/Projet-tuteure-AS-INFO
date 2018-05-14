@@ -100,7 +100,7 @@ public class ConfigParser {
     private static void addToMap(HashMap<String,Object> map, String key, Object value){
         if (!map.containsKey(key)){
                 map.put(key, value);
-        }
+        }        
     }
     public static String stringify(HashMap<String,HashMap<String,Object>> config){
         String str = "";
