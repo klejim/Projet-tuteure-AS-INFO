@@ -1,9 +1,9 @@
 ### GROUP_1 ###
 name = "groupe 1";
-consumption = 250000; //kW
+consumption = 250000;
 clustergroup = 1;
 
-### GROUP_2 ### 
+### GROUP_2 ###
 name = "groupe 2";
 consumption = 150000;
 clustergroup = 1;

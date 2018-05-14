@@ -91,6 +91,8 @@ public class Network {
         for (String key : network.keySet()) {
             if (key.matches("GROUP_.+")) {            	
                 HashMap<String, Object> group = network.get(key);
+                int k=0;
+                k++;
                 
                 
                 if (group.containsKey("name") && group.containsKey("consumption")) {
@@ -134,14 +136,17 @@ public class Network {
                         	NuclearPlant np=new NuclearPlant(name);
                         	this.nodes.add(np);
                         	powerpMap.put(key, np);
+                        	break;
                         case "HYDRAULIC" :
                         	HydraulicPlant powerp=new HydraulicPlant(name);
                         	this.nodes.add(powerp);
                         	powerpMap.put(key, powerp);
+                        	break;
                         case "GAS" :
                         	GasPlant gasp=new GasPlant(name);
                         	this.nodes.add(gasp);
                         	powerpMap.put(key, gasp);
+                        	break;
                         }
             		
                     }
