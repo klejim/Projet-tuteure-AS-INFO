@@ -29,10 +29,11 @@ public class Test {
             View view = new View(network);
             System.out.println("=== Etat initial ===");
             System.out.print(view.rapport());
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 40; i++) {
                 network.update();
                 System.out.println("=== Itération n°" + i + " ===");
                 System.out.print(view.rapport());
+                network.handleErrors(network.analyze());
             }
             
         }

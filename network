@@ -1,3 +1,19 @@
+
+### SUBSTATION_3 ###
+name = "station 3";
+groups = {GROUP_5, GROUP_4,GROUP_6};
+plants = {PLANT_3,PLANT_1};
+
+### GROUP_5 ###
+name = "groupe 5";
+consumption = 200000;
+clustergroup = 6;
+
+### GROUP_6 ###
+name = "groupe 6";
+consumption = 220000;
+clustergroup = 1;
+
 ### GROUP_1 ###
 name = "groupe 1";
 consumption = 250000;
@@ -6,7 +22,17 @@ clustergroup = 1;
 ### GROUP_2 ###
 name = "groupe 2";
 consumption = 150000;
-clustergroup = 1;
+clustergroup = 2;
+
+### GROUP_3 ###
+name = "groupe 3";
+consumption = 200000;
+clustergroup = 2;
+
+### GROUP_4 ###
+name = "groupe 4";
+consumption = 150000;
+clustergroup = 3;
 
 ### PLANT_1 ###
 type = "NUCLEAR";
@@ -17,6 +43,15 @@ name = "station 1";
 groups = {GROUP_1, GROUP_2};
 plants = {PLANT_1};
 
+### SUBSTATION_2 ###
+name = "station 2";
+groups = {GROUP_3, GROUP_4};
+plants = {PLANT_3};
+
 ### PLANT_2 ### // centrale non connectée
 name = "centrale 2";
 type = "HYDRAULIC";
+
+### PLANT_3 ###
+type = "NUCLEAR";
+name = "centrale 3";

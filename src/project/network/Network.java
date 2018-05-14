@@ -37,14 +37,13 @@ public class Network {
                     Double tab[] = new Double[tmp.size()];
                     for (int i = 0; i < tmp.size(); i++) {
                     	tab[i] = tmp.get(i);
-                    	//tab[i]=1.0;
                     }
                     
                     ConsumptionMacro.setConsumptionTab(varName, tab);
                     
                     
                 }
-                //ConsumptionMacro.setConsumptionTab(tabName, (Double[])data.get(tabName));
+                
             }
         }
         try {
@@ -53,7 +52,7 @@ public class Network {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} // non fonctionnel pour l'instant
-        //TESTInitNetwork();
+        
     }
 
     /**
@@ -97,8 +96,6 @@ public class Network {
                 
                 if (group.containsKey("name") && group.containsKey("consumption")) {
                     String name = (String) group.get("name");
-                    //System.err.println(((String) group.get("consumption")));
-                    //Double Dconsumption = (((Double) group.get("consumption"))).intValue();
                     
                     int consumption=(((Double) group.get("consumption"))).intValue();
                     Group g=new Group(consumption, name, "test");
@@ -172,7 +169,7 @@ public class Network {
             	
             }
        }
-       //1Er parcours terminé on connecte maintenant les nodes aux sous stations
+       //1er parcours terminé on connecte maintenant les nodes aux sous stations
        for(Map.Entry singleSub : subsMap.entrySet()) {
     	   ArrayList<String> nodeList=(ArrayList<String>) singleSub.getValue();
     	   SubStation sub=(SubStation) singleSub.getKey();
@@ -181,13 +178,10 @@ public class Network {
     		   k++;
     		   if(groupsMap.containsKey(s)) {
     			   this.addGroupsToStation(sub,groupsMap.get(s));
-    			   //sub.addGroups(groupsMap.get(s));
     		   }
     		   if(powerpMap.containsKey(s)) {
        			   PowerPlant pp=powerpMap.get(s);
        			   this.addPlantsToStation(sub, pp);
-    			   //Line li=new Line(pp,sub);
-    			   //sub.addLines(li);
     		   }
     	   }
        }

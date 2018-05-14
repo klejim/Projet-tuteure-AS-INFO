@@ -46,6 +46,7 @@ public class ClusterGroup {
 			throw new Exception("Erreur assignation id");
 		}		
 		this.id=p_id;
+		listId.add(this.id);
 	}
 
 	/**
