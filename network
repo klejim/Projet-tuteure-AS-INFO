@@ -27,7 +27,6 @@ clustergroup = 2;
 ### GROUP_3 ###
 name = "groupe 3";
 consumption = 200000;
-clustergroup = 2;
 
 ### GROUP_4 ###
 name = "groupe 4";

@@ -188,6 +188,9 @@ public class Network {
     			   this.addGroupsToStation(sub,groupsMap.get(s));
     			   groupsMap.remove(s);
     		   }
+    		   else {
+    			   throw new Exception("Un même groupe est configuré en double dans le fichier network");
+    		   }
     		   if(powerpMap.containsKey(s)) {
        			   PowerPlant pp=powerpMap.get(s);
        			   this.addPlantsToStation(sub, pp);
