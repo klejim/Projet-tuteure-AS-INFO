@@ -29,7 +29,7 @@ public class ClusterGroup {
 		this.groupList = groupList;
 		int temp_id=0;
 		while(this.listId.contains(temp_id)) {
-			temp_id=nextId++;
+			temp_id=temp_id++;
 		}
 		this.id=temp_id;
 	}

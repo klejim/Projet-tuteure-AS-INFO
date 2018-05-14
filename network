@@ -48,6 +48,11 @@ name = "station 2";
 groups = {GROUP_3, GROUP_4};
 plants = {PLANT_3};
 
+### SUBSTATION_4 ###
+name = "station 4";
+groups = {GROUP_1, GROUP_2, GROUP_3, GROUP_4, GROUP_5, GROUP_6};
+plants = {PLANT_3};
+
 ### PLANT_2 ### // centrale non connectée
 name = "centrale 2";
 type = "HYDRAULIC";

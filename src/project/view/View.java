@@ -5,11 +5,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import project.network.ClusterGroup;
 import project.network.Group;
 import project.network.Line;
 import project.network.Network;
 import project.network.Node;
 import project.network.PowerPlant;
+import project.network.RandomMacro;
 import project.network.SubStation;
 
 /**
@@ -76,6 +78,9 @@ public class View {
             for (Node n : unconnected) {
                 str += n.getName() + "\n";
             }
+        }
+        for(ClusterGroup cl : RandomMacro.getClusterList()) {
+        	int i=0;
         }
         str+="\n \n \n";
         
