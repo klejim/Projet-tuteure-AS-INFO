@@ -124,31 +124,32 @@ public class Network {
             	HashMap<String, Object> plant = network.get(key);
             	
             	if(plant.containsKey("name") && plant.containsKey("type")) {
-            		String type =(String) plant.get("type");
-            		if(type.equals("NUCLEAR") || type.equals("HYDRAULIC") || type.equals("GAS")) {
-            			String name = (String) plant.get("name");
-                        switch(type) {
-                        case "NUCLEAR" :
-                        	NuclearPlant np=new NuclearPlant(name);
-                        	this.nodes.add(np);
-                        	powerpMap.put(key, np);
-                        	break;
-                        case "HYDRAULIC" :
-                        	HydraulicPlant powerp=new HydraulicPlant(name);
-                        	this.nodes.add(powerp);
-                        	powerpMap.put(key, powerp);
-                        	break;
-                        case "GAS" :
-                        	GasPlant gasp=new GasPlant(name);
-                        	this.nodes.add(gasp);
-                        	powerpMap.put(key, gasp);
-                        	break;
-                        }
-            		
+        		String type =(String) plant.get("type");            		
+        			String name = (String) plant.get("name");
+                    switch(type) {
+                    case "NUCLEAR" :
+                    	NuclearPlant np=new NuclearPlant(name);
+                    	this.nodes.add(np);
+                    	powerpMap.put(key, np);
+                    	break;
+                    case "HYDRAULIC" :
+                    	HydraulicPlant powerp=new HydraulicPlant(name);
+                    	this.nodes.add(powerp);
+                    	powerpMap.put(key, powerp);
+                    	break;
+                    case "GAS" :
+                    	GasPlant gasp=new GasPlant(name);
+                    	this.nodes.add(gasp);
+                    	powerpMap.put(key, gasp);
+                    	break;
+                    
+                    default :
+                    	throw new Exception("Une Centrale n'est pas correctement configurée dans le fichier network");
                     }
+                
             	}
             	else {
-            		throw new Exception("Une Centrale n'est pas correctement configurée dans le fichier network");
+            		
             	}
             		
             }

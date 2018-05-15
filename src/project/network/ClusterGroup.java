@@ -23,8 +23,10 @@ public class ClusterGroup {
     
 	/**
 	 * Constructeur du clusterGroup.
+	 * Inutile pour le moment
 	 * @param groupList Groupes appartenant au clusterGroup
 	 */
+    /*
 	public ClusterGroup(ArrayList<Group> groupList) {
 		this.groupList = groupList;
 		int temp_id=0;
@@ -33,7 +35,7 @@ public class ClusterGroup {
 		}
 		this.id=temp_id;
 	}
-	
+	*/
 	/**
 	 * Constructeur du clusterGroup.Version avec ID et un groupe unique destinée au parser
 	 * @param groupList Groupes appartenant au clusterGroup
