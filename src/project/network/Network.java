@@ -47,7 +47,7 @@ public class Network {
             }
         }
         try {
-			initNetwork(ConfigParser.parse(networkFile));
+			setupNetwork(ConfigParser.parse(networkFile));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -81,7 +81,7 @@ public class Network {
      * @see ConfigParser
      */
     // TODO : terminer le chargement du réseau
-    private void initNetwork(HashMap<String, HashMap<String, Object>> network) throws Exception {
+    private void setupNetwork(HashMap<String, HashMap<String, Object>> network) throws Exception {
     	//HashMaps destinés à stocker les nodes en vue de leur liason dans les sous-stations (après le for)
     	HashMap<String,Group> groupsMap =new HashMap();
     	HashMap<String,PowerPlant> powerpMap =new HashMap();
@@ -89,10 +89,7 @@ public class Network {
     	
         for (String key : network.keySet()) {
             if (key.matches("GROUP_.+")) {            	
-                HashMap<String, Object> group = network.get(key);
-                int k=0;
-                k++;
-                
+                HashMap<String, Object> group = network.get(key);               
                 
                 if (group.containsKey("name") && group.containsKey("consumption")) {
                     String name = (String) group.get("name");
@@ -102,7 +99,7 @@ public class Network {
                     this.nodes.add(g);
                     groupsMap.put(key, g);
                     int idCluster=0;
-                    if(group.containsKey("clustergroup")&&g!=null) {
+                    if(group.containsKey("clustergroup")) {
                     	idCluster=(((Double) group.get("clustergroup"))).intValue();
                     }
                     	

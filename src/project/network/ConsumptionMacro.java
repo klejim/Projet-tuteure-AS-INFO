@@ -68,7 +68,7 @@ public class ConsumptionMacro {
 			consumpModes.put(consumpType, consumpTab);
 			return 1;
 		}
-		else if (consumpTab.equals(null)) {
+		else if (consumpTab==null) {
 			System.err.println("Erreur assignation tab Consommation nul");
 			return 0;
 		}
