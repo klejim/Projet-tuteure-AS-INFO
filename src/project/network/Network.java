@@ -23,6 +23,8 @@ public class Network {
     private Network() throws FileNotFoundException {
     	ConsumptionMacro.init();
     	
+    	
+    	//Lecture du fichier de parsing du réseau
         nodes = new SortedArrayList<>(Node.comparator);
         config = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(config));
@@ -32,6 +34,7 @@ public class Network {
             for (String varName : data.keySet()) {
                 Object var = data.get(varName);
                 System.out.println(var.getClass());
+                //Lecture et assignation du tableau de variation de consommation
                 if (var instanceof ArrayList) {
                     ArrayList<Double> tmp = (ArrayList<Double>) var;
                     Double tab[] = new Double[tmp.size()];
@@ -46,12 +49,17 @@ public class Network {
                 
             }
         }
-        try {
-			setupNetwork(ConfigParser.parse(networkFile));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} // non fonctionnel pour l'instant
+        
+			try {
+				setupNetwork(ConfigParser.parse(networkFile));
+			} catch (RuntimeException e) {				
+				e.printStackTrace();				
+				System.exit(0);
+			}
+			 catch (Exception e) {				
+				e.printStackTrace();
+				System.exit(0);
+			}
         
     }
 
@@ -117,7 +125,7 @@ public class Network {
                     
                 }                 
                 else {
-                	throw new Exception("Un groupe n'est pas correctement configuré dans le fichier network");
+                	throw new RuntimeException("Un groupe n'est pas correctement configuré dans le fichier network: "+key);
                 }
             }
             else if (key.matches("PLANT_.+")) {
@@ -144,7 +152,7 @@ public class Network {
                     	break;
                     
                     default :
-                    	throw new Exception("Une Centrale n'est pas correctement configurée dans le fichier network");
+                    	throw new RuntimeException("Une Centrale n'est pas correctement configurée dans le fichier network: " +key);
                     }
                 
             	}
@@ -169,7 +177,7 @@ public class Network {
             		            		
             	}
             	else {
-            		throw new Exception("Une Sous-Station n'est pas correctement configurée dans le fichier network");
+            		throw new RuntimeException("Une Sous-Station n'est pas correctement configurée dans le fichier network: "+key);
             	}
             	
             	
@@ -187,7 +195,7 @@ public class Network {
     			   groupsMap.remove(s);
     		   }
     		   else {
-    			   throw new Exception("Un même groupe est configuré en double dans le fichier network");
+    			   throw new RuntimeException("Un même groupe est configuré en double dans le fichier network");
     		   }
     		   if(powerpMap.containsKey(s)) {
        			   PowerPlant pp=powerpMap.get(s);
