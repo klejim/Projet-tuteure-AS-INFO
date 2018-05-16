@@ -146,7 +146,7 @@ public class Network {
         for (SubStation station : stations){
             // 1 itération
             for (Group group: station.getGroups()){
-                group.setConsumption(group.getConsumptionWithOffset(1));
+                group.setConsumption((int)(group.getConsumptionWithOffset(1)*1.10));
             }
             station.updateOutput();
             if (station.getDiff() != 0){
@@ -201,7 +201,8 @@ public class Network {
      * <li>Renvoyer le résultat</li>
      * </ul>
      * <p>Cette fonction se charge de la mise à jour (étapes 1 à 4).</p>
-     * @return la liste d'erreur générées par {@link #handleErrors(java.util.ArrayList) handleErrors()}. 
+     * @see #analyze() 
+     * @see #handleErrors(java.util.ArrayList) 
      */
     public void update() {
         // TODO : mise à jour consommation des groupes
