@@ -25,11 +25,11 @@ public class ClusterGroup {
 	 * @param groupList Groupes appartenant au clusterGroup
 	 * @throws Exception 
 	 */
-	public ClusterGroup(Group group,int p_id) throws Exception {
+	public ClusterGroup(Group group,int p_id) throws RuntimeException {
 		this.groupList=new ArrayList<Group>();
 		this.groupList.add(group);
 		if(this.listId.contains(p_id)) {
-			throw new Exception("Erreur assignation id");
+			throw new RuntimeException("Erreur assignation id");
 		}		
 		this.id=p_id;
 		listId.add(this.id);

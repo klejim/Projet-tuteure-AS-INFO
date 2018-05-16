@@ -58,10 +58,6 @@ public class Network {
 				e.printStackTrace();				
 				System.exit(0);
 			}
-			 catch (Exception e) {				
-				e.printStackTrace();
-				System.exit(0);
-			}
         
     }
 
@@ -92,7 +88,7 @@ public class Network {
      * @author Geoffroy
      */
    
-    private void setupNetwork(HashMap<String, HashMap<String, Object>> network) throws Exception {
+    private void setupNetwork(HashMap<String, HashMap<String, Object>> network) throws RuntimeException {
     	//HashMaps destinés à stocker les nodes en vue de leur liason dans les sous-stations (après le for)
     	HashMap<String,Group> groupsMap =new HashMap();
     	HashMap<String,PowerPlant> powerpMap =new HashMap();
