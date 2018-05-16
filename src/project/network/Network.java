@@ -160,7 +160,7 @@ public class Network {
                 
             	}
             	else {
-            		
+            		throw new RuntimeException("Une Centrale n'est pas correctement configurée dans le fichier network: " +key);
             	}
             		
             }
