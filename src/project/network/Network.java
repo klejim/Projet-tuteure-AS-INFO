@@ -21,20 +21,22 @@ public class Network {
     private SortedArrayList<Node> nodes;
 
     private Network() throws FileNotFoundException {
-    	ConsumptionMacro.init();
-    	
-    	
-    	//Lecture du fichier de parsing du réseau
+    	ConsumptionMacro.init();   	
+    	    	
         nodes = new SortedArrayList<>(Node.comparator);
+        
+        //Lecture du fichier de parsing du réseau
         config = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(config));
         String networkFile = (String) config.get("NETWORK_FILES").get("network");
+        
+        //Lecture et assignation du tableau de variation de consommation
         if (config.containsKey("DATA_CONSUMPTION")) {
             HashMap<String, Object> data = config.get("DATA_CONSUMPTION");
             for (String varName : data.keySet()) {
                 Object var = data.get(varName);
                 System.out.println(var.getClass());
-                //Lecture et assignation du tableau de variation de consommation
+                
                 if (var instanceof ArrayList) {
                     ArrayList<Double> tmp = (ArrayList<Double>) var;
                     Double tab[] = new Double[tmp.size()];
@@ -49,7 +51,7 @@ public class Network {
                 
             }
         }
-        
+        //mise en place du réseau dans setupNetwork
 			try {
 				setupNetwork(ConfigParser.parse(networkFile));
 			} catch (RuntimeException e) {				
@@ -87,8 +89,9 @@ public class Network {
      * @param network un tableau associatif représentant le réseau.
      * @throws Exception 
      * @see ConfigParser
+     * @author Geoffroy
      */
-    // TODO : terminer le chargement du réseau
+   
     private void setupNetwork(HashMap<String, HashMap<String, Object>> network) throws Exception {
     	//HashMaps destinés à stocker les nodes en vue de leur liason dans les sous-stations (après le for)
     	HashMap<String,Group> groupsMap =new HashMap();
@@ -182,14 +185,15 @@ public class Network {
             	
             	
             }
+            else {
+            	throw new RuntimeException("Champ de nature inconnu :"+key);
+            }
        }
        //1er parcours terminé on connecte maintenant les nodes aux sous stations
        for(Map.Entry singleSub : subsMap.entrySet()) {
     	   ArrayList<String> nodeList=(ArrayList<String>) singleSub.getValue();
     	   SubStation sub=(SubStation) singleSub.getKey();
     	   for(String s : nodeList) {
-    		   int k=1;
-    		   k++;
     		   if(groupsMap.containsKey(s)) {
     			   this.addGroupsToStation(sub,groupsMap.get(s));
     			   groupsMap.remove(s);
@@ -203,6 +207,7 @@ public class Network {
     		   }
     	   }
        }
+       //Initialisation des paramétres nécessitant les nodes du réseau mises en places (en réalité seulement l'initialisation de l'aléatoire)
        ConsumptionMacro.initNetwork(this);
     }
 
