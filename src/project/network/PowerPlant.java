@@ -13,13 +13,13 @@ abstract public class PowerPlant extends Node{
     /* quelques comparateurs utilisés dans la gestion des erreurs */
     // comparaison sur la puissance disponible
     static final Comparator<PowerPlant> powerComparator = (p1, p2)->{
-            return p1.getActivePower() - p2.getActivePower();
+            return p2.getActivePower() - p1.getActivePower();
         };
     // ON  < STARTING < OFF | à état égal on compare la puissance
     static final Comparator<PowerPlant> stateAndPowerComparator = (p1, p2)->{
         int cmp = 0;
         if (p1.getState() == p2.getState()){
-            cmp = p2.getActivePower() - p1.getActivePower();
+            cmp = PowerPlant.powerComparator.compare(p1, p2);
         }
         else if (p1.getState() == PowerPlant.State.ON){
             cmp = -1;

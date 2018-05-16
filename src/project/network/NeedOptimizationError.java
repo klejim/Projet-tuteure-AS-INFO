@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package project.network;
 
 import java.util.ArrayList;
@@ -21,7 +16,9 @@ public class NeedOptimizationError extends NetworkError{
     public SubStation getStation(){
         return this.station;
     }
-    
+    /**
+     * @see NetworkError#solve() 
+     */
     @Override
     public void solve(){
         int powerNeeded = this.station.getPowerIn();

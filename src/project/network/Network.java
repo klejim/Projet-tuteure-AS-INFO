@@ -93,6 +93,7 @@ public class Network {
                 if (station.getDiff() != 0){
                     errors.add(analyseSubStation(station)); /* /!\ peut renvoyer null! */
                 }
+                errors.add(new NeedOptimizationError(station)); // TODO : être intelligent
             }
         }
         errors.removeIf(e->e==null); // important
