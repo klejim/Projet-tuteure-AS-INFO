@@ -121,7 +121,7 @@ public class StatusWindow extends JFrame {
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
 		// réseau de test basé sur l'archi en dur de Network
-		Network myNetwork = new Network(0, 0, 0);
+		Network myNetwork = new Network();
 
 		StatusWindow myWindow = new StatusWindow(myNetwork);
 

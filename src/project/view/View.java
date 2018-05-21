@@ -82,8 +82,7 @@ public class View {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        Network myNetwork = new Network(0, 0, 0);
-
+        Network myNetwork = new Network();
         View myView = new View(myNetwork);
         // les flux sont supposés être libérés après usage afin d'éviter des fuites de ressources mais fermer System.in semble
         // une mauvaise habitude, donc on se contente de préciser que l'on sait ce qu'on fait

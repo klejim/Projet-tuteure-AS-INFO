@@ -20,7 +20,7 @@ public class Network {
     private int production, consumption;
     private SortedArrayList<Node> nodes;
 
-    private Network() throws FileNotFoundException {
+    public Network() throws FileNotFoundException {
         nodes = new SortedArrayList<>(Node.comparator);
         config = ConfigParser.parse("config");
         System.out.print(ConfigParser.stringify(config));
@@ -44,18 +44,6 @@ public class Network {
         }
         //initNetwork(ConfigParser.parse(networkFile)); // non fonctionnel pour l'instant
         TESTInitNetwork();
-    }
-
-    /**
-     * Constructeur. Bidon pour l'instant, l'initialisation du réseau se fait dans {#TESTInitNetwork TESTInitNetwork}.
-     * @param nStations non utilisé.
-     * @param nPowerPlants non utilisé.
-     * @param nGroups  non utilisé.
-     * @throws java.io.FileNotFoundException une erreur a eu lieu lors de la lecture des fichiers de configuration.
-     */
-    // TODO : un vrai constructeur
-    public Network(int nStations, int nPowerPlants, int nGroups) throws FileNotFoundException {
-        this();
     }
 
     /**
@@ -121,7 +109,7 @@ public class Network {
             // qu'il est inutile de la générer
             // TODO : amélioration possible pour le cas où l'attente serait plus longue que démarrer une autre centrale
             // quoique a priori l'algo démarre déjà les centrales les plus rapides, donc à voir. Ca peut être utile si les consommation varient énormément
-            for (Line line : station.getLines()) {
+        for (Line line : station.getLines()) {
                 if (line.getState() == Line.State.WAITING){
                     powerNeeded -= line.getPower();
                 }
@@ -206,7 +194,6 @@ public class Network {
      * @see #handleErrors(java.util.ArrayList) 
      */
     public void update() {
-        // TODO : mise à jour consommation des groupes
         // remarque : on suppose que la puissance de base d'une centrale est constante. Si cela change dans le futur il faudra modiier
         // la gestion des centrales et de leur puissance disponible.
         // nodes étant trié le parcours suivant met à jour tous les groupes, puis toutes centrales et enfin les sous-stations
