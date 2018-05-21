@@ -151,6 +151,9 @@ abstract public class PowerPlant extends Node{
         if (state == State.ON || state == State.STARTING){
             state = State.OFF;
             activePower = -1*power;
+            for (Line l : lines){
+                l.setState(Line.State.OFFLINE);
+            }
             stopped = true;
         }
         return stopped;
@@ -189,9 +192,7 @@ abstract public class PowerPlant extends Node{
                 // on active les lignes en attente (elles représentent des puissances réclamées par des stations qui attendaient
                 // que la centrale soit prête pour alimenter la sous-station)
                 for (Line l : lines) {
-                    if (l.getState() == Line.State.WAITING) {
-                        l.setState(Line.State.ONLINE);
-                    }
+                    l.setState(Line.State.ONLINE);
                 }
                 this.framesSinceStart = 1;
             } else {

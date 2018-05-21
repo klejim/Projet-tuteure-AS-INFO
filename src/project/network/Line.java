@@ -12,12 +12,12 @@ import java.util.Comparator;
 public class Line {
     /**
      * Représente l'état d'une ligne de transmission.
-     * ONLINE: la ligne transmet l'énergie
-     * DISABLED: la ligne ne transmet pas. Sa puissance peut ne pas être nulle.
+     * ONLINE: la ligne peut transmettre (sa puissance peut être nulle)
+     * OFFLINE: la ligne ne transmet pas. Sa puissance peut ne pas être nulle.
      * WAITING: la ligne est "en attente", c'est-à-dire qu'une station a réclamé de la puissance et que la centrale concernée
      * est en train de démarrer. La ligne ne transmet pas encore.
      */
-    public enum State{ONLINE, DISABLED, WAITING};
+    public enum State{ONLINE, OFFLINE, WAITING};
     public static final Comparator<Line> powerComparator = (l1, l2)->{
             return l1.getActivePower() - l2.getActivePower();
         };
@@ -27,7 +27,7 @@ public class Line {
                 cmp =  Line.powerComparator.compare(l1,l2);
             }
             else{
-                cmp = l1.getIn().getStartDelay() - l2.getIn().getStartDelay();
+                cmp = l1.getIn().getStartDelay() - l2.getIn().getStartDelay(); // équivalent à comparer les classes
             }
             return cmp;
         };
@@ -41,7 +41,7 @@ public class Line {
      */
     private Line(){
         super();
-        state = State.ONLINE;
+        state = State.OFFLINE;
     }
     /**
      * Constructeur.
