@@ -95,7 +95,7 @@ public class Network {
     	HashMap<SubStation,ArrayList<String>> subsMap =new HashMap<SubStation, ArrayList<String>>();
     	
         for (String key : network.keySet()) {
-            if (key.matches("GROUP_.+")) {            	
+        	if (key.matches("GROUP_.+")) {            	
                 HashMap<String, Object> group = network.get(key);               
                 
                 if (group.containsKey("name") && group.containsKey("consumption")) {
@@ -151,12 +151,12 @@ public class Network {
                     	break;
                     
                     default :
-                    	throw new RuntimeException("Une Centrale n'est pas correctement configurée dans le fichier network: " +key);
+                    	throw new RuntimeException("Une Centrale n'est pas correctement configurée dans le fichier network (type mauvais): " +key);
                     }
                 
             	}
             	else {
-            		throw new RuntimeException("Une Centrale n'est pas correctement configurée dans le fichier network: " +key);
+            		throw new RuntimeException("Une Centrale n'est pas correctement configurée dans le fichier network (champs obligatoires non présents) : " +key);
             	}
             		
             }
