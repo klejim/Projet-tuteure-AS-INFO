@@ -90,9 +90,9 @@ public class Network {
    
     private void setupNetwork(HashMap<String, HashMap<String, Object>> network) throws RuntimeException {
     	//HashMaps destinés à stocker les nodes en vue de leur liason dans les sous-stations (après le for)
-    	HashMap<String,Group> groupsMap =new HashMap();
-    	HashMap<String,PowerPlant> powerpMap =new HashMap();
-    	HashMap<SubStation,ArrayList<String>> subsMap =new HashMap();
+    	HashMap<String,Group> groupsMap =new HashMap<String, Group>();
+    	HashMap<String,PowerPlant> powerpMap =new HashMap<String, PowerPlant>();
+    	HashMap<SubStation,ArrayList<String>> subsMap =new HashMap<SubStation, ArrayList<String>>();
     	
         for (String key : network.keySet()) {
             if (key.matches("GROUP_.+")) {            	
@@ -181,25 +181,35 @@ public class Network {
             	
             	
             }
-            else {
-            	throw new RuntimeException("Champ de nature inconnu :"+key);
-            }
+            
        }
        //1er parcours terminé on connecte maintenant les nodes aux sous stations
        for(Map.Entry singleSub : subsMap.entrySet()) {
     	   ArrayList<String> nodeList=(ArrayList<String>) singleSub.getValue();
     	   SubStation sub=(SubStation) singleSub.getKey();
     	   for(String s : nodeList) {
-    		   if(groupsMap.containsKey(s)) {
-    			   this.addGroupsToStation(sub,groupsMap.get(s));
-    			   groupsMap.remove(s);
-    		   }
-    		   else {
-    			   throw new RuntimeException("Un même groupe est configuré en double dans le fichier network");
-    		   }
-    		   if(powerpMap.containsKey(s)) {
-       			   PowerPlant pp=powerpMap.get(s);
-       			   this.addPlantsToStation(sub, pp);
+    		   if(s.matches("GROUP_.+")) {
+    			   if(groupsMap.containsKey(s)){
+    				   this.addGroupsToStation(sub,groupsMap.get(s));
+        			   groupsMap.remove(s);
+    			   }
+    			   else{
+    				   throw new RuntimeException("Un même groupe est configuré en double dans le fichier network :" +s);
+    			   }    			   
+    		   }    		   
+    		   else if(s.matches("PLANT_.+")) {
+       			   if(powerpMap.containsKey(s)){
+       				   PowerPlant pp=powerpMap.get(s);
+       				   if(!sub.getPlants().contains(pp)){
+       					   this.addPlantsToStation(sub, pp);
+       				   }
+       				   else{
+       					   throw new RuntimeException("Une centrale est configurée en double sur une même sous-station" +s);
+       				   }
+       			   }       			   
+       			}
+    		   else{
+    			   throw new RuntimeException("Une clé est de sous-station est de nature inconnue :" +s);
     		   }
     	   }
        }

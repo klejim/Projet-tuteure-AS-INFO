@@ -136,4 +136,14 @@ public class SubStation extends Node{
         // alimentation - demande
         return powerIn - powerOut;
     }
+    
+    public ArrayList<PowerPlant> getPlants(){
+		ArrayList<Line> lines =this.getLines();
+    	ArrayList<PowerPlant> plants=new ArrayList<PowerPlant>();
+		for(Line l : lines){
+    		plants.add(l.getIn());
+    	}
+		
+		return plants;
+    }
 }

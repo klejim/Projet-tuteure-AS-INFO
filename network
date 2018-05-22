@@ -1,9 +1,3 @@
-
-### SUBSTATION_3 ###
-name = "station 3";
-groups = {GROUP_5, GROUP_4,GROUP_6};
-plants = {PLANT_3,PLANT_1};
-
 ### GROUP_5 ###
 name = "groupe 5";
 consumption = 200000;
@@ -40,17 +34,17 @@ name = "centrale 1";
 ### SUBSTATION_1 ###
 name = "station 1";
 groups = {GROUP_1, GROUP_2};
-plants = {PLANT_1};
+plants = {PLANT_1,PLANT_3};
 
 ### SUBSTATION_2 ###
 name = "station 2";
 groups = {GROUP_3, GROUP_4};
 plants = {PLANT_3};
 
-### SUBSTATION_4 ###
-name = "station 4";
-groups = {GROUP_1, GROUP_2, GROUP_3, GROUP_4, GROUP_5, GROUP_6};
-plants = {PLANT_3};
+### SUBSTATION_3 ###
+name = "station 3";
+groups = {GROUP_5,GROUP_6};
+plants = {PLANT_3,PLANT_1};
 
 ### PLANT_2 ### // centrale non connectée
 name = "centrale 2";
