@@ -22,7 +22,7 @@ public class Network {
 
     public Network() throws FileNotFoundException {
         nodes = new SortedArrayList<>(Node.comparator);
-        config = ConfigParser.parse("config");
+        config = ConfigParser.parse("config.conf");
         System.out.print(ConfigParser.stringify(config));
         String networkFile = (String) config.get("DEFAULT").get("network");
         if (config.containsKey("DATA_CONSUMPTION")) {
