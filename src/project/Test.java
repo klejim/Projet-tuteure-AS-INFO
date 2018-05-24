@@ -29,12 +29,21 @@ public class Test {
             View view = new View(network);
             System.out.println("=== Etat initial ===");
             System.out.print(view.rapport());
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 1000; i++) {
                 network.update();
+                network.handleErrors(network.analyze());
                 System.out.println("=== Itération n°" + i + " ===");
                 System.out.print(view.rapport());
+                
+                
+                view.updateView();
+                try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
-            
         }
     }
 }
