@@ -5,10 +5,12 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import project.network.GasPlant;
+import project.network.HydraulicPlant;
 import project.network.Line;
+import project.network.NuclearPlant;
 import project.network.PowerPlant;
 import project.network.PowerPlant.State;
-import project.network.SubStation;
 
 /**
  * Classe qui décrit la vue d'une centrale électrique.
@@ -39,15 +41,26 @@ public class StatusWindowPowerPlant extends StatusWindowElement {
 	 * @see project.view.StatusWindow.Element#formatData()
 	 */
 	public String[] formatData() {
-		String[] data = new String[3];
+		String[] data = new String[4];
 
 		State state = ((PowerPlant) this.modelNode).getState();
-		int id = ((PowerPlant) this.modelNode).getId();
+		Class type = ((PowerPlant)this.modelNode).getClass();
+		String name = ((PowerPlant) this.modelNode).getName();
 		int usedPower = connexion.getActivePower();
+		
 
-		data[0] = "| <-- PowerPlant " + id;
+		data[0] = "| <-- " + name;
 		data[1] = "Etat: " + state;
-		data[2] = "P. utilisée: " + usedPower + " kW";
+		data[2] = "P. utilisée: " + usedPower/1000 + " MW";
+		if(type.equals(NuclearPlant.class)) {
+			data[3] = " (Pmax : 1500 MW)";
+		}else if (type.equals(HydraulicPlant.class)) {
+			data[3] = "(Pmax : 5 MW)";
+		}else if (type.equals(GasPlant.class)) {
+			data[3] = "(Pmax : 300 MW)";
+		}else {
+			data[3] = "type centrale inconnu";
+		}
 
 		return data;
 	}
