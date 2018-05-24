@@ -101,11 +101,11 @@ public class StatusWindowSubStation extends StatusWindowElement {
 
 		int pin = ((SubStation) this.modelNode).getPowerIn();
 		int pout = ((SubStation) this.modelNode).getPowerOut();
-		int id = ((SubStation) this.modelNode).getId();
+		String name = ((SubStation) this.modelNode).getName();
 
-		data[0] = ("Sous-station " + id);
-		data[1] = "Pin: " + pin + " kW";
-		data[2] = "Pout: " + pout + " kW";
+		data[0] = (name);
+		data[1] = "Pin: " + pin/1000 + " MW";
+		data[2] = "Pout: " + pout/1000 + " MW";
 		data[3] = (pin >= pout ? "OK" : "P. INSUFISANTE");
 
 		return data;
