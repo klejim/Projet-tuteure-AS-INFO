@@ -142,7 +142,7 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 		// Mise à jour des groupes dans le réseau
 		for(Node node : this.model.getNodes()) {
 			if (node.getClass().equals(Group.class)) {
-				((Group)node).setConsumption(this.consumptions.get(node.getId()));
+				((Group)node).setOriginalconsumption(this.consumptions.get(node.getId()));
 			}
 		}
 	}
