@@ -4,6 +4,6 @@ package project.network;
  *
  * @author Jimenez
  */
-public class CriticalNetworkError extends NetworkError{
+abstract public class CriticalNetworkError extends NetworkError{
     
 }

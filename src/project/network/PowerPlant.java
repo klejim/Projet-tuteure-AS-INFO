@@ -13,13 +13,13 @@ abstract public class PowerPlant extends Node{
     /* quelques comparateurs utilisés dans la gestion des erreurs */
     // comparaison sur la puissance disponible
     static final Comparator<PowerPlant> powerComparator = (p1, p2)->{
-            return p1.getActivePower() - p2.getActivePower();
+            return p2.getActivePower() - p1.getActivePower();
         };
     // ON  < STARTING < OFF | à état égal on compare la puissance
     static final Comparator<PowerPlant> stateAndPowerComparator = (p1, p2)->{
         int cmp = 0;
         if (p1.getState() == p2.getState()){
-            cmp = p2.getActivePower() - p1.getActivePower();
+            cmp = PowerPlant.powerComparator.compare(p1, p2);
         }
         else if (p1.getState() == PowerPlant.State.ON){
             cmp = -1;
@@ -151,6 +151,9 @@ abstract public class PowerPlant extends Node{
         if (state == State.ON || state == State.STARTING){
             state = State.OFF;
             activePower = -1*power;
+            for (Line l : lines){
+                l.setState(Line.State.OFFLINE);
+            }
             stopped = true;
         }
         return stopped;
@@ -171,7 +174,7 @@ abstract public class PowerPlant extends Node{
         	}
         	else{
                     state=State.STARTING;
-                    this.framesSinceStart=0;
+                    this.framesSinceStart = 1;
                     started=true; 
         	}    
         }
@@ -189,11 +192,9 @@ abstract public class PowerPlant extends Node{
                 // on active les lignes en attente (elles représentent des puissances réclamées par des stations qui attendaient
                 // que la centrale soit prête pour alimenter la sous-station)
                 for (Line l : lines) {
-                    if (l.getState() == Line.State.WAITING) {
-                        l.setState(Line.State.ONLINE);
-                    }
+                    l.setState(Line.State.ONLINE);
                 }
-                this.framesSinceStart = 0;
+                this.framesSinceStart = 1;
             } else {
                 this.framesSinceStart++;
             }

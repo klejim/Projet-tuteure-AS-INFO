@@ -1,8 +1,10 @@
 package project.network;
 
+import java.awt.List;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ public class Network {
     private int production, consumption;
     private SortedArrayList<Node> nodes;
 
-    private Network() throws FileNotFoundException {
+    public Network() throws FileNotFoundException {
     	ConsumptionMacro.init();   	
     	    	
         nodes = new SortedArrayList<>(Node.comparator);
@@ -59,18 +61,6 @@ public class Network {
 				System.exit(0);
 			}
         
-    }
-
-    /**
-     * Constructeur. Bidon pour l'instant, l'initialisation du réseau se fait dans {#TESTInitNetwork TESTInitNetwork}.
-     * @param nStations non utilisé.
-     * @param nPowerPlants non utilisé.
-     * @param nGroups  non utilisé.
-     * @throws java.io.FileNotFoundException une erreur a eu lieu lors de la lecture des fichiers de configuration.
-     */
-    // TODO : un vrai constructeur
-    public Network(int nStations, int nPowerPlants, int nGroups) throws FileNotFoundException {
-        this();
     }
 
     /**
@@ -214,7 +204,7 @@ public class Network {
     	   }
        }
        //Initialisation des paramétres nécessitant les nodes du réseau mises en places (en réalité seulement l'initialisation de l'aléatoire)
-       ConsumptionMacro.initNetwork(this);
+       ConsumptionMacro.initFromNetwork(this);
     }
 
     /**
@@ -229,15 +219,79 @@ public class Network {
             }
             if (n instanceof SubStation) {
                 SubStation station = (SubStation) n;
-                int diff = station.getDiff();
-                if (diff > 0) {
-                    errors.add(new TooMuchPowerError(station, station.getDiff()));
-                } else if (diff < 0) {
-                    errors.add(new NotEnoughPowerError(station, Math.abs(station.getDiff())));
+                if (station.getDiff() != 0){
+                    errors.add(analyseSubStation(station)); /* /!\ peut renvoyer null! */
                 }
+                errors.add(new NeedOptimizationError(station)); // TODO : être intelligent
             }
         }
+        errors.removeIf(e->e==null); // important
         return errors;
+    }
+    /**
+     * Analyse l'équilibre des puissances d'une sous-station et retourne l'erreur appropriée. 
+     * prérequis : station.getDiff() != 0
+     * @param station la sous-station concernée
+     * @return l'instance de NetworkError appropriée
+     */
+    public NetworkError analyseSubStation(SubStation station){
+        int diff = station.getDiff();
+        NetworkError error = null;
+        if (diff > 0){
+            error = new TooMuchPowerError(station, diff);
+        } else{
+            int powerNeeded = Math.abs(diff);
+            /*
+            * pour le cas où la résolution d'une erreur demande le démarrage d'une centrale
+            * il est généralement nécessaire d'attendre plusieurs itérations avant la
+            * résolution. Pour cette raison on doit vérifier que la puissance exigée n'est pas déjà affectée 
+            */
+            // gestion des lignes en attente : si l'erreur peut être résolue par les puissances venant de centrales en démarrage on considère
+            // qu'il est inutile de la générer
+            // TODO : amélioration possible pour le cas où l'attente serait plus longue que démarrer une autre centrale
+            // quoique a priori l'algo démarre déjà les centrales les plus rapides, donc à voir. Ca peut être utile si les consommation varient énormément
+        for (Line line : station.getLines()) {
+                if (line.getState() == Line.State.WAITING){
+                    powerNeeded -= line.getPower();
+                }
+            }
+            // si ce n'est pas suffisant on génère une erreur pour la différence
+            if (powerNeeded > 0){
+                error = new NotEnoughPowerError(station, powerNeeded);
+            }
+        }
+        return error;
+    }
+    /**
+     * Gestion prédictive. 
+     * prédiction à:
+     * 1 itération : on applique la gestion des erreurs normale
+     * 5 itérations : 
+     * 20 itérations :
+     */
+    public void predictFutureAndReact(){
+        ArrayList<SubStation> stations = getSubStations();
+        ArrayList<NetworkError> errors = new ArrayList<>();
+        // voyage dans le futur
+        for (SubStation station : stations){
+            // 1 itération
+            for (Group group: station.getGroups()){
+                group.setConsumption((int)(group.getConsumptionWithOffset(1)*1.10));
+            }
+            station.updateOutput();
+            if (station.getDiff() != 0){
+                errors.add(analyseSubStation(station));
+            }
+        }
+        errors.removeIf(e->e == null); // important car analyzeSubStation peut retourner null
+        handleErrors(errors);
+        // retour à l'itération courante
+        for (SubStation station : stations){
+            for (Group group : station.getGroups()){
+                group.setConsumption(group.getConsumptionWithOffset(0));
+            }
+            station.updateOutput();
+        }
     }
 
     /**
@@ -253,122 +307,14 @@ public class Network {
         ArrayList<NetworkError> errors = new ArrayList<>(rawErrors.size());
         rawErrors.sort(NetworkError.typeAndPowerComparator);
         errors.addAll(rawErrors);
-        for (NetworkError e : rawErrors) {
-            if (e instanceof NotEnoughPowerError) {
-                NotEnoughPowerError err = (NotEnoughPowerError) e;
-                /*
-                 * pour le cas où la résolution d'une erreur demande le démarrage d'une centrale
-                 * il est généralement nécessaire d'attendre plusieurs itérations avant la
-                 * résolution. J'ai pris la décision de toujours générer une erreur lors des
-                 * appels à la méthode analyze() (après tout le problème est réel tant que la
-                 * solution n'est pas en ligne) et de détecter les erreurs "en attente" dans
-                 * cette méthode.
-                 */
-                // s'il existe une ligne en attente qui pourra corriger l'erreur, on la marque
-                // comme déjà résolue
-                // TODO : amélioration possible pour le cas où l'attente serait plus longue que démarrer une autre centrale
-                for (Line line : err.getStation().getLines()) {
-                    if (line.getState() == Line.State.WAITING && line.getPower() >= err.getPower()) {
-                        e.setMessage(line.getIn().getName() + " en cours de démarrage");
-                        e.setSolved(true);
-                        break;
-                    }
-                }
-                // si ce n'est pas le cas on passe à la recherche normale
-                if (!e.isSolved()){
-                    if (solvePowerShortage(err.getStation(), err.getPower())){
-                        e.setSolved(true);
-                    }
-                    else{
-                        e.setMessage("Correction automatique impossible");
-                        CannotFindSolutionError newError = new CannotFindSolutionError(e);
-                        errors.add(newError);
-                    }
-                }
-            } else if (e instanceof TooMuchPowerError) {
-                TooMuchPowerError err = (TooMuchPowerError) e;
-                if (solvePowerOverflow(err.getStation(), err.getPower())) {
-                    e.setSolved(true);
-                } else {
-                    e.setMessage("Correction automatique impossible");
-                    CannotFindSolutionError newError = new CannotFindSolutionError(e);
-                    errors.add(newError);
-                }
-            } else if (e instanceof NodeNotConnectedError) {
-                e.setMessage("Connexion manuelle nécessaire");
+        for (NetworkError error : rawErrors) {
+            error.solve();
+            if (!error.isSolved()){
+                CannotFindSolutionError newError = new CannotFindSolutionError(error);
+                errors.add(newError);
             }
         }
         return errors;
-    }
-
-    /**
-     * Tente de résoudre un manque de puissance au niveau d'une sous-station.
-     * <p>On effectue la recherche sur les centrales liées à la station et ordonnée par état (ON &lt; STARTING &lt; OFF) et par puissance
-     * disponible croissante.</p>
-     * <p>Ordre de recherche de solutions:</p>
-     * <ul>
-     * <li>on regarde si les centrales allumées ont encore de la puissance de disponible</li>
-     * <li>si ce n'est pas le cas on voit s'il existe une centrale en démarrage qui pourrait aider</li>
-     * <li>s'il n'y en a pas on essaie d'allumer une centrale</li>
-     * <li>si c'est impossible on panique et on retourne false</li>
-     * </ul>
-     * <p>L'ordre de recherche est assuré par le tri précédent. On emprunte en priorité aux centrales ayant le moins de puissance disponible.
-     *  Si une centrale ne peut pas combler toute l'erreur on prend ce qu'elle propose.</p>
-     * @param station la sous-station concernée par l'erreur.
-     * @param p la puissance qu'il manque pour alimenter correctement la sous-station.
-     * @return {@code true} si l'erreur a pu être corrigée et {@code false} sinon.
-     */
-    private boolean solvePowerShortage(SubStation station, int p) {
-        boolean ok = false;
-        ArrayList<PowerPlant> plants = new ArrayList<>();
-        for (Line line : station.getLines()) {
-            plants.add(line.getIn());
-        }
-        // avant de poursuivre on trie les centrales
-        // ordre : ON < STARTING < OFF et à catégorie égale la centrale ayant la plus grande puissance disponible est placée avant
-        plants.sort(PowerPlant.stateAndPowerComparator);
-        // Recherche de solution
-        int i = 0, powerNeeded = p;
-        while (i < plants.size() && !ok) {
-            PowerPlant plant = plants.get(i++);
-            if (Math.abs(plant.getActivePower()) > 0) {
-                if (plant.getState() == PowerPlant.State.OFF) {
-                    plant.start();
-                }
-                int powerAsked = (powerNeeded <= Math.abs(plant.getActivePower()))?powerNeeded:Math.abs(plant.getActivePower());
-                powerNeeded -= plant.grantToStation(station, powerAsked);
-                ok = powerNeeded <= 0;
-            }
-        }
-        return ok;
-    }
-
-    /**
-     * Tente de résoudre une surcharge au niveau d'une sous-station en libèrant de la puissance.
-     * <p>On travaille sur les lignes transmettant le moins de puissance en premier afin de privilégier les centrales les plus souples 
-     * (hydrauliques plutôt que nucléaires) et de libérer autant de centrales que possible.</p>
-     * @param station la sous-station concernée par l'erreur.
-     * @param overflow la puissance en trop.
-     * @return {@code true} si l'erreur a été corrigée et {@code false} sinon.
-     */
-    private boolean solvePowerOverflow(SubStation station, int overflow) {
-        boolean ok = false;
-        ArrayList<Line> lines = new ArrayList<>();
-        lines.addAll(station.getLines());
-        lines.sort(Line.powerComparator);
-        int i = 0, powerOverflow = overflow;
-        while (i < lines.size() && !ok) {
-            Line line = lines.get(i++);
-            PowerPlant plant = line.getIn();
-            int tmp = (powerOverflow > line.getActivePower()) ? line.getActivePower() : powerOverflow;
-            powerOverflow -= station.giveBackPower(line, tmp);
-            // on éteint ensuite la centrale si elle n'est plus utile
-            if (plant.getActivePower() == plant.getPower()) {
-                plant.stop();
-            }
-            ok = (powerOverflow == 0);
-        }
-        return ok;
     }
 
     /**
@@ -385,16 +331,16 @@ public class Network {
      * <li>Renvoyer le résultat</li>
      * </ul>
      * <p>Cette fonction se charge de la mise à jour (étapes 1 à 4).</p>
-     * @return la liste d'erreur générées par {@link #handleErrors(java.util.ArrayList) handleErrors()}. 
+     * @see #analyze() 
+     * @see #handleErrors(java.util.ArrayList) 
      */
     public void update() {
-        // TODO : mise à jour consommation des groupes
         // remarque : on suppose que la puissance de base d'une centrale est constante. Si cela change dans le futur il faudra modiier
         // la gestion des centrales et de leur puissance disponible.
         // nodes étant trié le parcours suivant met à jour tous les groupes, puis toutes centrales et enfin les sous-stations
         consumption = 0;
         production = 0;
-
+        ConsumptionMacro.incrementCursor();
         for (Node node : nodes) {
             node.update();
             if (node instanceof SubStation) {
@@ -402,7 +348,6 @@ public class Network {
                 production += ((SubStation) node).getPowerIn();
             }
         }
-        ConsumptionMacro.incrementCursor();
     }
 
     /**
@@ -416,7 +361,7 @@ public class Network {
         }
         ConsumptionMacro.setConsumptionTab("test", consumpTab);*/
 
-        NuclearPlant np = new NuclearPlant("nucléaire");
+        NuclearPlant np1 = new NuclearPlant("nucléaire 1"), np2 = new NuclearPlant("nucléaire 2"), np3 = new NuclearPlant("nucléaire 3");
         HydraulicPlant hp1 = new HydraulicPlant("hydraulique 1"), hp2 = new HydraulicPlant("hydraulique 2");
         GasPlant gp1 = new GasPlant("gaz 1");
         SubStation s1 = new SubStation("station 1"), s2 = new SubStation("station 2"), s3 = new SubStation("station 3");
@@ -425,15 +370,15 @@ public class Network {
         Group g4 = new Group(100000, "groupe 4", "test"), g5 = new Group(200000, "groupe 5", "test"),
                 g6 = new Group(250000, "groupe 6", "test");
         Group g7 = new Group(250000, "groupe 7", "test"), g8 = new Group(250000, "groupe 8", "test");
-        Node tab[] = { np, hp1, hp2, s1, s2, s3, g1, g2, g3, g4, g5, g6, g7, gp1, g8 };
+        Node tab[] = { np1, np2, np3, hp1, hp2, s1, s2, s3, g1, g2, g3, g4, g5, g6, g7, gp1, g8 };
         nodes.addAll(Arrays.asList(tab));
         addGroupsToStation(s1, g1, g2);
         addGroupsToStation(s2, g3, g4, g5);
         addGroupsToStation(s3, g6, g7);
-        addPlantsToStation(s1, np, gp1);
-        addPlantsToStation(s2, np, gp1, hp2);
-        addPlantsToStation(s3, np, hp2);
-        ConsumptionMacro.initNetwork(this);
+        addPlantsToStation(s1, np1, gp1);
+        addPlantsToStation(s2, np2, gp1, hp2);
+        addPlantsToStation(s3, np3, hp2);
+        ConsumptionMacro.initFromNetwork(this);
 
     }
 
@@ -506,7 +451,68 @@ public class Network {
         }
         return numbers;
     }
-
+    /**
+     * Retourne les éléments du réseau qui sont des instances des classes données en paramètre. Cette fonction n'est à utiliser
+     * que si on veut des éléments de plusieurs classes, les alternatives getSubStations, getPowerPlants et getGroups sont optimisées
+     * pour leurs cas d'utilisations.
+     * @param classes les classes dont on veut les instances.
+     * @return les éléments du réseau instances d'une classe de classes.
+     * @see #getSubStation()
+     * @see #getPowerPlants()
+     * @see #getGroups()
+     */
+    public ArrayList<Node> getNodesInstancesOf(Class... classes){
+        ArrayList<Node>  elements = new ArrayList<>();
+        for (Node n : nodes){
+            for (int i = 0; i < classes.length; i++){
+                Class c = classes[i];
+                if (c.isAssignableFrom(n.getClass())){
+                    elements.add(n);
+                }
+            }
+        }
+        return elements;
+    }
+    /**
+     * Retourne les sous-station du réseau. On évite de réutiliser getNodesInstancesOf et on préfère tirer avantage du fait que this.nodes est triée.
+     * @return les éléments de nodes qui sont aussi des instances de SubStation.
+     */
+    public ArrayList<SubStation> getSubStations(){
+        ArrayList<SubStation> stations = new ArrayList<>();
+        int i = nodes.size()-1;
+        Node n = nodes.get(i);
+        while (i >= 0 && n instanceof SubStation){
+            stations.add((SubStation)n);
+            n = nodes.get(--i);
+        }
+        return stations;
+    }
+    /**
+     * @return les centrales du réseau.
+     */
+    public ArrayList<PowerPlant> getPowerPlants(){
+        ArrayList<PowerPlant> plants = new ArrayList<>();
+        int i = 0;
+        Node n = nodes.get(0);
+        while (i < nodes.size() && n instanceof PowerPlant){
+            plants.add((PowerPlant)n);
+            n = nodes.get(++i);
+        }
+        return plants;
+    }
+    /**
+     * @return les groupes du réseau.
+     */
+    public ArrayList<Group> getGroups(){
+        // on pourrait certainement optimiser cette recherche-là aussi, à voir.
+        // En attendant on se contente d'utiliser getNodesInstancesOf.
+        ArrayList<Node> groupNodes = getNodesInstancesOf(Group.class);
+        ArrayList<Group> groups = new ArrayList<>(groupNodes.size());
+        for (Node n : groupNodes){
+            groups.add((Group)n);
+        }
+        return groups;
+    }
     /**
      * @return la production totale du réseau, correspondant à celle de toutes les centrales connectées. 
      */
@@ -527,19 +533,4 @@ public class Network {
     public ArrayList<Node> getNodes() {
         return nodes.getArray();
     }
-
-    //La solution la plus pertinente me parait au final de créer des getters pour les différents types de nodes
-    //Ainsi on évite la duplication de code lors de ce besoin dans les différents modules
-    // Mais on s'assure que les données soient synchronisées
-    public ArrayList<SubStation> getSubStation() {
-        ArrayList<SubStation> substation = new ArrayList<SubStation>();
-        for (Node node : nodes) {
-            if (node instanceof SubStation) {
-                substation.add((SubStation) node);
-            }
-        }
-
-        return substation;
-    }
-
 }

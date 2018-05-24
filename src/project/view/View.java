@@ -69,8 +69,9 @@ public class View {
                 }
                 for (Group g : ((SubStation)n).getGroups()){
                     str += "| --> " + g.getName() + " " + g.getConsumption()+" kW" + "\n";
-                    str += "| --> " + g.getName() + " dans 1 tours " + g.getFutureConsumption(1) + " kW" + "\n";
-                    str += "| --> " + g.getName() + " dans 2 tours " + g.getFutureConsumption(2) + " kW" + "\n";
+                    str += "| --> " + g.getName() + " dans -1 tours " + g.getConsumptionWithOffset(-1) + " kW" + "\n";
+                    str += "| --> " + g.getName() + " dans 0 tours " + g.getConsumptionWithOffset(0) + " kW" + "\n";
+                    str += "| --> " + g.getName() + " dans 1 tours " + g.getConsumptionWithOffset(1) + " kW" + "\n";
                 }
                 str += "Total IN: " + ((SubStation) n).getPowerIn() + " | Total OUT: " + ((SubStation) n).getPowerOut()
                         + "\n";
@@ -84,44 +85,44 @@ public class View {
                 str += n.getName() + "\n";
             }
         }
-        for(ClusterGroup cl : RandomMacro.getClusterList()) {
-        	int i=0;
-        }
         str+="\n \n \n";
-        
+
+
         return str;
     }
 
     public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 
-        Network myNetwork = new Network(0, 0, 0);
-
+        Network myNetwork = new Network();
         View myView = new View(myNetwork);
         // les flux sont supposés être libérés après usage afin d'éviter des fuites de ressources mais fermer System.in semble
         // une mauvaise habitude, donc on se contente de préciser que l'on sait ce qu'on fait
         @SuppressWarnings("resource")
         Scanner sc = new Scanner(System.in);
 
+        int i=0;
         while (true) {
             myNetwork.update();
             myView.updateView();
+            if (i > 18){
+                System.out.print("entrer un id de groupe (0 pour fermer) : ");
+                int id = sc.nextInt();
+                if (id == 0) {
+                    myView.deleteView();
+                    System.exit(0);
+                }
+                System.out.print("entrer une conso pour le groupe : ");
+                int conso = sc.nextInt();
 
-            System.out.print("entrer un id de groupe (0 pour fermer) : ");
-            int id = sc.nextInt();
-            if (id == 0) {
-                myView.deleteView();
-                System.exit(0);
-            }
-            System.out.print("entrer une conso pour le groupe : ");
-            int conso = sc.nextInt();
-
-            for (Node n : myNetwork.getNodes()) {
-                if (n.getClass().equals(Group.class) && ((Group) n).getId() == id) {
-                    ((Group) n).updateConsumption(conso);
+                for (Node n : myNetwork.getNodes()) {
+                    if (n.getClass().equals(Group.class) && ((Group) n).getId() == id) {
+                        ((Group) n).setOriginalconsumption(conso);
+                    }
                 }
             }
             myNetwork.handleErrors(myNetwork.analyze());
-            
+            myNetwork.predictFutureAndReact();
+            i++;
         }
     }
 }

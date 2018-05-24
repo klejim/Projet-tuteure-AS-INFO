@@ -43,6 +43,7 @@ public class RandomMacro {
 		rand = new Random();
 		randTurnLeft = RANDPERIOD - 1;
 	}
+
 	
 	/**
 	 * Initialisation des clustersLists, et de la première randomisation
@@ -54,6 +55,7 @@ public class RandomMacro {
 		/* ancien code avant l'intégration du parser
 		ArrayList<SubStation> subStation = net.getSubStation();
 		
+
 		for (SubStation sub : subStation) {
 			ArrayList<Group> group = sub.getGroups();
 			clusterList.add(new ClusterGroup(group));

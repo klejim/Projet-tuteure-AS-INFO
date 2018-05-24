@@ -18,7 +18,7 @@ public class Test {
     public static void main(String... args) {
         Network network = null;
         try {
-            network = new Network(1, 2, 10);
+            network = new Network();
         } catch (IOException e) {
             System.out.println("Erreur de lecture du fichier config");
         }

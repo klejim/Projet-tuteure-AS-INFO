@@ -128,13 +128,14 @@ public class Group extends Node {
     }
 
     /**
-     * Met à jour la consommation d'un groupe via updateConsumption suivant un facteur
+     * Retourne la consommation réelle d'un groupe (prenant en compte le facteur de variation)
+     * TODO : un facteur aléatoire
      * @see SubStation
      * @see ConsumptionMacro
      */
-    public int getFutureConsumption(int ahead_Turn) {
+    public int getConsumptionWithOffset(int offset) {
         if (this.consumpType != null) {
-            return (int) (ConsumptionMacro.getConsumFactor(this.consumpType, ahead_Turn) * this.originalconsumption);
+            return (int) (ConsumptionMacro.getConsumFactor(this.consumpType, offset) * this.originalconsumption);
         }
 
         else {

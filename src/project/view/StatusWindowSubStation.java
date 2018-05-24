@@ -113,7 +113,7 @@ public class StatusWindowSubStation extends StatusWindowElement {
 
 	public static void main(String[] args) throws InterruptedException, FileNotFoundException {
 
-		Network myNetwork = new Network(0, 0, 0);
+		Network myNetwork = new Network();
 
 		ArrayList<StatusWindowSubStation> stations = new ArrayList<>();
 		ArrayList<PowerPlant> plants = new ArrayList<>();

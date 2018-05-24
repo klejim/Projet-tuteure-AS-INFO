@@ -4,7 +4,7 @@ package project.network;
  *
  * @author Jimenez
  */
-public class PowerError extends NetworkError{
+abstract public class PowerError extends NetworkError{
     private final int power;
     private final SubStation station;
     PowerError(SubStation s, int p){
