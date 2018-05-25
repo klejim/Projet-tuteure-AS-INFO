@@ -1,6 +1,6 @@
 package project.network.error;
 
-import project.network.SubStation;
+import project.network.base.SubStation;
 
 /**
  *

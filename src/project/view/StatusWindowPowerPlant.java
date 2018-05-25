@@ -5,12 +5,12 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import project.network.GasPlant;
-import project.network.HydraulicPlant;
-import project.network.Line;
-import project.network.NuclearPlant;
-import project.network.PowerPlant;
-import project.network.PowerPlant.State;
+import project.network.base.GasPlant;
+import project.network.base.HydraulicPlant;
+import project.network.base.Line;
+import project.network.base.NuclearPlant;
+import project.network.base.PowerPlant;
+import project.network.base.PowerPlant.State;
 
 /**
  * Classe qui décrit la vue d'une centrale électrique.

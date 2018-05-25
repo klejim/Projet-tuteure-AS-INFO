@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import project.network.Network;
+import project.network.base.Network;
 
 /**
  * Classe abstraite qui représente un élément dans la fenêtre InputWindow. 

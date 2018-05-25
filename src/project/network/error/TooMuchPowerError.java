@@ -1,9 +1,9 @@
 package project.network.error;
 
 import java.util.ArrayList;
-import project.network.Line;
-import project.network.PowerPlant;
-import project.network.SubStation;
+import project.network.base.Line;
+import project.network.base.PowerPlant;
+import project.network.base.SubStation;
 
 /**
  *

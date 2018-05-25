@@ -1,5 +1,11 @@
 package project.view;
 
+import project.network.base.SubStation;
+import project.network.base.Group;
+import project.network.base.Node;
+import project.network.base.PowerPlant;
+import project.network.base.Line;
+import project.network.base.Network;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.io.FileNotFoundException;
@@ -10,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import project.network.*;
 
 /**
  * Classe qui décrit la vue d'une sous-station.

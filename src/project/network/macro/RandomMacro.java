@@ -5,10 +5,10 @@ import java.util.Random;
 
 import project.network.macro.ClusterGroup;
 import project.network.macro.ConsumptionMacro;
-import project.network.Group;
-import project.network.Network;
-import project.network.Network;
-import project.network.SubStation;
+import project.network.base.Group;
+import project.network.base.Network;
+import project.network.base.Network;
+import project.network.base.SubStation;
 
 /**
  * Classe Randomisant la consommation des Groupes suivant une gaussienne.

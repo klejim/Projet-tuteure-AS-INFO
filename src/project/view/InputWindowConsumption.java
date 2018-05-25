@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 
-import project.network.Network;
-import project.network.Node;
-import project.network.Group;
+import project.network.base.Network;
+import project.network.base.Node;
+import project.network.base.Group;
 
 public class InputWindowConsumption extends InputWindowElement implements ActionListener {
 

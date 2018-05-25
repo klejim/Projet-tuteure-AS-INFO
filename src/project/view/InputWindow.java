@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import project.network.Network;
+import project.network.base.Network;
 
 /**
  * Classe qui génère une fenêtre pour les entrées utilisateur. Cette fenêtre peut regrouper plusieurs interfaces utilisateur

@@ -5,7 +5,7 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import project.network.Network;
+import project.network.base.Network;
 /**
  * Compteur d'itérations du simulateur. Fonctionne avec un compteur local synchronisé à la création de la vue;
  * @author yoann

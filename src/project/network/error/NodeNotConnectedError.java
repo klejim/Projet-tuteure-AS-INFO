@@ -1,6 +1,6 @@
 package project.network.error;
 
-import project.network.Node;
+import project.network.base.Node;
 
 /**
  *

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import project.network.Group;
+import project.network.base.Group;
 
 /**
  * Classe qui décrit la vue d'un élément groupe de consommation

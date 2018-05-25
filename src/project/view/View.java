@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import project.network.macro.ClusterGroup;
-import project.network.Group;
-import project.network.Line;
-import project.network.Network;
-import project.network.Node;
-import project.network.PowerPlant;
+import project.network.base.Group;
+import project.network.base.Line;
+import project.network.base.Network;
+import project.network.base.Node;
+import project.network.base.PowerPlant;
 import project.network.macro.RandomMacro;
-import project.network.SubStation;
+import project.network.base.SubStation;
 
 /**
  * Classe chargée du formatage et de l'affichage des données du réseau.

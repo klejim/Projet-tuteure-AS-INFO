@@ -1,5 +1,10 @@
 package project.view;
 
+import project.network.base.SubStation;
+import project.network.base.Group;
+import project.network.base.Node;
+import project.network.base.Line;
+import project.network.base.Network;
 import java.awt.GridLayout;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -7,7 +12,6 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import project.network.*;
 
 /**
  * Classe gérant la fenêtre de statut de réseau.

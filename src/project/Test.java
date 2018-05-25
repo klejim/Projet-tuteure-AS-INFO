@@ -2,12 +2,12 @@ package project;
 
 import java.io.IOException;
 import java.util.Arrays;
-import project.network.Group;
-import project.network.Network;
-import project.network.Node;
-import project.network.NuclearPlant;
-import project.network.PowerPlant;
-import project.network.SubStation;
+import project.network.base.Group;
+import project.network.base.Network;
+import project.network.base.Node;
+import project.network.base.NuclearPlant;
+import project.network.base.PowerPlant;
+import project.network.base.SubStation;
 import project.view.View;
 
 /**

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import project.network.Network;
+import project.network.base.Network;
 import project.network.macro.RandomMacro;
 
 /**
