@@ -1,4 +1,4 @@
-package project.network;
+package project.network.error;
 
 /**
  *

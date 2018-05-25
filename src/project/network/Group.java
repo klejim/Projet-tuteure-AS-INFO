@@ -1,5 +1,7 @@
 package project.network;
 
+import project.network.macro.ConsumptionMacro;
+
 /**
  * Classe représentant un groupe de consommation (ou groupe de foyers, ou encore groupe d'habitations).
  * @author Jimenez

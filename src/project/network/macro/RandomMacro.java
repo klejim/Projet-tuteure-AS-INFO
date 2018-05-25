@@ -1,11 +1,12 @@
-package project.network;
+package project.network.macro;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import project.network.ClusterGroup;
-import project.network.ConsumptionMacro;
+import project.network.macro.ClusterGroup;
+import project.network.macro.ConsumptionMacro;
 import project.network.Group;
+import project.network.Network;
 import project.network.Network;
 import project.network.SubStation;
 

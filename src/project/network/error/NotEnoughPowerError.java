@@ -1,13 +1,16 @@
-package project.network;
+package project.network.error;
 
 import java.util.ArrayList;
+import project.network.Line;
+import project.network.PowerPlant;
+import project.network.SubStation;
 
 /**
  *
  * @author Jimenez
  */
 public class NotEnoughPowerError extends PowerError{
-    NotEnoughPowerError(SubStation s, int p){
+    public NotEnoughPowerError(SubStation s, int p){
         super(s, p);
     }
     /**

@@ -1,4 +1,4 @@
-package project.network;
+package project.network.error;
 
 import java.util.Comparator;
 
@@ -36,7 +36,7 @@ abstract public class NetworkError {
     };
     private boolean solved;
     private String message;
-    NetworkError(){
+    public NetworkError(){
         solved = false;
         message = "";
     }

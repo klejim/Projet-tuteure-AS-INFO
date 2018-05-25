@@ -1,10 +1,11 @@
-package project.network;
+package project.network.macro;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
-import project.network.RandomMacro;
+import project.network.Network;
+import project.network.macro.RandomMacro;
 
 /**
  * Classe servant à effectuer les variations de consommations des Groupes

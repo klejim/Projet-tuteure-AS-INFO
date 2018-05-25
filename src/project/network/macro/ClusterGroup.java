@@ -1,6 +1,7 @@
-package project.network;
+package project.network.macro;
 
 import java.util.ArrayList;
+import project.network.Group;
 
 /**
  * Classe servant à regrouper les Groupes en vue de leur affecter un facteur de consommation aléatoire.

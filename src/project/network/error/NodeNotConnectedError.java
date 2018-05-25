@@ -1,4 +1,6 @@
-package project.network;
+package project.network.error;
+
+import project.network.Node;
 
 /**
  *
@@ -6,7 +8,7 @@ package project.network;
  */
 public class NodeNotConnectedError extends NetworkError{
     private final Node node;
-    NodeNotConnectedError(Node n){
+    public NodeNotConnectedError(Node n){
         super();
         node = n;
     }

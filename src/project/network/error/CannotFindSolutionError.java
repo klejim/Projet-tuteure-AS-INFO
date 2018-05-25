@@ -1,4 +1,4 @@
-package project.network;
+package project.network.error;
 
 /**
  *
@@ -6,7 +6,7 @@ package project.network;
  */
 public class CannotFindSolutionError extends CriticalNetworkError {
     private final NetworkError error;
-    CannotFindSolutionError(NetworkError e){
+    public CannotFindSolutionError(NetworkError e){
         super();
         error = e;
     }

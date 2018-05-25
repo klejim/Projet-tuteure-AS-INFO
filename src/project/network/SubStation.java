@@ -25,7 +25,7 @@ public class SubStation extends Node{
      * Constructeur.
      * @param s une chaîne contenant le nom de la station.
      */
-    SubStation(String s){
+    public SubStation(String s){
         this();
         setName(s);
     }
@@ -35,7 +35,7 @@ public class SubStation extends Node{
      * @param plants les centrales auxquelles cette station est liée.
      * @param gr les groupes auxquels cette station est liée.
      */
-    SubStation(String s, PowerPlant[] plants, Group[] gr){
+    public SubStation(String s, PowerPlant[] plants, Group[] gr){
         this(s);
         for (PowerPlant p : plants){
             Line line = new Line(p, this);
@@ -56,14 +56,14 @@ public class SubStation extends Node{
     /**
      * Met à jour la puissance d'entrée à partir des puissances venant de chaque lignes de transmission.
      */
-    void updateInput(){
+    public void updateInput(){
         powerIn = 0;
         lines.forEach(line -> powerIn += line.getActivePower());
     }
     /**
      * Met à jour la puissance de sortie à partir de la demande de chaque groupe alimenté par la station.
      */
-    void updateOutput(){
+    public void updateOutput(){
         powerOut = 0;
         groups.forEach(g -> powerOut += g.getConsumption());
     }
@@ -82,7 +82,7 @@ public class SubStation extends Node{
      * @return la puissance restituée ou 0
      * @see Line#substractPower(int) 
      */
-    int giveBackPower(Line line, int p){
+    public int giveBackPower(Line line, int p){
         int returned = line.substractPower(p);
         // on pourrait se contenter de mettre à jour la puissance disponible de la centrale au prochain début de cycle
         // mais il est mieux de le faire maintenant car elle pourrait être nécessaire pour gérer une autre erreur.

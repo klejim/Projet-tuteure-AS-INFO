@@ -5,13 +5,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import project.network.ClusterGroup;
+import project.network.macro.ClusterGroup;
 import project.network.Group;
 import project.network.Line;
 import project.network.Network;
 import project.network.Node;
 import project.network.PowerPlant;
-import project.network.RandomMacro;
+import project.network.macro.RandomMacro;
 import project.network.SubStation;
 
 /**

@@ -1,4 +1,6 @@
-package project.network;
+package project.network.error;
+
+import project.network.SubStation;
 
 /**
  *
@@ -7,7 +9,7 @@ package project.network;
 abstract public class PowerError extends NetworkError{
     private final int power;
     private final SubStation station;
-    PowerError(SubStation s, int p){
+    public PowerError(SubStation s, int p){
         super();
         power = p;
         station = s;

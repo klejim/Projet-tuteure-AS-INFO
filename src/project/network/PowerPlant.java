@@ -12,11 +12,11 @@ abstract public class PowerPlant extends Node{
     public enum State {ON, OFF, STARTING};
     /* quelques comparateurs utilisés dans la gestion des erreurs */
     // comparaison sur la puissance disponible
-    static final Comparator<PowerPlant> powerComparator = (p1, p2)->{
+    public static final Comparator<PowerPlant> powerComparator = (p1, p2)->{
             return p2.getActivePower() - p1.getActivePower();
         };
     // ON  < STARTING < OFF | à état égal on compare la puissance
-    static final Comparator<PowerPlant> stateAndPowerComparator = (p1, p2)->{
+    public static final Comparator<PowerPlant> stateAndPowerComparator = (p1, p2)->{
         int cmp = 0;
         if (p1.getState() == p2.getState()){
             cmp = PowerPlant.powerComparator.compare(p1, p2);
@@ -58,7 +58,7 @@ abstract public class PowerPlant extends Node{
      * @param p la puissance produite par la centrale
      * @param sd le délai de démarrage pour la centrale
      */
-    PowerPlant(String s, int p,int sd){
+    public PowerPlant(String s, int p,int sd){
         this();
         setName(s);
         power = p;
@@ -146,7 +146,7 @@ abstract public class PowerPlant extends Node{
      * Arrête la centrale si c'est possible.Met à jour les lignes et stations correspondantes.
      * @return true si la centrale a été arrêtée et false sinon.
      */
-    boolean stop(){
+    public boolean stop(){
         boolean stopped = false;
         if (state == State.ON || state == State.STARTING){
             state = State.OFF;
@@ -164,7 +164,7 @@ abstract public class PowerPlant extends Node{
      */
     //Il faudrait passer started en int éventuellement, pour distinguer ON OFF & STARTING
     //
-    boolean start(){
+    public boolean start(){
         boolean started = false;
         if (state == State.OFF){
         	if(this.startDelay==0){
