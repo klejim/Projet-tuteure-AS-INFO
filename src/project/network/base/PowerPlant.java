@@ -40,7 +40,9 @@ abstract public class PowerPlant extends Node{
             return p1.startDelay - p2.startDelay;
         };
     private State state;
-    private int power, activePower, startDelay;
+    private int power;
+    private int activePower;
+    private int startDelay;
     private ArrayList<Line> lines;
     private int framesSinceStart;
     

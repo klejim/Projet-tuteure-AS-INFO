@@ -32,7 +32,8 @@ public class Line {
             return cmp;
         };
     public static int nextId = 0;
-    private int id, power;
+    private int id;
+    private int power;
     private PowerPlant in;
     private SubStation out;
     private State state;

@@ -10,7 +10,8 @@ import java.util.Arrays;
  * @author Jimenez
  */
 public class SubStation extends Node{
-    private int powerIn, powerOut;
+    private int powerIn;
+    private int powerOut;
     private ArrayList<Group> groups;
     private ArrayList<Line> lines;
     /**

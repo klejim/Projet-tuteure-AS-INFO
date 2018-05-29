@@ -28,7 +28,8 @@ import project.util.SortedArrayList;
  */
 public class Network {
     private HashMap<String, HashMap<String, Object>> config; // contenu du fichier config
-    private int production, consumption;
+    private int production;
+    private int consumption;
     private SortedArrayList<Node> nodes;
 
     public Network() throws FileNotFoundException {
