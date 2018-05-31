@@ -2,35 +2,42 @@
 name = "groupe 5";
 consumption = 200000;
 clustergroup = 6;
+pattern="test";
 
 ### GROUP_6 ###
 name = "groupe 6";
 consumption = 220000;
 clustergroup = 1;
+pattern = "pic";
 
 ### GROUP_1 ###
 name = "groupe 1";
 consumption = 250000;
 clustergroup = 1;
+pattern = "test";
 
 ### GROUP_2 ###
 name = "groupe 2";
 consumption = 150000;
 clustergroup = 2;
+pattern = "test";
 
 ### GROUP_3 ###
 name = "groupe 3";
 consumption = 200000;
+pattern = "pic";
 
 ### GROUP_4 ###
 name = "groupe 4";
 consumption = 150000;
 clustergroup = 3;
+pattern = "pic";
 
 ### GROUP_4 ###
 name = "groupe 4";
 consumption = 150000;
 clustergroup = 3;
+pattern = "pic";
 
 ### PLANT_1 ###
 type = "NUCLEAR";

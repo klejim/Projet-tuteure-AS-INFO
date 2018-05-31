@@ -100,9 +100,13 @@ public class Network {
                 
                 if (group.containsKey("name") && group.containsKey("consumption")) {
                     String name = (String) group.get("name");
-                    
                     int consumption=(((Double) group.get("consumption"))).intValue();
-                    Group g=new Group(consumption, name, "test");
+                    String consumptionPattern="test";
+                    if(group.containsKey("pattern")){
+                    	consumptionPattern= (String) group.get("pattern");
+                    }
+                    
+                    Group g=new Group(consumption, name, consumptionPattern);
                     this.nodes.add(g);
                     groupsMap.put(key, g);
                     int idCluster=0;
