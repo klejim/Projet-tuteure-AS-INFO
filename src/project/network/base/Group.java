@@ -43,7 +43,7 @@ public class Group extends Node {
     /**
      * @return the originalconsumption
      */
-    public int getOriginalconsumption() {
+    public int getOriginalConsumption() {
         return originalconsumption;
     }
 

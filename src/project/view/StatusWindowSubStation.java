@@ -9,6 +9,7 @@ import project.network.base.Network;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.io.FileNotFoundException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -111,7 +112,9 @@ public class StatusWindowSubStation extends StatusWindowElement {
 		data[0] = (name);
 		data[1] = "Pin: " + pin/1000 + " MW";
 		data[2] = "Pout: " + pout/1000 + " MW";
-		data[3] = (pin >= pout ? "OK" : "P. INSUFISANTE");
+                double ratio = (double)pin/pout * 100;
+                DecimalFormat df = new DecimalFormat("##0.##");
+		data[3] = (ratio >= 100.0 ? "OK" : "P. INSUFISANTE (" + df.format(ratio) + "%)");
 
 		return data;
 	}

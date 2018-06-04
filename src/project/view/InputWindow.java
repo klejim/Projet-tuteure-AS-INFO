@@ -1,10 +1,14 @@
 package project.view;
 
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import project.Test;
 
 import project.network.base.Network;
 
@@ -16,7 +20,7 @@ import project.network.base.Network;
  */
 
 @SuppressWarnings("serial")
-public class InputWindow extends JFrame {
+public class InputWindow extends JFrame implements WindowListener{
 	
 	// Réseau associé
 	private Network modelNetwork;
@@ -36,6 +40,7 @@ public class InputWindow extends JFrame {
 		this.inputElements = new ArrayList<>();
 		createElements();
 		buildWindow();	
+                addWindowListener(this);
 	}
 	
 	
@@ -107,5 +112,46 @@ public class InputWindow extends JFrame {
 		this.validate();
 		this.repaint();		
 	}
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        System.out.println("closing");
+        try{
+            Test.printResult(this.modelNetwork, Test.finalIter);
+        }
+        catch (IOException exc){
+            
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        
+    }
 
 }

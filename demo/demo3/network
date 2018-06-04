@@ -18,4 +18,4 @@ type = "NUCLEAR";
 ### SUBSTATION_1 ###
 name = "station 1";
 groups = {GROUP_1};
-plants = {PLANT_1};
+plants = {PLANT_1, PLANT_2, PLANT_3};

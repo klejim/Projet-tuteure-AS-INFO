@@ -290,7 +290,7 @@ public class Network {
         for (SubStation station : stations){
             // 1 itération
             for (Group group: station.getGroups()){
-                group.setConsumption((int)(group.getConsumptionWithOffset(1)*1.10));
+                group.setConsumption((int)(group.getConsumptionWithOffset(1)*1.15));
             }
             station.updateOutput();
             if (station.getDiff() != 0){

@@ -6,12 +6,16 @@ import project.network.base.Node;
 import project.network.base.Line;
 import project.network.base.Network;
 import java.awt.GridLayout;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import project.Test;
 
 /**
  * Classe gérant la fenêtre de statut de réseau.
@@ -28,7 +32,7 @@ import javax.swing.JPanel;
  * TODO : Tester un autre type de Layout pour la fenêtre 
  */
 @SuppressWarnings("serial")
-public class StatusWindow extends JFrame {
+public class StatusWindow extends JFrame implements WindowListener{
 
 	private Network modelNetwork;
 	private ArrayList<StatusWindowSubStation> subStations;
@@ -47,6 +51,7 @@ public class StatusWindow extends JFrame {
 		buildWindow();
 
 		TESTNetworkElements = new HashMap<>();
+                addWindowListener(this);
 	}
 
 	/**
@@ -158,5 +163,45 @@ public class StatusWindow extends JFrame {
 			myWindow.updateDisplay();
 		}
 	}
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        System.out.println("closing");
+        try{
+            Test.printResult(this.modelNetwork, Test.finalIter);
+        }
+        catch (IOException exc){
+            
+        }
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+    }
+
+    @Override
+    public void windowIconified(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowActivated(WindowEvent e) {
+        
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent e) {
+        
+    }
 
 }

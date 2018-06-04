@@ -1,0 +1,68 @@
+projet : résumé des features:
+1. Analyse syntaxique de fichier de configuration
+    implémentation d'un parser générique permettant de lire des fichiers de configuration au format texte.
+    le parser lit un fichier et retourne un tableau associatif section/variables où variables est un tableau associatif nom/valeur.
+
+2. Représentation d'un réseau
+    stations, groupes et centrales sont des classes filles de Node
+    éléments stockés dans un arraylist de Nodes
+    station:
+        lines : lignes d'alimentation
+        groups : groupes qu'elle alimente
+    centrale: 
+        puissance
+        état
+        lines : lignes de transmission reliées à la centrale
+    ligne:
+        lien stations/centrales
+        état (ON, OFF, WAITING)
+    groupe:
+        consommation
+        
+3. Initialisation d'un réseau à partir d'une configuration
+    création du réseau et des éléments à partir de la lecture d'un fichier au format reconnu par le parser
+
+4. Maintient de l'alimentation des sous-stations
+    à chaque itération:
+        analyse de chaque centrales et génération d'erreurs
+            manque de puissance:
+                avant de générer l'erreur on vérifie qu'elle ne sera pas comblée par des centrales qui viendront plus tard en ligne
+                si une partie seulement est comblée par les centrales à venir on génère une erreur mais seulement pour la différence (si rien n'est comblé on génère évidemment l'erreur)
+            trop: rien à expliquer
+            non connecté:
+                stations: toujours connectées (base du réseau)
+                groupes: connectées si reliées à une station
+                centrales: connectées si reliées à une station
+        types d'erreurs : manque de puissance, trop de puissance, elt non connecté
+        résolution des erreurs:
+            ordre: libération d'abord, puis demande de puissance (permet de retirer de la puissance d'une station et de la redistribuer dans une autre en un tour)
+            trop: on cherche à libérer de la puissance
+                préférence: centrales rapides à démarrer puis celles ayant le moins de puissance (pour tenter de les éteindre)
+                si la centrale après libération n'est plus utilisée on l'éteint
+            pas assez: on cherche à prendre de la puissance
+                préférence: ON < STARTING < OFF puis puissance la plus grande (? sans doute pour minimiser le nombre de centrales utilisées)
+                correction partielle possible si pas assez de puissance dans les centrales
+            élément non connecté: pas de correction automatique
+            si une erreur est résolue on la marque solved
+            sinon on génère une CannotFindSolutionError référençant cette erreur
+            on fait passer l'ensemble des erreurs (traitées+générées) à la vue (qui n'en fait rien...)
+        optimisation de l'utilisation des centrales
+            on s'assure qu'on utilise le nombre minimum de centrales pour alimenter la station
+            ex: si une station est alimentée par une centrale nucléaire et une à gas mais que la nucléaire suffit on va libérer la puissance de l'autre (et l'éteindre si ça la rend inutile)
+            on préfère garder les "grosses centrales" allumées car les petites (hydrau+gaz) sont rapides à rallumer
+
+5. Variation de la consommation
+    définition de modèles de consommation dans le fichier config qui sont des tableaux de facteurs (ils décrivent donc la forme de la courbe voulue)
+    à chaque itération on avance d'une case
+    la consommation est affectée par un facteur random (demander à baptiste définition claire)
+    voir avec baptiste si j'ai oublié quelque chose
+    
+6. Gestion prévisionnelle
+    à chaque itération:
+        estimation de la consommation du tour prochain à partir du modèle
+        l'estimation est majorée de 10% pour tenir compte des imprévus
+        gestion des écarts de consommations selon la méthode décrite plus haut
+        (WIP) estimation du besoin dans les itérations à venir
+            si le besoin dépasse la capacité actuelle des centrales on en allume d'autres
+
+7. voir Yoann

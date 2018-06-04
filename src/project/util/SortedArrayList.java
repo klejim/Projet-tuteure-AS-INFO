@@ -50,9 +50,25 @@ public class SortedArrayList<T> extends ArrayList<T>{
 
     @Override
     public boolean add(T e) {
+        if (this.array.isEmpty()){
+            this.array.add(e);
+        }
+        else{
+            int i;
+            for (i=0;i<this.array.size();i++){
+                T elt = this.array.get(i);
+                boolean ok = false;
+                if (this.comparator.compare(e, elt) <= 0){
+                    ok = true;
+                }
+                if (ok)break;
+            }
+            this.array.add(i, e);
+        }
+        /*
         int i = Collections.binarySearch(array, e, comparator);
         i = i > 0 ? i : 0;
-        array.add(i, e);
+        array.add(i, e);*/
         return true;
     }
     

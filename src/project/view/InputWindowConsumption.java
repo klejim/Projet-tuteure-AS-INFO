@@ -115,7 +115,7 @@ public class InputWindowConsumption extends InputWindowElement implements Action
 
 		for(Node node : this.model.getNodes()) {
 			if(node.getClass().equals(Group.class)) {
-				this.consumptions.put(node.getId(),((Group)node).getConsumption()/1000);
+				this.consumptions.put(node.getId(),((Group)node).getOriginalConsumption()/1000);
 			}
 		}
 

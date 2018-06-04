@@ -4,14 +4,13 @@ import java.awt.event.WindowEvent;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import project.Test;
 
-import project.network.macro.ClusterGroup;
 import project.network.base.Group;
 import project.network.base.Line;
 import project.network.base.Network;
 import project.network.base.Node;
 import project.network.base.PowerPlant;
-import project.network.macro.RandomMacro;
 import project.network.base.SubStation;
 
 /**
@@ -35,6 +34,8 @@ public class View {
         
         this.inputWin = new InputWindow(network);
         this.inputWin.createDisplay();
+        
+        
     }
 
     /**
