@@ -22,8 +22,8 @@ import project.view.View;
  * @author Jimenez
  */
 public class Test {
-    public static final boolean JUMP_TO_BALANCED = false;
-    public static final int DELAY = 1000; // en ms
+    public static final boolean JUMP_TO_BALANCED = true;
+    public static final int DELAY = 2000; // en ms
     public static HashMap<SubStation, Integer> testMap;
     public static int finalIter;
     static{

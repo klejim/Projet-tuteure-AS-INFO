@@ -1,7 +1,8 @@
 ### GROUP_1 ###
 name = "groupe 1";
-consumption = 2000;
-pattern = "test";
+consumption = 3000;
+clustergroup = 1;
+pattern = "stable";
 
 ### PLANT_1 ###
 name = "centrale hydraulique";
@@ -18,4 +19,4 @@ type = "NUCLEAR";
 ### SUBSTATION_1 ###
 name = "station 1";
 groups = {GROUP_1};
-plants = {PLANT_1};
+plants = {PLANT_1, PLANT_2, PLANT_3};

@@ -7,7 +7,7 @@ package project.network.base;
  */
 public class HydraulicPlant extends PowerPlant{
     public static final int DEFAULT_POWER = 5000;
-    public static final int DEFAULT_DELAY = 0;
+    public static final int DEFAULT_DELAY = 1;
     /**
      * Constructeur.
      * @param s le nom de la centrale.

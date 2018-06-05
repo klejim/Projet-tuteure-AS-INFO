@@ -207,3 +207,120 @@ station 1 : 0.0
 station 1 : 0.0
 
 
+***Pourcentages de réussite***
+station 1 : 0.0
+
+
+***Pourcentages de réussite***
+station 3 : 0.2903225806451613
+station 2 : 0.3870967741935484
+station 1 : 0.2903225806451613
+
+
+***Pourcentages de réussite***
+station 3 : 0.9552772808586762
+station 2 : 0.960644007155635
+station 1 : 0.9445438282647585
+
+
+***Pourcentages de réussite***
+station 1 : 0.9256756756756757
+
+
+***Pourcentages de réussite***
+station 1 : 0.8888888888888888
+
+
+***Pourcentages de réussite***
+station 1 : 0.7777777777777778
+
+
+***Pourcentages de réussite***
+station 1 : 0.5384615384615384
+
+
+***Pourcentages de réussite***
+station 1 : 0.0
+
+
+***Pourcentages de réussite***
+station 1 : 0.2
+
+
+***Pourcentages de réussite***
+station 1 : 0.275
+
+
+***Pourcentages de réussite***
+station 1 : 0.4375
+
+
+***Pourcentages de réussite***
+station 1 : 0.0
+
+
+***Pourcentages de réussite***
+station 1 : 0.0
+
+
+***Pourcentages de réussite***
+station 1 : 0.0
+
+
+***Pourcentages de réussite***
+station 1 : 0.8267857142857142
+
+
+***Pourcentages de réussite***
+station 1 : 0.0
+
+
+***Pourcentages de réussite***
+station 3 : 0.13636363636363635
+station 2 : 0.13636363636363635
+station 1 : 0.13636363636363635
+
+
+***Pourcentages de réussite***
+station 2 : 0.0
+
+
+***Pourcentages de réussite***
+station 2 : 0.23529411764705882
+
+
+***Pourcentages de réussite***
+station 2 : 0.0
+
+
+***Pourcentages de réussite***
+station 2 : 0.07407407407407407
+
+
+***Pourcentages de réussite***
+station 3 : 0.30357142857142855
+station 1 : 0.05357142857142857
+
+
+***Pourcentages de réussite***
+station 3 : 0.038461538461538464
+station 1 : 0.0
+
+
+***Pourcentages de réussite***
+station 3 : 0.08695652173913043
+station 1 : 0.0
+
+
+***Pourcentages de réussite***
+station 1 : 0.5572139303482587
+
+
+***Pourcentages de réussite***
+station 1 : 0.8846153846153846
+
+
+***Pourcentages de réussite***
+station 1 : 0.7608695652173914
+
+

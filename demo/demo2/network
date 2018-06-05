@@ -1,61 +1,23 @@
-### GROUP_5 ###
-name = "groupe 5";
-consumption = 200000;
-clustergroup = 6;
-pattern="test";
+### SUBSTATION_2 ###
+name = "station 2";
+groups = {GROUP_3, GROUP_4};
+plants = {PLANT_7, PLANT_1};
 
-### GROUP_6 ###
-name = "groupe 6";
-consumption = 220000;
-clustergroup = 1;
-pattern = "test";
-
-### GROUP_1 ###
-name = "groupe 1";
+### GROUP_3 ###
+name = "groupe 3";
 consumption = 2000000;
-clustergroup = 1;
 pattern = "test";
-
-### GROUP_2 ###
-name = "groupe 2";
-consumption = 150000;
-clustergroup = 2;
-pattern = "test";
-
-
 
 ### GROUP_4 ###
 name = "groupe 4";
-consumption = 150000;
+consumption = 100000;
 clustergroup = 3;
 pattern = "test";
 
-### SUBSTATION_1 ###
-name = "station 1";
-groups = {GROUP_1, GROUP_2};
-plants = {PLANT_3, PLANT_5, PLANT_6};
+### PLANT_1 ###
+type = "GAS";
+name = "gaz 1";
 
-### SUBSTATION_3 ###
-name = "station 3";
-groups = {GROUP_5,GROUP_6};
-plants = {PLANT_3,PLANT_2,PLANT_4};
-
-### PLANT_2 ###
-name = "Hydraulique 1";
-type = "HYDRAULIC";
-
-### PLANT_4 ###
-name = "Hydraulique 2";
-type = "HYDRAULIC";
-
-### PLANT_5 ###
-name = "Hydraulique 3";
-type = "HYDRAULIC";
-
-### PLANT_6 ###
-name = "Hydraulique 4";
-type = "HYDRAULIC";
-
-### PLANT_3 ###
+### PLANT_7 ###
 type = "NUCLEAR";
-name = "Nucléaire 1";
+name = "Nucléaire 2";

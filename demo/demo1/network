@@ -1,23 +1,22 @@
-### SUBSTATION_2 ###
-name = "station 2";
-groups = {GROUP_3, GROUP_4};
-plants = {PLANT_7, PLANT_1};
-
-### GROUP_3 ###
-name = "groupe 3";
-consumption = 2000000;
-pattern = "test";
-
-### GROUP_4 ###
-name = "groupe 4";
-consumption = 500000;
-clustergroup = 3;
-pattern = "test";
+### GROUP_1 ###
+name = "groupe 1";
+consumption = 3000;
+clustergroup = 1;
+pattern = "stable";
 
 ### PLANT_1 ###
-type = "GAS";
-name = "gaz 1";
+name = "centrale hydraulique";
+type = "HYDRAULIC";
 
-### PLANT_7 ###
+### PLANT_2 ###
+name = "centrale à gaz";
+type = "GAS";
+
+### PLANT_3 ###
+name = "centrale nucléaire";
 type = "NUCLEAR";
-name = "Nucléaire 2";
+
+### SUBSTATION_1 ###
+name = "station 1";
+groups = {GROUP_1};
+plants = {PLANT_1, PLANT_2, PLANT_3};
